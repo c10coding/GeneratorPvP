@@ -1,0 +1,122 @@
+
+Prefix: "&d&l[GeneratorPvP]"
+Costs:
+  TP:
+    SpecialTP: 500
+  OreTP:
+    Iron: 20
+    IronBlock: 75
+    Gold: 200
+    GoldBlock: 300
+    Diamond: 400
+    DiamondBlock: 500
+    Emerald: 700
+
+Menus:
+  ## MAIN MENU
+  MainMenu:
+    10:
+      Material: SUNFLOWER
+      DisplayName: "&eShop"
+      Lore:
+        - This is the lore
+    11:
+      Material: ENDER_PEARL
+      DisplayName: "&eWarps"
+      Lore:
+        - This is the lore
+    12:
+      Material: ORANGE_DYE
+      DisplayName: "&bC&ah&ea&dt"
+      Lore:
+        - This is the lore
+    13:
+      Material: PLAYER_HEAD
+      DisplayName: "&7Statistics"
+      Lore:
+        - This is the lore
+    14:
+      Material: POTION
+      DisplayName: "&6Amplifiers"
+      Lore:
+        - This is the lore
+    15:
+      Material: DIAMOND_BOOTS
+      DisplayName: "&bSuper Boots"
+      Lore:
+        - This is the lore
+    16:
+      Material: ENDER_CHEST
+      DisplayName: "&5Ender Chest"
+      Lore:
+        - This is the lore
+  ## SHOP MENU
+  ShopMenu:
+    12:
+      Material: CHORUS_FRUIT
+      DisplayName: "&5Teleportations"
+      Lore:
+    13:
+      Material: EMERALD_ORE
+      DisplayName: "&b&2Ores"
+      Lore:
+    14:
+      Material: BOW
+      DisplayName: "&cWeapons"
+      Lore:
+  WarpMenu:
+    9:
+      Material: ENDER_EYE
+      DisplayName: "&7Spawn"
+      Lore:
+    11:
+      Material: ENDER_EYE
+      DisplayName: "&bVIP"
+      Lore:
+    13:
+      Material: ENDER_EYE
+      DisplayName: "&6MVP"
+      Lore:
+    15:
+      Material: ENDER_EYE
+      DisplayName: "&dULTRA"
+      Lore:
+    17:
+      Material: ENDER_EYE
+      DisplayName: "&dS&bp&ae&ec&ci&3a&6l"
+      Lore:
+
+  TeleportationsMenu:
+    10:
+      Material: EMERALD
+      DisplayName: "&aEmerald"
+      Lore:
+    11:
+      Material: DIAMOND_BLOCK
+      DisplayName: "&bDiamond Block"
+      Lore:
+    12:
+      Material: DIAMOND
+      DisplayName: "&bDiamond"
+      Lore:
+    13:
+      Material: GOLD_INGOT
+      DisplayName: "&eGold"
+      Lore:
+    14:
+      Material: GOLD_BLOCK
+      DisplayName: "&eGold Block"
+      Lore:
+    15:
+      Material: IRON_BLOCK
+      DisplayName: "&fIron Block"
+      Lore:
+    16:
+      Material: IRON_INGOT
+      DisplayName: "&fIron"
+      Lore:
+        - This is the lore
+
+
+
+

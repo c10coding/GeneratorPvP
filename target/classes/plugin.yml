@@ -1,0 +1,29 @@
+name: GeneratorPvP
+version: 1.0-SNAPSHOT
+main: me.c10coding.generatorpvp.GeneratorPvP
+api-version: 1.13
+commands:
+  menu:
+    description: "Opens the generator pvp menu"
+
+permissions:
+  gp.*:
+    description: Gives access to all GeneratorPvP commands and what-not
+    children:
+      gp.teleport.vip: true
+      gp.teleport.mvp: true
+      gp.teleport.ultra: true
+      gp.teleport.special: true
+    default: op
+  gp.use:
+    description: Allows you to open the plugin menu
+    default: true
+  gp.teleport.vip:
+    default: op
+  gp.teleport.mvp:
+    default op
+  gp.teleport.ultra:
+    default: op
+  gp.teleport.special:
+    default: op
+
