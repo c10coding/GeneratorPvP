@@ -1,8 +1,10 @@
 
 Prefix: "&d&l[GeneratorPvP]"
 Costs:
+
   TP:
     SpecialTP: 500
+
   OreTP:
     Iron: 20
     IronBlock: 75
@@ -11,6 +13,53 @@ Costs:
     Diamond: 400
     DiamondBlock: 500
     Emerald: 700
+
+  Ores:
+    1:
+      CoalBlock: 3
+      Iron: 5
+      IronBlock: 10
+      Gold: 15
+      GoldBlock: 20
+      Diamond: 25
+      DiamondBlock: 50
+      Emerald: 75
+      EmeraldBlock: 100
+    32:
+      CoalBlock: 96
+      Iron: 160
+      IronBlock: 32
+      Gold: 480
+      GoldBlock: 640
+      Diamond: 800
+      DiamondBlock: 1600
+      Emerald: 2400
+      EmeraldBlock: 3200
+    64:
+      CoalBlock: 192
+      Iron: 320
+      IronBlock: 640
+      Gold: 960
+      GoldBlock: 1280
+      Diamond: 1600
+      DiamondBlock: 3200
+      Emerald: 4800
+      EmeraldBlock: 6400
+
+  Weapons:
+    Knockback: 15
+    PositionSwap: 100
+    TNT: 20
+    Fireball: 50
+    InstaKill: 100
+
+  Chat:
+    Gray: 0
+    Green: 500
+    Yellow: 500
+    Blue: 0
+    Gold: 0
+    Purple: 0
 
 Menus:
   ## MAIN MENU
@@ -117,6 +166,56 @@ Menus:
       Lore:
         - This is the lore
 
+  WeaponsMenu:
+    9:
+      Material: SNOWBALL
+      DisplayName: "&fKnockback"
+      Lore:
+        - "&bGives a little punch :)"
+    11:
+      Material: SLIME_BALL
+      DisplayName: "&aPosition Swap"
+      Lore:
+        - "&bSwaps positions with whom you hit."
+    13:
+      Material: TNT
+      DisplayName: "&cTNT"
+      Lore:
+        - "&bUh, it's obvious what this does. Right?"
+    15:
+      Material: FIRE_CHARGE
+      DisplayName: "&4Fireball"
+      Lore:
+        - "&bYou ever wanted to become a Human Ghast? Here's your chance!"
+    17:
+      Material: EGG
+      DisplayName: "&eInstant Kill"
+      Lore:
+        - "&bIt's embarrassing how overpowered this bad boy is... Enjoy!"
 
-
+  ChatMenu:
+    10:
+      Material: LIGHT_GRAY_CONCRETE
+      DisplayName: "&7Gray"
+      Lore:
+    11:
+      Material: GREEN_CONCRETE
+      DisplayName: "&aGreen"
+      Lore:
+    12:
+      Material: YELLOW_CONCRETE
+      DisplayName: "&eYellow"
+      Lore:
+    14:
+      Material: LIGHT_BLUE_CONCRETE
+      DisplayName: "&3Light Blue"
+      Lore:
+    15:
+      Material: ORANGE_CONCRETE
+      DisplayName: "&6Orange"
+      Lore:
+    16:
+      Material: PINK_CONCRETE
+      DisplayName: "&dPink"
+      Lore:
 

@@ -56,6 +56,18 @@ public class DefaultConfigManager extends me.c10coding.coreapi.files.ConfigManag
         return config.getDouble("Costs.OreTP." + key);
     }
 
+    public double getOreCost(String key, int amount){
+        return config.getDouble("Costs.Ores." + amount + "." + key);
+    }
+
+    public double getWeaponsCost(String key){
+        return config.getDouble("Costs.Weapons." + key);
+    }
+
+    public double getChatCost(String key){
+        return config.getDouble("Costs.Chat." + key);
+    }
+
     private String getMenuPath(String menuType, int slotNum, String key){
         return "Menus." + menuType + "." + slotNum + "." + key;
     }

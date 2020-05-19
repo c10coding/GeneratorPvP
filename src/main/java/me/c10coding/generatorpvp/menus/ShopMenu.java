@@ -40,6 +40,12 @@ public class ShopMenu extends MenuCreator {
             case 12:
                 newMenu = new TeleportationsMenu(plugin, "Teleportations", 27);
                 break;
+            case 13:
+                newMenu = new OresMenu(plugin , "Ores", 27);
+                break;
+            case 14:
+                newMenu = new WeaponsMenu(plugin, "Weapons", 27);
+                break;
             default:
                 return;
         }

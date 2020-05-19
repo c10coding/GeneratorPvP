@@ -20,7 +20,6 @@ public class TeleportationsMenu extends MenuCreator implements Listener {
     public TeleportationsMenu(JavaPlugin plugin, String menuTitle, int numSlots) {
         super(plugin, menuTitle, numSlots);
         createMenu("TeleportationsMenu");
-        Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     public enum Teleportations{
@@ -80,7 +79,6 @@ public class TeleportationsMenu extends MenuCreator implements Listener {
         Player p = (Player) e.getWhoClicked();
         int slotClicked = e.getSlot();
         String prefix = ((GeneratorPvP)plugin).getPrefix();
-        Economy econ = GeneratorPvP.getEconomy();
         double coins = econ.getBalance(p);
         double cost;
         Location teleLoc;
@@ -102,6 +100,7 @@ public class TeleportationsMenu extends MenuCreator implements Listener {
                     }
                     p.teleport(teleLoc);
                     chatFactory.sendPlayerMessage("Teleporting you...", true, p, prefix);
+                    return;
                 }else{
                     chatFactory.sendPlayerMessage("You do not have enough coins! You need at least &a&l" + cost + "&r coins!", true, p, prefix);
                 }

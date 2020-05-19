@@ -4,6 +4,7 @@ import me.c10coding.coreapi.chat.Chat;
 import me.c10coding.coreapi.menus.Menu;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.files.DefaultConfigManager;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,12 +21,15 @@ public class MenuCreator extends Menu implements Listener {
 
     protected me.c10coding.generatorpvp.files.DefaultConfigManager cm;
     protected Chat chatFactory;
+    protected Economy econ = GeneratorPvP.getEconomy();
+    protected String prefix;
 
     public MenuCreator(JavaPlugin plugin) {
         super(plugin, "Menu", 27);
         fillerMat = Material.RED_STAINED_GLASS_PANE;
         this.cm = new DefaultConfigManager(plugin);
         this.chatFactory = ((GeneratorPvP) plugin).getApi().getChatFactory();
+        this.prefix = ((GeneratorPvP) plugin).getPrefix();
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -34,6 +38,7 @@ public class MenuCreator extends Menu implements Listener {
         fillerMat = Material.RED_STAINED_GLASS_PANE;
         this.cm = new DefaultConfigManager(plugin);
         this.chatFactory = ((GeneratorPvP) plugin).getApi().getChatFactory();
+        this.prefix = ((GeneratorPvP) plugin).getPrefix();
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -78,7 +83,7 @@ public class MenuCreator extends Menu implements Listener {
 
         Player playerClicked = (Player) e.getWhoClicked();
         int slotClicked = e.getSlot();
-        Menu newMenu;
+        Menu newMenu = null;
 
         switch(slotClicked){
             case 10:
@@ -88,19 +93,19 @@ public class MenuCreator extends Menu implements Listener {
                 newMenu = new WarpsMenu(plugin, "Warps", 27);
                 break;
             case 12:
-                newMenu = new ChatMenu(plugin, "Statistics", 27);
+                newMenu = new ChatMenu(plugin, "Statistics", 27, playerClicked);
                 break;
             case 13:
-                newMenu = new ChatMenu(plugin, "Amplifiers", 27);
+                //newMenu = new ChatMenu(plugin, "Amplifiers", 27);
                 break;
             case 14:
-                newMenu = new ChatMenu(plugin, "SuperBoots", 27);
+                //newMenu = new ChatMenu(plugin, "SuperBoots", 27);
                 break;
             case 15:
-                newMenu = new ChatMenu(plugin, "EnderChest", 27);
+                //newMenu = new ChatMenu(plugin, "EnderChest", 27);
                 break;
             case 16:
-                newMenu = new ChatMenu(plugin, "Chat", 27);
+                //newMenu = new ChatMenu(plugin, "Chat", 27);
                 break;
             default:
                 return;
