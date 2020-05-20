@@ -1,24 +1,20 @@
 package me.c10coding.generatorpvp.menus;
 
-import me.c10coding.coreapi.menus.Menu;
+
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class AmplifiersMenu extends Menu {
+public class AmplifiersMenu extends MenuCreator {
 
-    public AmplifiersMenu(JavaPlugin plugin, String menuTitle, int numSlots) {
-        super(plugin, menuTitle, numSlots);
+    public AmplifiersMenu(JavaPlugin plugin, Player p) {
+        super(plugin, "Amplifiers", 27, p);
+        createMenu();
     }
 
-    @Override
-    public void initializeItems(Player player) {
+    public void createMenu(){
 
     }
 
-    @Override
-    protected void onInventoryClick(InventoryClickEvent inventoryClickEvent) {
 
-    }
 
 }

@@ -20,7 +20,7 @@ public class GeneralListener implements Listener {
         Player p = e.getPlayer();
         EquippedConfigManager ecm = new EquippedConfigManager(plugin, p.getUniqueId());
         if(ecm.isInFile()){
-            ecm.addPlayerToFile(p.getUniqueId());
+            ecm.addPlayerToFile();
             ecm.saveConfig();
         }
     }

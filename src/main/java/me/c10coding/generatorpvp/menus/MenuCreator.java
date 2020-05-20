@@ -5,7 +5,6 @@ import me.c10coding.coreapi.menus.Menu;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.files.DefaultConfigManager;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,6 +22,8 @@ public class MenuCreator extends Menu implements Listener {
     protected Chat chatFactory;
     protected Economy econ = GeneratorPvP.getEconomy();
     protected String prefix;
+    protected Player p;
+    private boolean hasGivables;
 
     public MenuCreator(JavaPlugin plugin) {
         super(plugin, "Menu", 27);
@@ -30,16 +31,19 @@ public class MenuCreator extends Menu implements Listener {
         this.cm = new DefaultConfigManager(plugin);
         this.chatFactory = ((GeneratorPvP) plugin).getApi().getChatFactory();
         this.prefix = ((GeneratorPvP) plugin).getPrefix();
-        Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        setHasGivables(false);
     }
 
-    public MenuCreator(JavaPlugin plugin, String menuTitle, int numSlots) {
+    public MenuCreator(JavaPlugin plugin, String menuTitle, int numSlots, Player p) {
         super(plugin, menuTitle, numSlots);
         fillerMat = Material.RED_STAINED_GLASS_PANE;
         this.cm = new DefaultConfigManager(plugin);
         this.chatFactory = ((GeneratorPvP) plugin).getApi().getChatFactory();
         this.prefix = ((GeneratorPvP) plugin).getPrefix();
-        Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
+        this.p = p;
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        setHasGivables(false);
     }
 
     @Override
@@ -55,6 +59,7 @@ public class MenuCreator extends Menu implements Listener {
             String displayName = (String) slotInfo.get("DisplayName");
             Material mat = (Material) slotInfo.get("Material");
             List<String> lore = (List<String>) slotInfo.get("Lore");
+            lore = applyPlaceholders(lore);
 
             inv.setItem(i, createGuiItem(mat, displayName, 1, lore));
         }
@@ -81,22 +86,18 @@ public class MenuCreator extends Menu implements Listener {
 
         if(clickedItem == null || clickedItem.getType().equals(Material.AIR)) return;
 
-        Player playerClicked = (Player) e.getWhoClicked();
         int slotClicked = e.getSlot();
         Menu newMenu = null;
 
         switch(slotClicked){
             case 10:
-                newMenu = new ShopMenu(plugin, "Shop", 27);
+                newMenu = new ShopMenu(plugin, p);
                 break;
             case 11:
-                newMenu = new WarpsMenu(plugin, "Warps", 27);
+                newMenu = new WarpsMenu(plugin, p);
                 break;
             case 12:
-                newMenu = new ChatMenu(plugin, "Statistics", 27, playerClicked);
-                break;
-            case 13:
-                //newMenu = new ChatMenu(plugin, "Amplifiers", 27);
+                newMenu = new ChatMenu(plugin, p);
                 break;
             case 14:
                 //newMenu = new ChatMenu(plugin, "SuperBoots", 27);
@@ -110,7 +111,25 @@ public class MenuCreator extends Menu implements Listener {
             default:
                 return;
         }
-        playerClicked.closeInventory();
-        newMenu.openInventory(playerClicked);
+        p.closeInventory();
+        newMenu.openInventory(p);
+    }
+
+    public List<String> applyPlaceholders(List<String> lore){
+        for(String s : lore){
+            if(s.contains("%coins%")){
+                int index = lore.indexOf(s);
+                lore.set(index, s.replace("%coins%", String.valueOf((int)econ.getBalance(p))));
+            }
+        }
+        return lore;
+    }
+
+    public void setHasGivables(boolean b) {
+        this.hasGivables = b;
+    }
+
+    public boolean hasGivables() {
+        return hasGivables;
     }
 }

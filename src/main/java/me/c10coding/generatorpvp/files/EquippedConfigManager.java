@@ -1,7 +1,6 @@
 package me.c10coding.generatorpvp.files;
 
 import me.c10coding.coreapi.files.ConfigManager;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -16,22 +15,28 @@ public class EquippedConfigManager extends ConfigManager {
         this.u = u;
     }
 
-    public void setEquipped(String key, String category, boolean isEquipped){
+    public void setEquipped(String key, String category){
         if(hasSomethingEquipped(category)){
-            Bukkit.broadcastMessage("There is something equipped");
             String equippedKey = getThingEquipped(category);
-            Bukkit.broadcastMessage("Equipped key: " + equippedKey);
-            config.set(category + "." + u + "." + ".IsEquipped." + equippedKey, false);
+            config.set(category + "." + u.toString() + ".IsEquipped." + equippedKey, false);
         }
-        config.set(category + "." + u + "." + ".IsEquipped." + key, true);
+        config.set(category + "." + u.toString() + ".IsEquipped." + key, true);
+    }
+
+    public void setEquipped(String key, String category, boolean b){
+        config.set(category + "." + u.toString() + ".IsEquipped." + key, b);
+    }
+
+    public void setPurchased(String key, String category, boolean b){
+        config.set(category + "." + u.toString() + ".IsPurchased." + key, b);
     }
 
     public boolean isEquipped(String key, String category){
-        return config.getBoolean(category + "." + u + "." + ".IsEquipped." + key);
+        return config.getBoolean(category + "." + u.toString() + ".IsEquipped." + key);
     }
 
     public boolean isPurchased(String key, String category){
-        return config.getBoolean(category + "." + u + "." + ".IsPurchased." + key);
+        return config.getBoolean(category + "." + u.toString() + ".IsPurchased." + key);
     }
 
     public boolean hasSomethingEquipped(String category){
@@ -39,20 +44,21 @@ public class EquippedConfigManager extends ConfigManager {
         return values.contains(true);
     }
 
-    public void addPlayerToFile(UUID u){
+    public void addPlayerToFile(){
 
-        config.set("Chat." + u.toString() + ".IsPurchased.Gray", false);
+        config.set("Chat." + u.toString() + ".IsPurchased.Gray", true);
         config.set("Chat." + u.toString() + ".IsPurchased.Green", false);
-        config.set("Chat." + u.toString() + ".IsPurchased.Orange", false);
+        config.set("Chat." + u.toString() + ".IsPurchased.Yellow", false);
         config.set("Chat." + u.toString() + ".IsPurchased.Blue", false);
-        config.set("Chat." + u.toString() + ".IsPurchased.Orange", false);
-        config.set("Chat." + u.toString() + ".IsPurchased.Pink", false);
-        config.set("Chat." + u.toString() + ".IsEquipped.Gray", false);
+        config.set("Chat." + u.toString() + ".IsPurchased.Gold", false);
+        config.set("Chat." + u.toString() + ".IsPurchased.Purple", false);
+
+        config.set("Chat." + u.toString() + ".IsEquipped.Gray", true);
         config.set("Chat." + u.toString() + ".IsEquipped.Green", false);
-        config.set("Chat." + u.toString() + ".IsEquipped.Orange", false);
+        config.set("Chat." + u.toString() + ".IsEquipped.Yellow", false);
         config.set("Chat." + u.toString() + ".IsEquipped.Blue", false);
-        config.set("Chat." + u.toString() + ".IsEquipped.Orange", false);
-        config.set("Chat." + u.toString() + ".IsEquipped.Pink", false);
+        config.set("Chat." + u.toString() + ".IsEquipped.Gold", false);
+        config.set("Chat." + u.toString() + ".IsEquipped.Purple", false);
 
     }
 
@@ -60,16 +66,16 @@ public class EquippedConfigManager extends ConfigManager {
         Map<Object, Object> values = new HashMap<>();
         ConfigurationSection cs = config.getConfigurationSection(category + "." + u + ".IsEquipped");
         for(String key: cs.getKeys(false)){
-            values.put(key, config.getBoolean(category + "." + u + "." + ".IsEquipped." + key));
+            values.put(key, config.getBoolean(category + "." + u.toString() + ".IsEquipped." + key));
         }
         return values;
     }
 
     public List<Boolean> getCategoryIsEquipped(String category){
         List<Boolean> values = new ArrayList<>();
-        ConfigurationSection cs = config.getConfigurationSection(category);
+        ConfigurationSection cs = config.getConfigurationSection(category + "." + u.toString() + ".IsEquipped");
         for(String k : cs.getKeys(false)){
-            values.add(config.getBoolean(category + "." + u + "." + ".IsEquipped." + k));
+            values.add(config.getBoolean(category + "." + u.toString() + ".IsEquipped." + k));
         }
         return values;
     }

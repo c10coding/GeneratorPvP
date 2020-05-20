@@ -41,12 +41,18 @@ public class DefaultConfigManager extends me.c10coding.coreapi.files.ConfigManag
         return getSlots(menuType).size();
     }
 
+    public double getTPDelay(){
+        return config.getDouble("TPDelay");
+    }
+
     public List<Integer> getSlots(String menuType){
         List<Integer> slotNums = new ArrayList<>();
         Set<String> cs = config.getConfigurationSection("Menus." + menuType).getKeys(false);
         cs.stream().forEach(s -> slotNums.add(Integer.parseInt(s)));
         return slotNums;
     }
+
+
 
     public double getTPCost(String key){
         return config.getDouble("Costs.TP." + key);

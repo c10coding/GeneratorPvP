@@ -1,5 +1,6 @@
 
 Prefix: "&d&l[GeneratorPvP]"
+TPDelay: 3
 Costs:
 
   TP:
@@ -83,7 +84,7 @@ Menus:
       Material: PLAYER_HEAD
       DisplayName: "&7Statistics"
       Lore:
-        - This is the lore
+        - "You have &b&l%coins%&r coins!"
     14:
       Material: POTION
       DisplayName: "&6Amplifiers"
@@ -208,14 +209,14 @@ Menus:
       Lore:
     14:
       Material: LIGHT_BLUE_CONCRETE
-      DisplayName: "&3Light Blue"
+      DisplayName: "&3Blue"
       Lore:
     15:
       Material: ORANGE_CONCRETE
-      DisplayName: "&6Orange"
+      DisplayName: "&6Gold"
       Lore:
     16:
-      Material: PINK_CONCRETE
-      DisplayName: "&dPink"
+      Material: MAGENTA_CONCRETE
+      DisplayName: "&dPurple"
       Lore:
 

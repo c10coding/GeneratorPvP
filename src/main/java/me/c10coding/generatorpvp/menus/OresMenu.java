@@ -12,8 +12,8 @@ import java.util.ArrayList;
 
 public class OresMenu extends MenuCreator implements Listener {
 
-    public OresMenu(JavaPlugin plugin, String menuTitle, int numSlots) {
-        super(plugin, menuTitle, numSlots);
+    public OresMenu(JavaPlugin plugin, Player p) {
+        super(plugin, "Ores", 27, p);
         createMenu();
     }
 
@@ -42,7 +42,7 @@ public class OresMenu extends MenuCreator implements Listener {
         if (clickedItem == null || clickedItem.getType().equals(Material.AIR)) return;
 
         Player p = (Player) e.getWhoClicked();
-        OrePurchaseMenu opm = new OrePurchaseMenu(plugin, "Purchase ores", 27, clickedItem.getType());
+        OrePurchaseMenu opm = new OrePurchaseMenu(plugin, clickedItem.getType(), p);
         p.closeInventory();
         opm.openInventory(p);
 

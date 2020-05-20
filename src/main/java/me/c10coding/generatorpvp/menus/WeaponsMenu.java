@@ -10,10 +10,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class WeaponsMenu extends MenuCreator implements Listener {
 
-    public WeaponsMenu(JavaPlugin plugin, String menuTitle, int numSlots) {
-        super(plugin, menuTitle, numSlots);
+    public WeaponsMenu(JavaPlugin plugin, Player p) {
+        super(plugin, "Weapons", 27, p);
         createMenu("WeaponsMenu");
         fillMenu();
+        setHasGivables(true);
     }
 
     enum Weapons{
@@ -48,36 +49,44 @@ public class WeaponsMenu extends MenuCreator implements Listener {
         double playerBalance = econ.getBalance(p);
         double cost;
         Material mat;
+        String configKey;
 
         switch(slotClicked){
             case 9:
                 cost = cm.getWeaponsCost(Weapons.KNOCKBACK.configKey);
                 mat = Weapons.KNOCKBACK.mat;
+                configKey = Weapons.KNOCKBACK.configKey;
                 break;
             case 11:
                 cost = cm.getWeaponsCost(Weapons.POSITION_SWAP.configKey);
                 mat = Weapons.POSITION_SWAP.mat;
+                configKey = Weapons.POSITION_SWAP.configKey;
                 break;
             case 13:
                 cost = cm.getWeaponsCost(Weapons.TNT.configKey);
                 mat = Weapons.TNT.mat;
+                configKey = Weapons.TNT.configKey;
                 break;
             case 15:
                 cost = cm.getWeaponsCost(Weapons.FIREBALL.configKey);
                 mat = Weapons.FIREBALL.mat;
+                configKey = Weapons.FIREBALL.configKey;
                 break;
             case 17:
                 cost = cm.getWeaponsCost(Weapons.INSTA_KILL.configKey);
                 mat = Weapons.INSTA_KILL.mat;
+                configKey = Weapons.KNOCKBACK.configKey;
                 break;
             default:
                 return;
         }
 
         if(playerBalance >= cost){
-            econ.withdrawPlayer(p, cost);
-            giveWeapon(p, mat);
-            chatFactory.sendPlayerMessage("Here you go boss! Have fun with your new weapon", true, p, prefix);
+            ConfirmPurchaseMenu cpm = new ConfirmPurchaseMenu(plugin, p, mat, cost, configKey,this, 1);
+            p.closeInventory();
+            cpm.openInventory(p);
+            //econ.withdrawPlayer(p, cost);
+            //giveWeapon(p, mat);
         }else{
             chatFactory.sendPlayerMessage("Looks like you don't have enough coins for this weapon. Bummer (&c&l" + cost + "&r coins)", true, p, prefix);
         }

@@ -21,9 +21,36 @@ permissions:
   gp.teleport.vip:
     default: op
   gp.teleport.mvp:
-    default op
+    default: op
   gp.teleport.ultra:
     default: op
   gp.teleport.special:
     default: op
+  #Whether a player can purchase the color or not
+  gp.purchase.gray:
+    default: true
+  gp.purchase.green:
+    default: true
+  gp.purchase.yellow:
+    default: true
+  gp.purchase.blue:
+    default: op
+  gp.purchase.gold:
+    default: op
+  gp.purchase.pink:
+    default: op
+  #If they have this permission, they already have the chat color purchased
+  gp.unlock.gray:
+    default: op
+  gp.unlock.blue:
+    default: op
+  gp.unlock.gold:
+    default: op
+  gp.unlock.purple:
+    default: op
+  gp.unlock.green:
+    default: op
+  gp.unlock.yellow:
+    default: op
+
 

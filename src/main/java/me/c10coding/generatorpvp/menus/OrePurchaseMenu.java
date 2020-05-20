@@ -9,16 +9,22 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class OrePurchaseMenu extends MenuCreator implements Listener {
 
     private Material oreClicked;
+    private OreTypes oreType;
 
-    public OrePurchaseMenu(JavaPlugin plugin, String menuTitle, int numSlots, Material oreClicked) {
-        super(plugin, menuTitle, numSlots);
+    public OrePurchaseMenu(JavaPlugin plugin, Material oreClicked, Player p) {
+        super(plugin, "Purchase ores", 27, p);
         this.oreClicked = oreClicked;
+        this.oreType = getOreType();
         createMenu();
+        setHasGivables(true);
     }
 
     enum OreTypes{
@@ -40,13 +46,29 @@ public class OrePurchaseMenu extends MenuCreator implements Listener {
             this.configKey = configKey;
             this.name = name;
         }
+
+        public Material getMat(){
+            return mat;
+        }
+
+        public String getConfigKey(){
+            return configKey;
+        }
+
     }
 
     public void createMenu(){
         Material emBlock = Material.EMERALD_BLOCK;
-        inv.setItem(11, createGuiItem(emBlock, "Purchase 64", 64, new ArrayList<>()));
-        inv.setItem(13, createGuiItem(emBlock, "Purchase 32", 32, new ArrayList<>()));
-        inv.setItem(15, createGuiItem(emBlock, "Purchase 1", 1, new ArrayList<>()));
+        int cost1 = (int) cm.getOreCost(oreType.configKey , 1);
+        int cost32 = (int) cm.getOreCost(oreType.configKey, 32);
+        int cost64 = (int) cm.getOreCost(oreType.configKey, 64);
+        List<String> cost1Lore = new ArrayList((Arrays.asList(chatFactory.chat("&b&lCost: &a&l" + cost1))));
+        List<String> cost32Lore = new ArrayList((Arrays.asList(chatFactory.chat("&b&lCost: &a&l" + cost32))));
+        List<String> cost64Lore = new ArrayList((Arrays.asList(chatFactory.chat("&b&lCost: &a&l" + cost64))));
+
+        inv.setItem(11, createGuiItem(emBlock, "Purchase 64", 64, cost64Lore));
+        inv.setItem(13, createGuiItem(emBlock, "Purchase 32", 32, cost32Lore));
+        inv.setItem(15, createGuiItem(emBlock, "Purchase 1", 1, cost1Lore));
     }
 
     @EventHandler
@@ -76,30 +98,36 @@ public class OrePurchaseMenu extends MenuCreator implements Listener {
                 amount = 1;
             }
 
-            String configKey = OreTypes.COAL_BLOCK.configKey;
-            OreTypes oreType = OrePurchaseMenu.OreTypes.COAL_BLOCK;
-
-            for(OreTypes ot : OreTypes.values()){
-                if(oreClicked.equals(ot.mat)){
-                    configKey = ot.configKey;
-                    oreType = ot;
-                    break;
-                }
-            }
-
+            String configKey = oreType.configKey;
             cost = cm.getOreCost(configKey, amount);
+
             if(playerBalance >= cost){
-                econ.withdrawPlayer(p, cost);
-                giveItems(p, amount);
-                chatFactory.sendPlayerMessage("You have been given &b&l" + amount + "&a " + oreType.name, true, p, prefix);
+                ConfirmPurchaseMenu cpm = new ConfirmPurchaseMenu(plugin, p, oreType.mat , cost, configKey, this, amount);
+                p.closeInventory();
+                cpm.openInventory(p);
+                //econ.withdrawPlayer(p, cost);
+                //giveItems(p, amount);
+                //chatFactory.sendPlayerMessage("You have been given &b&l" + amount + "&a " + oreType.name, true, p, prefix);
             }else{
                 chatFactory.sendPlayerMessage("You can't afford this! It costs &c&l" + cost + "&r coins!", true, p, prefix);
+                p.closeInventory();
             }
         }
     }
 
     public void giveItems(Player p , int amount){
         p.getInventory().addItem(new ItemStack(oreClicked, amount));
+    }
+
+    public OreTypes getOreType(){
+        OreTypes oreType = null;
+        for(OreTypes ot : OreTypes.values()){
+            if(oreClicked.equals(ot.mat)){
+                oreType = ot;
+                break;
+            }
+        }
+        return oreType;
     }
 
 }

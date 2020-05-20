@@ -3,6 +3,7 @@ package me.c10coding.generatorpvp;
 import me.c10coding.coreapi.CoreAPI;
 import me.c10coding.generatorpvp.commands.Commands;
 import me.c10coding.generatorpvp.listeners.GeneralListener;
+import me.c10coding.generatorpvp.listeners.TeleportListener;
 import me.c10coding.generatorpvp.listeners.WeaponsListener;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -91,6 +92,7 @@ public final class GeneratorPvP extends JavaPlugin {
         this.getServer().getPluginCommand("menu").setExecutor(new Commands(this));
         this.getServer().getPluginManager().registerEvents(new WeaponsListener(this), this);
         this.getServer().getPluginManager().registerEvents(new GeneralListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new TeleportListener(this), this);
     }
 
     private void registerEmptyEnchant(Enchantment ench){

@@ -1,7 +1,5 @@
 package me.c10coding.generatorpvp.menus;
 
-import me.c10coding.coreapi.menus.Menu;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,11 +8,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ShopMenu extends MenuCreator {
-    public ShopMenu(JavaPlugin plugin, String menuTitle, int numSlots) {
-        super(plugin, menuTitle, numSlots);
+    public ShopMenu(JavaPlugin plugin, Player p) {
+        super(plugin, "Shop", 27, p);
         createMenu("ShopMenu");
         fillMenu();
-        Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
+        setHasGivables(false);
     }
 
     @Override
@@ -37,14 +35,15 @@ public class ShopMenu extends MenuCreator {
         MenuCreator newMenu;
 
         switch(slotClicked){
+
             case 12:
-                newMenu = new TeleportationsMenu(plugin, "Teleportations", 27);
+                newMenu = new TeleportationsMenu(plugin, p);
                 break;
             case 13:
-                newMenu = new OresMenu(plugin , "Ores", 27);
+                newMenu = new OresMenu(plugin, p);
                 break;
             case 14:
-                newMenu = new WeaponsMenu(plugin, "Weapons", 27);
+                newMenu = new WeaponsMenu(plugin, p);
                 break;
             default:
                 return;
@@ -52,7 +51,6 @@ public class ShopMenu extends MenuCreator {
 
         playerClicked.closeInventory();
         newMenu.openInventory(playerClicked);
-
 
     }
 }

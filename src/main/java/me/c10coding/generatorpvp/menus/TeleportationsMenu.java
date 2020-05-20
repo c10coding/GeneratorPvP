@@ -2,24 +2,22 @@ package me.c10coding.generatorpvp.menus;
 
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.IncompleteLocation;
-import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Random;
 
-public class TeleportationsMenu extends MenuCreator implements Listener {
+public class TeleportationsMenu extends MenuCreator{
 
-    public TeleportationsMenu(JavaPlugin plugin, String menuTitle, int numSlots) {
-        super(plugin, menuTitle, numSlots);
+    public TeleportationsMenu(JavaPlugin plugin, Player p) {
+        super(plugin, "Teleportations", 27, p);
         createMenu("TeleportationsMenu");
+        setHasGivables(false);
     }
 
     public enum Teleportations{
@@ -57,11 +55,6 @@ public class TeleportationsMenu extends MenuCreator implements Listener {
         public IncompleteLocation getIncLocation(){
             return firstLoc;
         }
-    }
-
-    @Override
-    public void initializeItems(Player player) {
-
     }
 
     @EventHandler
@@ -103,6 +96,7 @@ public class TeleportationsMenu extends MenuCreator implements Listener {
                     return;
                 }else{
                     chatFactory.sendPlayerMessage("You do not have enough coins! You need at least &a&l" + cost + "&r coins!", true, p, prefix);
+                    p.closeInventory();
                 }
             }
         }

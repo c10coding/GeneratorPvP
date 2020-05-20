@@ -23,7 +23,7 @@ public class Commands implements CommandExecutor {
 
         if(sender instanceof Player){
             Player p = (Player) sender;
-            MenuCreator mm = new MenuCreator(plugin);
+            MenuCreator mm = new MenuCreator(plugin, "Menu", 27, p);
             mm.createMenu("MainMenu");
             mm.fillMenu();
             mm.openInventory(p);
