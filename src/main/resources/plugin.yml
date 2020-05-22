@@ -5,6 +5,10 @@ api-version: 1.13
 commands:
   menu:
     description: "Opens the generator pvp menu"
+  genpvp:
+    description: "Other commands that may come with the plugin. Primarily admin commands."
+    aliases:
+      - gp
 
 permissions:
   gp.*:

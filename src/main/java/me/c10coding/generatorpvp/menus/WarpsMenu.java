@@ -69,7 +69,6 @@ public class WarpsMenu extends MenuCreator implements Listener {
 
         Player playerClicked = (Player) e.getWhoClicked();
         int slotClicked = e.getSlot();
-        String prefix = ((GeneratorPvP)plugin).getPrefix();
 
         switch(slotClicked){
             case 9:

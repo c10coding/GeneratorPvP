@@ -1,0 +1,43 @@
+Broadcast Messages:
+  - "&e%player% &7has activated a &e%amplifier%&7 for &e%time% &7hours"
+  - "&eClick &lhere&r&7 to thank them and get &65 coins!"
+
+Amplifier Info:
+  Multipliers:
+    1:
+      #In hours
+      Duration: 1
+    2:
+      Duration: 2
+    3:
+      Duration: 24
+  Boosters:
+    Multiplier: 3
+    1:
+      Duration: 1
+    2:
+      Duration: 2
+    3:
+      Duration: 24
+  Coin Multiplier:
+    Multiplier: 2
+    1:
+      Duration: 1
+    2:
+      Duration: 2
+    3:
+      Duration: 24
+
+Amplifier Activation Status:
+  Multipliers:
+    Active: false
+    Person Who Activated:
+    TimeLeft:
+  Boosters:
+    Active: false
+    Person Who Activated:
+    TimeLeft:
+  Coin Multiplier:
+    Active: false
+    Person Who Activated:
+    TimeLeft:

@@ -220,3 +220,23 @@ Menus:
       DisplayName: "&dPurple"
       Lore:
 
+  AmplifiersMenu:
+    10:
+      Material: LINGERING_POTION
+      DisplayName: "&dMultipliers"
+      Lore:
+        - Want faster ore drops? Purchase a Multiplier!
+    13:
+      Material: LINGERING_POTION
+      DisplayName: "&aBoosters"
+      Lore:
+        - Speeds up the timer of generators by %boosterMult%
+    16:
+      Material: LINGERING_POTION
+      DisplayName: "&6Coins Multipliers"
+      Lore:
+        - Duh, it increases the amount of coins you can get!
+
+
+
+

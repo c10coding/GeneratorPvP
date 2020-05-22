@@ -100,7 +100,7 @@ public class MenuCreator extends Menu implements Listener {
                 newMenu = new ChatMenu(plugin, p);
                 break;
             case 14:
-                //newMenu = new ChatMenu(plugin, "SuperBoots", 27);
+                newMenu = new AmplifiersMenu(plugin, p);
                 break;
             case 15:
                 //newMenu = new ChatMenu(plugin, "EnderChest", 27);

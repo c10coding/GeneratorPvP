@@ -8,12 +8,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class Commands implements CommandExecutor {
+public class MenuCommand implements CommandExecutor {
 
     private GeneratorPvP plugin;
     private Chat chatFactory;
 
-    public Commands(GeneratorPvP plugin){
+    public MenuCommand(GeneratorPvP plugin){
         this.plugin = plugin;
         this.chatFactory = plugin.getApi().getChatFactory();
     }
