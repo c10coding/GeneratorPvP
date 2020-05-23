@@ -108,10 +108,8 @@ public class EquippedConfigManager extends ConfigManager {
     public void decreaseAmplifierAmount(String amplifierName, int levelAmplifier){
         int currentAmount = getAmplifierAmount(amplifierName, levelAmplifier);
         int newAmount = currentAmount - 1;
-        config.set("Amplifiers." + u.toString() + ".Amount." + newAmount + "." + levelAmplifier, newAmount);
+        config.set("Amplifiers." + u.toString() + ".Amount." + amplifierName + "." + levelAmplifier, newAmount);
     }
-
-
 
     public boolean isInFile(){
         return config.getString("Chat." + u.toString() + ".IsPurchased.Gray") == null;
@@ -146,6 +144,44 @@ public class EquippedConfigManager extends ConfigManager {
         config.set("Amplifiers." + u.toString() + ".Amount.Coinmult.1", 0);
         config.set("Amplifiers." + u.toString() + ".Amount.Coinmult.2", 0);
         config.set("Amplifiers." + u.toString() + ".Amount.Coinmult.3", 0);
+
+    }
+
+    private void setBootsCategory(){
+
+        config.set("SuperBoots." + u.toString() + ".IsPurchased.Anti Fall", false);
+        config.set("SuperBoots." + u.toString() + ".IsPurchased.Strength", false);
+        config.set("SuperBoots." + u.toString() + ".IsPurchased.Regen", false);
+        config.set("SuperBoots." + u.toString() + ".IsPurchased.Glowing", false);
+
+        config.set("SuperBoots." + u.toString() + ".IsPurchased.Speed", false);
+        config.set("SuperBoots." + u.toString() + ".IsPurchased.Jump Boost", false);
+        config.set("SuperBoots." + u.toString() + ".IsPurchased.Double Jump", false);
+        config.set("SuperBoots." + u.toString() + ".IsPurchased.Absorption", false);
+        config.set("SuperBoots." + u.toString() + ".IsPurchased.Blindness", false);
+
+        config.set("SuperBoots." + u.toString() + ".IsPurchased.Coin", false);
+        config.set("SuperBoots." + u.toString() + ".IsPurchased.AntiKB", false);
+        config.set("SuperBoots." + u.toString() + ".IsPurchased.Stonks", false);
+        config.set("SuperBoots." + u.toString() + ".IsPurchased.Levitation", false);
+        config.set("SuperBoots." + u.toString() + ".IsPurchased.Invisibility", false);
+
+        config.set("SuperBoots." + u.toString() + ".IsEquipped.Anti Fall", false);
+        config.set("SuperBoots." + u.toString() + ".IsEquipped.Strength", false);
+        config.set("SuperBoots." + u.toString() + ".IsEquipped.Regen", false);
+        config.set("SuperBoots." + u.toString() + ".IsEquipped.Glowing", false);
+
+        config.set("SuperBoots." + u.toString() + ".IsEquipped.Speed", false);
+        config.set("SuperBoots." + u.toString() + ".IsEquipped.Jump Boost", false);
+        config.set("SuperBoots." + u.toString() + ".IsEquipped.Double Jump", false);
+        config.set("SuperBoots." + u.toString() + ".IsEquipped.Absorption", false);
+        config.set("SuperBoots." + u.toString() + ".IsEquipped.Blindness", false);
+
+        config.set("SuperBoots." + u.toString() + ".IsEquipped.Coin", false);
+        config.set("SuperBoots." + u.toString() + ".IsEquipped.AntiKB", false);
+        config.set("SuperBoots." + u.toString() + ".IsEquipped.Stonks", false);
+        config.set("SuperBoots." + u.toString() + ".IsEquipped.Levitation", false);
+        config.set("SuperBoots." + u.toString() + ".IsEquipped.Invisibility", false);
 
     }
 

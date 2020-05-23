@@ -1,6 +1,10 @@
 
 Prefix: "&d&l[GeneratorPvP]"
+AnnouncerPrefix: "&b&l[Announcer] "
+ThankingRewardAmount: 5
+ActivatorRewardAmount: 10
 TPDelay: 3
+
 Costs:
 
   TP:
@@ -61,6 +65,22 @@ Costs:
     Blue: 0
     Gold: 0
     Purple: 0
+
+  SuperBoots:
+    AntiFall: 1000
+    Strength: 0
+    Regen: 2500
+    Glowing: 1000
+    Speed: 25000
+    JumpBoost: 0
+    DoubleJump: 20000
+    Absorption: 5000
+    Blindness: 10000
+    Coin: 0
+    AntiKB: 50000
+    Stonks: 10000
+    Levitation: 50000
+    Invisibility: 50000
 
 Menus:
   ## MAIN MENU
@@ -230,12 +250,62 @@ Menus:
       Material: LINGERING_POTION
       DisplayName: "&aBoosters"
       Lore:
-        - Speeds up the timer of generators by %boosterMult%
+        - Speeds up the timer of generators by %boosterMult%x!
     16:
       Material: LINGERING_POTION
       DisplayName: "&6Coins Multipliers"
       Lore:
         - Duh, it increases the amount of coins you can get!
+
+  MultipliersMenu:
+    10:
+      Material: POTION
+      DisplayName: "&c%multLength1% &7Hour &dMultiplier"
+      Lore:
+        - Increases the amount of
+    13:
+      Material: SPLASH_POTION
+      DisplayName: "&c%multLength2% &7Hour &dMultiplier"
+      Lore:
+    16:
+      Material: LINGERING_POTION
+      DisplayName: "&c%multLength3% &7Hour &dMultiplier"
+      Lore:
+  BoostersMenu:
+    10:
+      Material: POTION
+      DisplayName: "&c%boostLength1% &7Hour &dBooster"
+      Lore:
+        - Speeds up the timer of generators by %boosterMult%x!
+        -
+    13:
+      Material: SPLASH_POTION
+      DisplayName: "&c%boostLength2% &7Hour &dBooster"
+      Lore:
+        - Speeds up the timer of generators by %boosterMult%x!
+    16:
+      Material: LINGERING_POTION
+      DisplayName: "&c%boostLength3% &7Hour &dBooster"
+      Lore:
+        - Speeds up the timer of generators by %boosterMult%x!
+
+  CoinsMultMenu:
+    10:
+      Material: POTION
+      DisplayName: "&c%coinsMultLength1% &7Hour &dCoin Multiplier"
+      Lore:
+        - Increases the amount of coins you get per kill by %coinsMult%x!
+    13:
+      Material: SPLASH_POTION
+      DisplayName: "&c%coinsMultLength2% &7Hour &dCoin Multiplier"
+      Lore:
+        - Increases the amount of coins you get per kill by %coinsMult%x!
+    16:
+      Material: LINGERING_POTION
+      DisplayName: "&c%coinsMultLength3% &7Hour &dCoin Multiplier"
+      Lore:
+        - Increases the amount of coins you get per kill by %coinsMult%x!
+
 
 
 

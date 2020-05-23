@@ -74,6 +74,10 @@ public class DefaultConfigManager extends me.c10coding.coreapi.files.ConfigManag
         return config.getDouble("Costs.Chat." + key);
     }
 
+    public double getBootCost(String key){
+        return config.getDouble("Costs.SuperBoots." + key);
+    }
+
     private String getMenuPath(String menuType, int slotNum, String key){
         return "Menus." + menuType + "." + slotNum + "." + key;
     }

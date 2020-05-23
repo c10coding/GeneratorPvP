@@ -3,6 +3,8 @@ package me.c10coding.generatorpvp.files;
 import me.c10coding.coreapi.files.ConfigManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class AmplifiersConfigManager extends ConfigManager {
@@ -35,10 +37,6 @@ public class AmplifiersConfigManager extends ConfigManager {
         config.set("Amplifier Activation Status." + amplifierName + ".Person Who Activated", playerName);
     }
 
-    public void setAmplifierAsActivated(String amplifierName){
-        config.set("Amplifier Activation Status." + amplifierName, true);
-    }
-
     public void setAmplifierTimer(String amplifierName, int levelAmplifier){
         double lengthOfAmplifier = getAmplifierDuration(amplifierName, levelAmplifier);
         double seconds = lengthOfAmplifier * 3600;
@@ -64,6 +62,20 @@ public class AmplifiersConfigManager extends ConfigManager {
 
     public double getAmplifierDuration(String amplifierName, int levelAmplifier){
        return config.getDouble("Amplifier Info." + amplifierName + "." + levelAmplifier + ".Duration");
+    }
+
+    public void addToThankfulPeopleList(String playerName, String amplifierName){
+        List<String> thankfulPeopleList = config.getStringList("Amplifier Activation Status." + amplifierName + ".ThankfulPeople");
+        thankfulPeopleList.add(playerName);
+        config.set("Amplifier Activation Status." + amplifierName + ".ThankfulPeople", thankfulPeopleList);
+    }
+
+    public boolean isOnThankfulPeopleList(String playerName, String amplifierName){
+        return config.getStringList("Amplifier Activation Status." + amplifierName + ".ThankfulPeople").contains(playerName);
+    }
+
+    public void clearThankfulPeopleList(String playerName, String amplifierName){
+        config.set("Amplifier Activation Status." + amplifierName + ".ThankfulPeople", new ArrayList<>());
     }
 
     public double getBoostersMultiplier(){

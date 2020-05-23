@@ -2,11 +2,13 @@ package me.c10coding.generatorpvp.commands;
 
 import me.c10coding.coreapi.chat.Chat;
 import me.c10coding.generatorpvp.GeneratorPvP;
+import me.c10coding.generatorpvp.files.AmplifiersConfigManager;
 import me.c10coding.generatorpvp.files.EquippedConfigManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +71,36 @@ public class AdminCommands implements CommandExecutor {
                     ecm.increaseAmplifierAmount(amplifierType, levelAmplifier, amount);
                     ecm.saveConfig();
                 }
+
+            }else if(args[0].equalsIgnoreCase("givecoins") && args.length == 5){
+                //Guaranteed to be a player because this command is only run when a player clicks on the "Click Here" text
+                Player playerWhoClicked = (Player) sender;
+                if(args[1].trim().equalsIgnoreCase("%playerName%")){
+                    String playerName = sender.getName();
+                    String playerWhoActivatedName = args[3];
+                    String amplifierName = args[4];
+                    Player activator;
+                    AmplifiersConfigManager acm = new AmplifiersConfigManager(plugin);
+
+                    if(playerName.equalsIgnoreCase(playerWhoActivatedName)){
+                        chatFactory.sendPlayerMessage("You can't thank yourself silly!", true, sender, prefix);
+                        return false;
+                    }else{
+                        if(acm.isOnThankfulPeopleList(playerName, amplifierName)){
+                            chatFactory.sendPlayerMessage("&7You've already received your coins for thanking &e" + playerWhoActivatedName, true, playerWhoClicked, prefix);
+                            return false;
+                        }else{
+                            rewardCoinsToClicker(playerWhoClicked);
+                            acm.addToThankfulPeopleList(playerName, amplifierName);
+                            acm.saveConfig();
+                        }
+                    }
+
+                    if(Bukkit.getPlayer(playerWhoActivatedName) != null){
+                        activator = Bukkit.getPlayer(playerWhoActivatedName);
+                        rewardCoinsToActivator(activator);
+                    }
+                }
             }
         }
         return false;
@@ -81,4 +113,17 @@ public class AdminCommands implements CommandExecutor {
         possibleAmplifiers.add("mult");
         return possibleAmplifiers;
     }
+
+    public void rewardCoinsToClicker(Player playerWhoClicked){
+        int rewardAmount = plugin.getConfig().getInt("ThankingRewardAmount");
+        plugin.getEconomy().depositPlayer(playerWhoClicked, rewardAmount);
+        chatFactory.sendPlayerMessage("&7You have received &e" + rewardAmount  + " &6Coins!", true, playerWhoClicked, prefix);
+    }
+
+    public void rewardCoinsToActivator(Player activator){
+        int rewardAmount = plugin.getConfig().getInt("ActivatorRewardAmount");
+        plugin.getEconomy().depositPlayer(activator, rewardAmount);
+        chatFactory.sendPlayerMessage("&7You have received &e" + rewardAmount  + " &6Coins!", true, activator, prefix);
+    }
+
 }

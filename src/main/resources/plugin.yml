@@ -56,5 +56,65 @@ permissions:
     default: op
   gp.unlock.yellow:
     default: op
+  #BOOTS
+  gp.purchase.antifall:
+    default: true
+  gp.purchase.strength:
+    default: op
+  gp.purchase.regen:
+    default: true
+  gp.purchase.glowing:
+    default: true
+  gp.purchase.speed:
+    default: true
+  gp.purchase.jumpboost:
+    default: op
+  gp.purchase.doublejump:
+    default: true
+  gp.purchase.absorption:
+    default: true
+  gp.purchase.blindness:
+    default: true
+  gp.purchase.coin:
+    default: op
+  gp.purchase.antikb:
+    default: true
+  gp.purchase.stonks:
+    default: true
+  gp.purchase.levitation:
+    default: true
+  gp.purchase.invisibility:
+    default: true
+
+  gp.unlock.antifall:
+    default: op
+    gp.unlock.strength:
+      default: op
+    gp.unlock.regen:
+      default: op
+    gp.unlock.glowing:
+      default: op
+    gp.unlock.speed:
+      default: op
+    gp.unlock.jumpboost:
+      default: op
+    gp.unlock.doublejump:
+      default: op
+    gp.unlock.absorption:
+      default: op
+    gp.unlock.blindness:
+      default: op
+    gp.unlock.coin:
+      default: op
+    gp.unlock.antikb:
+      default: op
+    gp.unlock.stonks:
+      default: op
+    gp.unlock.levitation:
+      default: op
+    gp.unlock.invisibility:
+      default: op
+
+
 
 

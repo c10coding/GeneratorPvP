@@ -81,6 +81,19 @@ public class GPUtils {
 
     }
 
+    public static List<Integer> getIndexesInColumn(Inventory inv, int inventoryIndex, int inventoryNumRows){
+        List<Integer> indexes = new ArrayList<>();
+        int columnNum = getColumnNum(inventoryNumRows, inventoryIndex, inv);
+        for(int row = 0; row < inventoryNumRows; row++){
+            for(int column = 0; column < 9; column++){
+                if(column == columnNum){
+                    indexes.add(column);
+                }
+            }
+        }
+        return indexes;
+    }
+
     public static String secondsToSerializedTime(int seconds){
         Chat chat = new Chat();
         int hours = seconds / 3600;
@@ -88,5 +101,6 @@ public class GPUtils {
         int correctSeconds = seconds % 60;
         return chat.chat("&c" + hours + " &7Hours &c" + minutes + " &7Minutes &c" + correctSeconds + " &7Seconds");
     }
+
 
 }
