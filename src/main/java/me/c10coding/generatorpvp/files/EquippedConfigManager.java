@@ -50,6 +50,7 @@ public class EquippedConfigManager extends ConfigManager {
     public void addPlayerToFile(){
         setChatCategory();
         setAmplifiersCategory();
+        setBootsCategory();
     }
 
     public Map<Object, Object> mapIsEquipped(String category){

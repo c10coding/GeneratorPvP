@@ -52,8 +52,6 @@ public class DefaultConfigManager extends me.c10coding.coreapi.files.ConfigManag
         return slotNums;
     }
 
-
-
     public double getTPCost(String key){
         return config.getDouble("Costs.TP." + key);
     }
@@ -76,6 +74,14 @@ public class DefaultConfigManager extends me.c10coding.coreapi.files.ConfigManag
 
     public double getBootCost(String key){
         return config.getDouble("Costs.SuperBoots." + key);
+    }
+
+    public double getBootsActivationTime(){
+        return config.getDouble("BootsActivationTime");
+    }
+
+    public List<String> getBootsLore(String key){
+        return config.getStringList("SuperBoots Lores." + key);
     }
 
     private String getMenuPath(String menuType, int slotNum, String key){

@@ -3,7 +3,95 @@ Prefix: "&d&l[GeneratorPvP]"
 AnnouncerPrefix: "&b&l[Announcer] "
 ThankingRewardAmount: 5
 ActivatorRewardAmount: 10
+BootsActivationTime: 3
 TPDelay: 3
+
+SuperBoots Lores:
+  Anti Fall:
+    - "&7What is fall damage?"
+  Strength:
+    - "&7Gives you strength &e%level% permanently"
+  Regen:
+    - "&7Gives you regen &e%level%&7 permanently"
+  Glowing:
+    - "&7You can pretty much x-ray with these bad boys on"
+    - "&7Gives the glowing effect to everyone within &e%glowBlockRange% blocks &7(Only you see)"
+  Speed:
+    - "&7Gotta go fast &e™"
+  Jump Boost:
+    - "&7This' pretty self explanatory, &oright?"
+    - "&7You gain jump boost &e%level%&7 permanently"
+  Double Jump:
+    - "&7Another obvious one."
+    - "&7You can jump another time while midair with these boots on"
+  Absorption:
+    - "&7You gain &e%absorptionAmount%&7 extra hearts"
+  Blindness:
+    - "&7I feel bad for the people that are near you..."
+    - "&7You blind anyone who is within &e%blindnessBlockRange% blocks&7 of you."
+  Coin:
+    - "&7These boots are the definition of &dOP"
+    - "&7You can gain anywhere from &e1&7 to &e25&7 coins when you kill someone"
+  AntiKB:
+    - "&7What is knock-back, am I right?"
+  Stonks:
+    - "&7You can't ever go broke if you never lose coins"
+    - "&7You never lose coins when you die with these boots on"
+  Levitation:
+    - "&7I took levitation classes once, &ebut then I dropped out..."
+  Invisibility:
+    - "&7Lets switch it up and go &e&oinvisible&7 for a bit!"
+
+SuperBoots Properties:
+  Anti Fall:
+    Cooldown: 0
+    Duration: 0
+  Strength:
+    Cooldown: 0
+    Duration: 0
+    Level: 1
+  Regen:
+    Cooldown: 0
+    Duration: 0
+    Level: 1
+  Glowing:
+    Cooldown: 30
+    Duration: 10
+    GlowBlockRange: 50
+  Speed:
+    Cooldown: 60
+    Duration: 30
+    Level: 1
+  JumpBoost:
+    Cooldown: 60
+    Duration: 30
+    Level: 1
+  Double Jump:
+    Cooldown: 10
+    Duration: 0
+  Absorption:
+    Cooldown: 0
+    Duration: 0
+    ExtraHeartAmount: 10
+  Blindness:
+    Cooldown: 60
+    Duration: 30
+    BlindnessBlockRange: 5
+  Coin:
+    Cooldown: 0
+    Duration: 0
+  AntiKB:
+    Cooldown: 30
+    Duration: 10
+  Stonks:
+    Cooldown: 0
+    Duration: 0
+  Levitation:
+    Cooldown: 120
+    Duration: 5
+  Invisibility:
+    Cooldown: 60
+    Duration: 25
 
 Costs:
 
@@ -67,13 +155,13 @@ Costs:
     Purple: 0
 
   SuperBoots:
-    AntiFall: 1000
+    Anti Fall: 1000
     Strength: 0
     Regen: 2500
     Glowing: 1000
     Speed: 25000
-    JumpBoost: 0
-    DoubleJump: 20000
+    Jump Boost: 0
+    Double Jump: 20000
     Absorption: 5000
     Blindness: 10000
     Coin: 0

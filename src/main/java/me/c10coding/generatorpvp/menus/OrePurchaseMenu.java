@@ -1,6 +1,5 @@
 package me.c10coding.generatorpvp.menus;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,7 +8,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,22 +27,24 @@ public class OrePurchaseMenu extends MenuCreator implements Listener {
 
     enum OreTypes{
 
-        COAL_BLOCK(Material.COAL_BLOCK, "CoalBlock", "Coal Block"),
-        IRON(Material.IRON_INGOT, "Iron", "Iron"),
-        IRON_BLOCK(Material.IRON_BLOCK, "IronBlock", "Iron Block"),
-        GOLD(Material.GOLD_INGOT, "Gold", "Gold"),
-        GOLD_BLOCK(Material.GOLD_BLOCK, "GoldBlock", "Gold Block"),
-        DIAMOND(Material.DIAMOND, "Diamond", "Diamond"),
-        DIAMOND_BLOCK(Material.DIAMOND_BLOCK, "DiamondBlock", "Diamond Block"),
-        EMERALD(Material.EMERALD, "Emerald", "Emerald Block"),
-        EMERALD_BLOCK(Material.EMERALD_BLOCK, "EmeraldBlock", "Emerald Block");
+        COAL_BLOCK(Material.COAL_BLOCK, "CoalBlock", "Coal Block", "&0"),
+        IRON(Material.IRON_INGOT, "Iron", "Iron", "&f"),
+        IRON_BLOCK(Material.IRON_BLOCK, "IronBlock", "Iron Block", "&f"),
+        GOLD(Material.GOLD_INGOT, "Gold", "Gold", "&e"),
+        GOLD_BLOCK(Material.GOLD_BLOCK, "GoldBlock", "Gold Block", "&e"),
+        DIAMOND(Material.DIAMOND, "Diamond", "Diamond", "&b"),
+        DIAMOND_BLOCK(Material.DIAMOND_BLOCK, "DiamondBlock", "Diamond Block", "&b"),
+        EMERALD(Material.EMERALD, "Emerald", "Emerald Block", "&a"),
+        EMERALD_BLOCK(Material.EMERALD_BLOCK, "EmeraldBlock", "Emerald Block", "&a");
 
         private Material mat;
         private String configKey, name;
-        OreTypes(Material mat, String configKey, String name){
+        private String colorCode;
+        OreTypes(Material mat, String configKey, String name, String colorCode){
             this.mat = mat;
             this.configKey = configKey;
             this.name = name;
+            this.colorCode = colorCode;
         }
 
         public Material getMat(){
@@ -53,6 +53,14 @@ public class OrePurchaseMenu extends MenuCreator implements Listener {
 
         public String getConfigKey(){
             return configKey;
+        }
+
+        public String getName(){
+            return name;
+        }
+
+        public String getColorCode(){
+            return colorCode;
         }
 
     }

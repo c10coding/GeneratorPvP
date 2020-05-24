@@ -4,6 +4,7 @@ import me.c10coding.coreapi.chat.Chat;
 import me.c10coding.coreapi.menus.Menu;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.files.DefaultConfigManager;
+import me.c10coding.generatorpvp.files.EquippedConfigManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -19,6 +20,7 @@ import java.util.Map;
 public class MenuCreator extends Menu implements Listener {
 
     protected me.c10coding.generatorpvp.files.DefaultConfigManager cm;
+    protected EquippedConfigManager ecm;
     protected Chat chatFactory;
     protected Economy econ = GeneratorPvP.getEconomy();
     protected String prefix;
@@ -31,8 +33,8 @@ public class MenuCreator extends Menu implements Listener {
         this.cm = new DefaultConfigManager(plugin);
         this.chatFactory = ((GeneratorPvP) plugin).getApi().getChatFactory();
         this.prefix = ((GeneratorPvP) plugin).getPrefix();
+        this.ecm = new EquippedConfigManager(plugin, p.getUniqueId());
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        setHasGivables(false);
     }
 
     public MenuCreator(JavaPlugin plugin, String menuTitle, int numSlots, Player p) {
@@ -42,8 +44,8 @@ public class MenuCreator extends Menu implements Listener {
         this.chatFactory = ((GeneratorPvP) plugin).getApi().getChatFactory();
         this.prefix = ((GeneratorPvP) plugin).getPrefix();
         this.p = p;
+        this.ecm = new EquippedConfigManager(plugin, p.getUniqueId());
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        setHasGivables(false);
     }
 
     @Override
@@ -103,7 +105,7 @@ public class MenuCreator extends Menu implements Listener {
                 newMenu = new AmplifiersMenu(plugin, p, "Amplifiers");
                 break;
             case 15:
-                //newMenu = new ChatMenu(plugin, "EnderChest", 27);
+                newMenu = new SuperBootsMenu(plugin, p);
                 break;
             case 16:
                 //newMenu = new ChatMenu(plugin, "Chat", 27);

@@ -7,6 +7,7 @@ import me.c10coding.generatorpvp.listeners.GeneralListener;
 import me.c10coding.generatorpvp.listeners.TeleportListener;
 import me.c10coding.generatorpvp.listeners.WeaponsListener;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -22,7 +23,7 @@ public final class GeneratorPvP extends JavaPlugin {
     private CoreAPI api = new CoreAPI();
     private static Economy econ = null;
     private Logger logger;
-    public static Enchantment empty;
+    private EnchantmentRegister enchantmentRegister;
 
     @Override
     public void onEnable() {
@@ -32,36 +33,21 @@ public final class GeneratorPvP extends JavaPlugin {
         initializeCommands();
         startAmplifierTimer();
 
-        empty = new EmptyEnchant(this);
-        registerEmptyEnchant(empty);
-
         if (!setupEconomy() ) {
             this.getLogger().severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
             getServer().getPluginManager().disablePlugin(this);
         }
+
         this.logger = this.getLogger();
+        this.enchantmentRegister = new EnchantmentRegister(this);
+
+        enchantmentRegister.registerEnchantments();
+
     }
 
     @Override
     public void onDisable() {
-        try {
-            Field keyField = Enchantment.class.getDeclaredField("byKey");
-
-            keyField.setAccessible(true);
-            @SuppressWarnings("unchecked")
-            HashMap<NamespacedKey, Enchantment> byKey = (HashMap<NamespacedKey, Enchantment>) keyField.get(null);
-
-            byKey.remove(new NamespacedKey(this, "Empty"));
-
-            Field nameField = Enchantment.class.getDeclaredField("byName");
-
-            nameField.setAccessible(true);
-            @SuppressWarnings("unchecked")
-            HashMap<String, Enchantment> byName = (HashMap<String, Enchantment>) nameField.get(null);
-
-            byKey.remove(new NamespacedKey(this, "Empty"));
-
-        } catch (Exception ignored) { }
+        enchantmentRegister.unRegisterEnchantments();
     }
 
     public CoreAPI getApi(){
@@ -69,7 +55,7 @@ public final class GeneratorPvP extends JavaPlugin {
     }
 
     public void validateConfigs(){
-        File[] files = {new File(this.getDataFolder(), "config.yml"), new File(this.getDataFolder(), "equipped.yml"), new File(this.getDataFolder(), "amplifiers.yml")};
+        File[] files = {new File(this.getDataFolder(), "config.yml"), new File(this.getDataFolder(), "equipped.yml"), new File(this.getDataFolder(), "amplifiers.yml"), new File(this.getDataFolder(), "enchants.yml")};
         for(File f : files){
             if(!f.exists()){
                 this.saveResource(f.getName(),false);
@@ -109,6 +95,7 @@ public final class GeneratorPvP extends JavaPlugin {
         new AmplifierTimer(this).runTaskTimer(this, 0L, 20L);
     }
 
+    /*
     private void registerEmptyEnchant(Enchantment ench){
         boolean registered = true;
         //Using Reflection
@@ -126,7 +113,7 @@ public final class GeneratorPvP extends JavaPlugin {
         }else{
             this.getLogger().info("The empty enchant is already registered. Ignoring...");
         }
-    }
+    }*/
 
     public static Economy getEconomy() {
         return econ;
@@ -135,5 +122,7 @@ public final class GeneratorPvP extends JavaPlugin {
     public Logger getPluginLogger(){
         return logger;
     }
+
+
 
 }

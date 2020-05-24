@@ -15,6 +15,7 @@ public class OresMenu extends MenuCreator implements Listener {
     public OresMenu(JavaPlugin plugin, Player p) {
         super(plugin, "Ores", 27, p);
         createMenu();
+        setHasGivables(true);
     }
 
     public void createMenu(){

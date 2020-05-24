@@ -3,11 +3,15 @@ package me.c10coding.generatorpvp.menus;
 import me.c10coding.generatorpvp.files.DefaultConfigManager;
 import me.c10coding.generatorpvp.files.EquippedConfigManager;
 import me.c10coding.generatorpvp.utils.GPUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -20,6 +24,8 @@ public class ConfirmPurchaseMenu extends MenuCreator {
     private int cost;
     private MenuCreator prevMenu;
     private int amount;
+    final String ORE_PURCHASE_LORE = "&c[!] &rUse this item to trade &c[!]";
+    private EquippedConfigManager ecm;
 
     public ConfirmPurchaseMenu(JavaPlugin plugin, Player p, Material mat, double cost, String configKey, MenuCreator prevMenu, int amount) {
         super(plugin, "Purchasing: &b&l" + GPUtils.matToName(mat), 27, p);
@@ -28,18 +34,42 @@ public class ConfirmPurchaseMenu extends MenuCreator {
         this.cost = (int) cost;
         this.prevMenu = prevMenu;
         this.amount = amount;
+        this.ecm = new EquippedConfigManager(plugin,p.getUniqueId());
         createMenu();
     }
 
     public void createMenu(){
-        int slotItem = 13;
-        int slotCost = 22;
-        DefaultConfigManager dcm = new DefaultConfigManager(plugin);
+        int playerBalance = (int) econ.getBalance(p);
         List<String> lore = new ArrayList<>();
-        lore.add(chatFactory.chat("Cost: &a&l" + cost));
-        inv.setItem(13, createGuiItem(matPurchasing, chatFactory.chat(GPUtils.matToName(matPurchasing)), amount, lore));
-        inv.setItem(22, createGuiItem(Material.SUNFLOWER, chatFactory.chat("Balance: &a&l" + econ.getBalance(p)), new ArrayList<>()));
+        lore.add(chatFactory.chat("&7Cost: &c" + cost + " coins"));
+        if(prevMenu instanceof SuperBootsMenu){
+            ItemStack boots = createEnchantedBoot();
+            inv.setItem(13, boots);
+        }else{
+            inv.setItem(13, createGuiItem(matPurchasing, chatFactory.chat(GPUtils.matToName(matPurchasing)), amount, lore));
+        }
+        inv.setItem(22, createGuiItem(Material.SUNFLOWER, chatFactory.chat("&7Coins: &c" + playerBalance), new ArrayList<>()));
         fillMenu();
+    }
+
+    private ItemStack createEnchantedBoot(){
+        SuperBootsMenu.SuperBoots bootType = getSuperBootType(configKey);
+        ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
+        LeatherArmorMeta lam = (LeatherArmorMeta) boots.getItemMeta();
+        lam.setColor(bootType.getColorOfArmor());
+        lam.setDisplayName(chatFactory.chat("&e" + bootType.getConfigKey() + "&7 Boots"));
+        boots.setItemMeta(lam);
+        return boots;
+    }
+
+    private SuperBootsMenu.SuperBoots getSuperBootType(String configKey){
+        SuperBootsMenu.SuperBoots bootType = SuperBootsMenu.SuperBoots.ANTI_FALL;
+        for(SuperBootsMenu.SuperBoots sb : SuperBootsMenu.SuperBoots.values()){
+            if(sb.getConfigKey().equalsIgnoreCase(configKey)){
+                bootType = sb;
+            }
+        }
+        return bootType;
     }
 
     @Override
@@ -59,10 +89,24 @@ public class ConfirmPurchaseMenu extends MenuCreator {
 
             if(inv.getItem(x) == null){
                 setFillerMaterial(pattern[patternCounter]);
-                inv.setItem(x, createGuiItem());
+                ItemStack fillerItem = createPane();
+                inv.setItem(x, fillerItem);
             }
             patternCounter++;
         }
+    }
+
+    private ItemStack createPane(){
+        ItemStack glassPane = new ItemStack(fillerMat, 1);
+        ItemMeta itemMeta = glassPane.getItemMeta();
+        itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        if(fillerMat.equals(Material.GREEN_STAINED_GLASS_PANE)){
+            itemMeta.setDisplayName(chatFactory.chat("&aPurchase"));
+        }else{
+            itemMeta.setDisplayName(chatFactory.chat("&cCancel"));
+        }
+        glassPane.setItemMeta(itemMeta);
+        return glassPane;
     }
 
     @EventHandler
@@ -87,6 +131,8 @@ public class ConfirmPurchaseMenu extends MenuCreator {
             prevMenu = new WarpsMenu(plugin, p);
         }else if(prevMenu instanceof ChatMenu){
             prevMenu = new ChatMenu(plugin, p);
+        }else if(prevMenu instanceof SuperBootsMenu){
+            prevMenu = new SuperBootsMenu(plugin, p);
         }
 
         if(clickedItem.getType().equals(Material.GREEN_STAINED_GLASS_PANE)){
@@ -95,24 +141,40 @@ public class ConfirmPurchaseMenu extends MenuCreator {
             }
             econ.withdrawPlayer(p, cost);
             p.closeInventory();
-            chatFactory.sendPlayerMessage("&c&l- " + cost + " coins", true, p, prefix);
+            chatFactory.sendPlayerMessage("&c&l- &c" + cost + "&e coins", true, p, prefix);
 
-            if(prevMenu instanceof ChatMenu){
-                EquippedConfigManager ecm = new EquippedConfigManager(plugin, p.getUniqueId());
+            if(prevMenu instanceof ChatMenu) {
                 ecm.setPurchased(configKey, "Chat", true);
                 ecm.saveConfig();
-            }else{
-                prevMenu.openInventory(p);
+            }else if(prevMenu instanceof SuperBootsMenu){
+                ecm.setPurchased(configKey, "SuperBoots", true);
+                ecm.saveConfig();
             }
+
+            p.closeInventory();
         }else if(clickedItem.getType().equals(Material.RED_STAINED_GLASS_PANE)){
             p.closeInventory();
             prevMenu.openInventory(p);
         }
-
     }
 
     public void giveItems(){
-        p.getInventory().addItem(new ItemStack(matPurchasing, amount));
+        ItemStack item = new ItemStack(matPurchasing, amount);
+
+        if(prevMenu instanceof OresMenu){
+            for(OrePurchaseMenu.OreTypes oreType : OrePurchaseMenu.OreTypes.values()){
+                if(oreType.getMat().equals(matPurchasing)){
+                    ItemMeta itemMeta = item.getItemMeta();
+                    List<String> lore = new ArrayList<>();
+                    lore.add(chatFactory.chat(ORE_PURCHASE_LORE));
+                    itemMeta.setDisplayName(chatFactory.chat(oreType.getColorCode() + oreType.getName()));
+                    itemMeta.setLore(lore);
+                    item.setItemMeta(itemMeta);
+                }
+            }
+        }
+
+        p.getInventory().addItem(item);
     }
 
 }

@@ -22,27 +22,35 @@ public class ChatMenu extends MenuCreator{
         setHasGivables(false);
     }
 
-    enum ChatColors{
+    public enum ChatColors{
 
-        GRAY("Gray", Material.GRAY_CONCRETE, "gp.purchase.gray","gp.unlock.gray", false),
-        GREEN("Green", Material.GREEN_CONCRETE, "gp.purchase.green","gp.unlock.green", true),
-        YELLOW("Yellow", Material.YELLOW_CONCRETE, "gp.purchase.yellow","gp.unlock.yellow", true),
-        BLUE("Blue", Material.LIGHT_BLUE_CONCRETE, "gp.purchase.blue","gp.unlock.blue", false),
-        GOLD("Gold", Material.ORANGE_CONCRETE, "gp.purchase.orange","gp.unlock.orange", false),
-        PURPLE("Purple", Material.MAGENTA_CONCRETE, "gp.purchase.purple","gp.unlock.magenta", false);
+        GRAY("Gray", Material.GRAY_CONCRETE, "gp.purchase.gray","gp.unlock.gray", false, "&7"),
+        GREEN("Green", Material.GREEN_CONCRETE, "gp.purchase.green","gp.unlock.green", true, "&a"),
+        YELLOW("Yellow", Material.YELLOW_CONCRETE, "gp.purchase.yellow","gp.unlock.yellow", true, "&e"),
+        BLUE("Blue", Material.LIGHT_BLUE_CONCRETE, "gp.purchase.blue","gp.unlock.blue", false, "&1"),
+        GOLD("Gold", Material.ORANGE_CONCRETE, "gp.purchase.orange","gp.unlock.orange", false, "&6"),
+        PURPLE("Purple", Material.MAGENTA_CONCRETE, "gp.purchase.purple","gp.unlock.magenta", false, "&5");
 
-        private String configKey;
         private Material mat;
-        private String unlockPermission;
-        private String purchasePermission;
+        private String unlockPermission, purchasePermission, configKey, colorCode;
         private boolean isPurchasable;
-        ChatColors(String configKey, Material mat, String purchasePermission, String unlockPermission, boolean isPurchasable){
+        ChatColors(String configKey, Material mat, String purchasePermission, String unlockPermission, boolean isPurchasable, String colorCode){
             this.configKey = configKey;
             this.mat = mat;
             this.unlockPermission = unlockPermission;
             this.purchasePermission = purchasePermission;
             this.isPurchasable = isPurchasable;
+            this.colorCode = colorCode;
         }
+
+        public String getColorCode(){
+            return colorCode;
+        }
+
+        public String getConfigKey(){
+            return configKey;
+        }
+
     }
 
     public void createMenu(){
@@ -169,7 +177,11 @@ public class ChatMenu extends MenuCreator{
             */
                 if(ecm.hasSomethingEquipped("Chat")){
                     int slotEquipped = getSlotEquipped(Material.REDSTONE_ORE);
-                    setSlotToNormal(slotEquipped);
+                    if(slotEquipped != slotClicked){
+                        setSlotToNormal(slotEquipped);
+                    }else{
+                        return;
+                    }
                 }
 
                 setSlotToEquipped(slotClicked);
