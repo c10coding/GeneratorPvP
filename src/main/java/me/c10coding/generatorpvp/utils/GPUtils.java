@@ -21,7 +21,7 @@ public class GPUtils {
         return enumName;
     }
 
-    public static String enumToString(Enum e){
+    public static String enumToConfigKey(Enum e){
         String stringValue = e.toString();
         String finalStringValue = "";
 

@@ -2,15 +2,14 @@ package me.c10coding.generatorpvp.bootEnchants;
 
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.files.DefaultConfigManager;
+import me.c10coding.generatorpvp.menus.SuperBootsMenu;
 import org.bukkit.Bukkit;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
-import org.bukkit.boss.KeyedBossBar;
+import org.bukkit.NamespacedKey;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Iterator;
 
 public class BootsTimer {
 
@@ -18,12 +17,15 @@ public class BootsTimer {
     private double duration, cooldown;
     private DefaultConfigManager dm;
     private boolean isActive;
+    private boolean isOnCooldown = false;
+    private SuperBootsMenu.SuperBoots boot;
 
-    public BootsTimer(GeneratorPvP plugin, double duration, double cooldown){
+    public BootsTimer(GeneratorPvP plugin, double duration, double cooldown, SuperBootsMenu.SuperBoots boot){
         this.plugin = plugin;
         this.duration = duration;
         this.cooldown = cooldown;
         this.dm = new DefaultConfigManager(plugin);
+        this.boot = boot;
     }
 
     public void incrementXPBar(Player player){
@@ -42,19 +44,27 @@ public class BootsTimer {
     public void decreaseXPBar(Player p){
 
         float minExp = 0.0F;
-        float expToSubtract = (float) (1.0F / duration);
+        float expToSubtract = (float) (1.0 / duration);
 
         new BukkitRunnable() {
             @Override
             public void run() {
                 float currentXP = p.getExp();
-                if(minExp <= currentXP - expToSubtract){
-                    p.setExp(currentXP - expToSubtract);
+                ItemStack boots = p.getInventory().getBoots();
+                if(boots != null && boots.getItemMeta().hasEnchant(Enchantment.getByKey(new NamespacedKey(plugin, boot.getEnchantmentKey().toString())))){
+                    if(minExp <= currentXP - expToSubtract){
+                        p.setExp(currentXP - expToSubtract);
+                    }else{
+                        resetXPBar(p);
+                        putBarInCooldownMode(p);
+                        isOnCooldown = true;
+                        this.cancel();
+                    }
                 }else{
                     resetXPBar(p);
-                    putBarInCooldownMode(p);
                     this.cancel();
                 }
+
             }
         }.runTaskTimer(plugin, 20L, 20L);
     }
@@ -67,12 +77,21 @@ public class BootsTimer {
         new BukkitRunnable() {
             @Override
             public void run() {
+
                 float currentXP = p.getExp();
-                if(maxExp >= currentXP + expToAdd){
-                    p.setExp(currentXP + expToAdd);
+
+                ItemStack boots = p.getInventory().getBoots();
+                if(boots != null && boots.getItemMeta().hasEnchant(Enchantment.getByKey(new NamespacedKey(plugin, boot.getEnchantmentKey().toString())))){
+                    if (maxExp >= currentXP + expToAdd) {
+                        p.setExp(currentXP + expToAdd);
+                    } else {
+                        p.setExp(0);
+                        setActive(false);
+                        isOnCooldown = false;
+                        this.cancel();
+                    }
                 }else{
                     p.setExp(0);
-                    setActive(false);
                     this.cancel();
                 }
             }
@@ -86,6 +105,10 @@ public class BootsTimer {
 
     public void setActive(boolean isActive){
         this.isActive = isActive;
+    }
+
+    public boolean isOnCooldown(){
+        return isOnCooldown;
     }
 
 

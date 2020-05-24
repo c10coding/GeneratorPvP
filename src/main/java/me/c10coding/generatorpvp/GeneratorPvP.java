@@ -1,21 +1,18 @@
 package me.c10coding.generatorpvp;
 
 import me.c10coding.coreapi.CoreAPI;
+import me.c10coding.coreapi.holograms.HologramHelper;
 import me.c10coding.generatorpvp.commands.AdminCommands;
 import me.c10coding.generatorpvp.commands.MenuCommand;
 import me.c10coding.generatorpvp.listeners.GeneralListener;
 import me.c10coding.generatorpvp.listeners.TeleportListener;
 import me.c10coding.generatorpvp.listeners.WeaponsListener;
+import me.c10coding.generatorpvp.managers.Generator;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.logging.Logger;
 
 public final class GeneratorPvP extends JavaPlugin {
@@ -28,10 +25,13 @@ public final class GeneratorPvP extends JavaPlugin {
     @Override
     public void onEnable() {
 
+        this.enchantmentRegister = new EnchantmentRegister(this);
+
         validateConfigs();
         registerEvents();
         initializeCommands();
         startAmplifierTimer();
+        startGenerators();
 
         if (!setupEconomy() ) {
             this.getLogger().severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
@@ -39,8 +39,6 @@ public final class GeneratorPvP extends JavaPlugin {
         }
 
         this.logger = this.getLogger();
-        this.enchantmentRegister = new EnchantmentRegister(this);
-
         enchantmentRegister.registerEnchantments();
 
     }
@@ -48,6 +46,7 @@ public final class GeneratorPvP extends JavaPlugin {
     @Override
     public void onDisable() {
         enchantmentRegister.unRegisterEnchantments();
+        disableHolograms();
     }
 
     public CoreAPI getApi(){
@@ -55,7 +54,7 @@ public final class GeneratorPvP extends JavaPlugin {
     }
 
     public void validateConfigs(){
-        File[] files = {new File(this.getDataFolder(), "config.yml"), new File(this.getDataFolder(), "equipped.yml"), new File(this.getDataFolder(), "amplifiers.yml"), new File(this.getDataFolder(), "enchants.yml")};
+        File[] files = {new File(this.getDataFolder(), "config.yml"), new File(this.getDataFolder(), "equipped.yml"), new File(this.getDataFolder(), "amplifiers.yml"), new File(this.getDataFolder(), "generators.yml")};
         for(File f : files){
             if(!f.exists()){
                 this.saveResource(f.getName(),false);
@@ -69,6 +68,7 @@ public final class GeneratorPvP extends JavaPlugin {
     }
 
     private boolean setupEconomy() {
+        getLogger().info("Hooking Economy...");
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
             return false;
         }
@@ -81,14 +81,64 @@ public final class GeneratorPvP extends JavaPlugin {
     }
 
     private void registerEvents(){
+        getLogger().info("Registering events...");
         this.getServer().getPluginManager().registerEvents(new WeaponsListener(this), this);
         this.getServer().getPluginManager().registerEvents(new GeneralListener(this), this);
         this.getServer().getPluginManager().registerEvents(new TeleportListener(this), this);
     }
 
     private void initializeCommands(){
+        getLogger().info("Setting up commands...");
         this.getServer().getPluginCommand("menu").setExecutor(new MenuCommand(this));
         this.getServer().getPluginCommand("genpvp").setExecutor(new AdminCommands(this));
+    }
+
+    private void startGenerators(){
+
+        getLogger().info("Starting Generators...");
+
+        Generator coalOre1 = new Generator(this, GeneratorTypes.COAL_ORE, 1);
+        Generator coalOre2 = new Generator(this, GeneratorTypes.COAL_ORE, 2);
+        Generator coalOre3 = new Generator(this, GeneratorTypes.COAL_ORE, 3);
+        coalOre1.startGenerator();
+        coalOre2.startGenerator();
+        coalOre3.startGenerator();
+
+        Generator coalBlock1 = new Generator(this, GeneratorTypes.COAL_BLOCK, 1);
+        Generator coalBlock2 = new Generator(this, GeneratorTypes.COAL_BLOCK, 2);
+        coalBlock1.startGenerator();
+        coalBlock2.startGenerator();
+
+        Generator ironOre1 = new Generator(this, GeneratorTypes.IRON_ORE, 1);
+        Generator ironOre2 = new Generator(this, GeneratorTypes.IRON_ORE, 2);
+        ironOre1.startGenerator();
+        ironOre2.startGenerator();
+
+        Generator ironBlock1 = new Generator(this, GeneratorTypes.IRON_BLOCK, 1);
+        ironBlock1.startGenerator();
+
+        Generator goldOre1 = new Generator(this, GeneratorTypes.GOLD_ORE, 1);
+        goldOre1.startGenerator();
+
+        Generator goldBlock1 = new Generator(this, GeneratorTypes.GOLD_BLOCK, 1);
+        goldBlock1.startGenerator();
+
+        Generator diamondOre1 = new Generator(this, GeneratorTypes.DIAMOND_ORE, 1);
+        diamondOre1.startGenerator();
+
+        Generator diamondBlock1 = new Generator(this, GeneratorTypes.DIAMOND_BLOCK, 1);
+        diamondBlock1.startGenerator();
+
+        Generator emeraldOre1 = new Generator(this, GeneratorTypes.EMERALD_ORE, 1);
+        emeraldOre1.startGenerator();
+
+    }
+
+    private void disableHolograms(){
+        HologramHelper hh = new HologramHelper(this);
+        for(String hologramName : hh.getAllNames()){
+            hh.removeHologram(hologramName);
+        }
     }
 
     private void startAmplifierTimer(){

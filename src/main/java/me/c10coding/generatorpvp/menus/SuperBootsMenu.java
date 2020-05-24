@@ -16,9 +16,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class SuperBootsMenu extends MenuCreator implements Listener {
@@ -72,6 +75,10 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
 
         public Color getColorOfArmor(){
             return colorOfArmor;
+        }
+
+        public EnchantmentKeys getEnchantmentKey(){
+            return enchantmentKey;
         }
 
     }
@@ -247,6 +254,9 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
                     p.getInventory().setBoots(null);
                     p.closeInventory();
                     chatFactory.sendPlayerMessage("You have unequipped your boots!", true, p, prefix);
+                    removePotions();
+                    removeFlight();
+                    removeExtraHealth();
                 }
                 return;
             case 2:
@@ -335,6 +345,9 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
                     int slotEquipped = getSlotEquipped();
                     if(slotEquipped != slotClicked){
                         setSlotToNormal(slotEquipped);
+                        removePotions();
+                        removeFlight();
+                        removeExtraHealth();
                     }else{
                         return;
                     }
@@ -348,11 +361,28 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
                 LeatherArmorMeta bootsMeta = (LeatherArmorMeta) boots.getItemMeta();
                 Color colorOfArmor = superBoot.colorOfArmor;
                 ChatColor chatColor = GPUtils.matchArmorColorWithChatColor(colorOfArmor);
+
                 bootsMeta.setDisplayName(chatFactory.chat(chatColor + superBoot.configKey));
                 bootsMeta.setColor(colorOfArmor);
                 bootsMeta.addEnchant(Enchantment.getByKey(new NamespacedKey(plugin, superBoot.enchantmentKey.toString())), 1, false);
+                bootsMeta.addEnchant(Enchantment.BINDING_CURSE, 1, false);
+                bootsMeta.setUnbreakable(true);
+                bootsMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+
                 boots.setItemMeta(bootsMeta);
                 p.getInventory().setBoots(boots);
+
+                if(superBoot.equals(SuperBoots.REGEN)){
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,Integer.MAX_VALUE, bm.getBootsProperty(configKey, DefaultConfigBootsSectionManager.SuperBootsProperty.LEVEL) - 1));
+                }else if(superBoot.equals(SuperBoots.STRENGTH)){
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,Integer.MAX_VALUE, bm.getBootsProperty(configKey, DefaultConfigBootsSectionManager.SuperBootsProperty.LEVEL) - 1));
+                }else if(superBoot.equals(SuperBoots.DOUBLE_JUMP)){
+                    p.setAllowFlight(true);
+                }else if(superBoot.equals(SuperBoots.ABSORPTION)){
+                    double maxHealthAdditive = bm.getBootsProperty(configKey, DefaultConfigBootsSectionManager.SuperBootsProperty.EXTRA_HEART_AMOUNT);
+                    p.setMaxHealth(p.getMaxHealth() + maxHealthAdditive);
+                    p.setHealth(p.getMaxHealth());
+                }
 
                 p.closeInventory();
             }
@@ -404,6 +434,22 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
 
         }
         ecm.saveConfig();
+    }
+
+    private void removePotions(){
+        Collection<PotionEffect> potionEffects = p.getActivePotionEffects();
+        for(PotionEffect pe : potionEffects){
+            p.removePotionEffect(pe.getType());
+        }
+    }
+
+    private void removeFlight(){
+        p.setAllowFlight(false);
+    }
+
+    private void removeExtraHealth(){
+        p.setMaxHealth(10);
+        p.setHealth(p.getMaxHealth());
     }
 
 }

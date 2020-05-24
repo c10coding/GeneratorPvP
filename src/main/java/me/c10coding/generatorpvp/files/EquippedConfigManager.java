@@ -51,6 +51,7 @@ public class EquippedConfigManager extends ConfigManager {
         setChatCategory();
         setAmplifiersCategory();
         setBootsCategory();
+        setEnderChestCategory();
     }
 
     public Map<Object, Object> mapIsEquipped(String category){
@@ -184,6 +185,10 @@ public class EquippedConfigManager extends ConfigManager {
         config.set("SuperBoots." + u.toString() + ".IsEquipped.Levitation", false);
         config.set("SuperBoots." + u.toString() + ".IsEquipped.Invisibility", false);
 
+    }
+
+    private void setEnderChestCategory(){
+        config.set("EnderChest." + u.toString() + ".IsPurchased.EnderChest", false);
     }
 
 }

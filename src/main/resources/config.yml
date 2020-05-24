@@ -4,6 +4,8 @@ AnnouncerPrefix: "&b&l[Announcer] "
 ThankingRewardAmount: 5
 ActivatorRewardAmount: 10
 BootsActivationTime: 3
+CoinsLostPerDeath: 1
+CoinsGainedPerKill: 1
 TPDelay: 3
 
 SuperBoots Lores:
@@ -62,7 +64,7 @@ SuperBoots Properties:
     Cooldown: 60
     Duration: 30
     Level: 1
-  JumpBoost:
+  Jump Boost:
     Cooldown: 60
     Duration: 30
     Level: 1
@@ -94,6 +96,8 @@ SuperBoots Properties:
     Duration: 25
 
 Costs:
+
+  EnderChest: 500
 
   TP:
     SpecialTP: 500

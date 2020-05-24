@@ -84,6 +84,18 @@ public class DefaultConfigManager extends me.c10coding.coreapi.files.ConfigManag
         return config.getStringList("SuperBoots Lores." + key);
     }
 
+    public int getCoinsGainedPerKill(){
+        return config.getInt("CoinsGainedPerKill");
+    }
+
+    public int getCoinsLostPerDeath(){
+        return config.getInt("CoinsLostPerDeath");
+    }
+
+    public int getEnderChestCost(){
+        return config.getInt("Costs.EnderChest");
+    }
+
     private String getMenuPath(String menuType, int slotNum, String key){
         return "Menus." + menuType + "." + slotNum + "." + key;
     }

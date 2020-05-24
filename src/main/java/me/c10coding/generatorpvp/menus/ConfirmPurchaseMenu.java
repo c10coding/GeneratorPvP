@@ -149,6 +149,9 @@ public class ConfirmPurchaseMenu extends MenuCreator {
             }else if(prevMenu instanceof SuperBootsMenu){
                 ecm.setPurchased(configKey, "SuperBoots", true);
                 ecm.saveConfig();
+            }else if(prevMenu instanceof MenuCreator){
+                ecm.setPurchased(configKey, "EnderChest", true);
+                ecm.saveConfig();
             }
 
             p.closeInventory();

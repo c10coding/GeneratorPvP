@@ -20,7 +20,7 @@ public class DefaultConfigBootsSectionManager extends ConfigManager {
     }
 
     public int getBootsProperty(String configKey, SuperBootsProperty property){
-        return config.getInt("SuperBoots Properties." + configKey + "." + GPUtils.enumToString(property));
+        return config.getInt("SuperBoots Properties." + configKey + "." + GPUtils.enumToConfigKey(property));
     }
 
     public boolean isLevelable(String configKey){

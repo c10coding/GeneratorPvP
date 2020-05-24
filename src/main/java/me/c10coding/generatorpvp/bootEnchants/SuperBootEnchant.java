@@ -6,21 +6,28 @@ import me.c10coding.generatorpvp.files.DefaultConfigManager;
 import me.c10coding.generatorpvp.menus.SuperBootsMenu;
 import me.c10coding.generatorpvp.utils.GPUtils;
 import org.bukkit.*;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
 
-public abstract class SuperBootEnchant extends Enchantment implements Listener {
+public abstract class SuperBootEnchant extends Enchantment{
 
 	protected String name = "";
 	protected EnchantmentKeys ek;
@@ -47,12 +54,11 @@ public abstract class SuperBootEnchant extends Enchantment implements Listener {
 		this.cooldown = dsm.getBootsProperty(configKey, DefaultConfigBootsSectionManager.SuperBootsProperty.COOLDOWN);
 		this.duration = dsm.getBootsProperty(configKey, DefaultConfigBootsSectionManager.SuperBootsProperty.DURATION);
 		this.bootsActivationTime = dm.getBootsActivationTime();
-		this.timer = new BootsTimer(plugin, duration, cooldown);
+		this.timer = new BootsTimer(plugin, duration, cooldown, superBoot);
 
 		this.loreColor = GPUtils.matchArmorColorWithChatColor(superBoot.getColorOfArmor());
 		this.enchantParticle = p;
 		setName();
-		Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 	
 	public void setName() {
@@ -125,7 +131,7 @@ public abstract class SuperBootEnchant extends Enchantment implements Listener {
 
 		Player playerSneaking = e.getPlayer();
 
-		if(!timer.isActive()){
+		if(!timer.isActive() && hasDuration() && hasEnchant(playerSneaking)){
 			if(!playersThatAreSneaking.contains(playerSneaking.getUniqueId())){
 				playersThatAreSneaking.add(playerSneaking.getUniqueId());
 				new BukkitRunnable() {
@@ -147,6 +153,28 @@ public abstract class SuperBootEnchant extends Enchantment implements Listener {
 								playerSneaking.setExp(1.0F);
 								timer.decreaseXPBar(playerSneaking);
 
+								if(superBoot.equals(SuperBootsMenu.SuperBoots.SPEED)){
+									playerSneaking.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, (int) (duration * 20), dsm.getBootsProperty(configKey, DefaultConfigBootsSectionManager.SuperBootsProperty.LEVEL) - 1));
+									playerSneaking.getWorld().spawnParticle(enchantParticle, playerSneaking.getLocation(), 50);
+								}else if(superBoot.equals(SuperBootsMenu.SuperBoots.JUMP_BOOST)){
+									playerSneaking.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, (int) (duration * 20), dsm.getBootsProperty(configKey, DefaultConfigBootsSectionManager.SuperBootsProperty.LEVEL) - 1));
+								}else if(superBoot.equals(SuperBootsMenu.SuperBoots.BLINDNESS)){
+									double blockRadius = dsm.getBootsProperty(configKey, DefaultConfigBootsSectionManager.SuperBootsProperty.BLINDNESS_BLOCK_RANGE);
+									Collection<Entity> entitiesNearby = playerSneaking.getNearbyEntities(blockRadius, blockRadius, blockRadius);
+									for(Entity e : entitiesNearby){
+										if(e instanceof Player){
+											Player nearby = (Player) e;
+											nearby.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int) (duration * 20), dsm.getBootsProperty(configKey, DefaultConfigBootsSectionManager.SuperBootsProperty.LEVEL)));
+										}
+									}
+								}else if(superBoot.equals(SuperBootsMenu.SuperBoots.LEVITATION)){
+									playerSneaking.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, (int) (duration * 20), dsm.getBootsProperty(configKey, DefaultConfigBootsSectionManager.SuperBootsProperty.LEVEL)));
+									playerSneaking.getWorld().spawnParticle(enchantParticle, playerSneaking.getLocation(), 50);
+								}else if(superBoot.equals(SuperBootsMenu.SuperBoots.INVISIBILITY)){
+									playerSneaking.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, (int) (duration * 20), dsm.getBootsProperty(configKey, DefaultConfigBootsSectionManager.SuperBootsProperty.LEVEL), false,false));
+									playerSneaking.getWorld().spawnParticle(enchantParticle, playerSneaking.getLocation(), 50);
+								}
+
 								playersThatAreSneaking.remove(playerSneaking.getUniqueId());
 
 							}else{
@@ -161,6 +189,18 @@ public abstract class SuperBootEnchant extends Enchantment implements Listener {
 		}
 
 
+	}
+
+	protected boolean hasEnchant(Player p){
+		if(p.getInventory().getBoots() != null){
+			return p.getInventory().getBoots().getItemMeta().hasEnchant(this);
+		}else{
+			return false;
+		}
+	}
+
+	public BootsTimer getTimer(){
+		return timer;
 	}
 
 }

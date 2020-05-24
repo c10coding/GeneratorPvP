@@ -1,6 +1,7 @@
 package me.c10coding.generatorpvp;
 
-import me.c10coding.generatorpvp.bootEnchants.AntiFallEnchant;
+import me.c10coding.generatorpvp.bootEnchants.*;
+import me.c10coding.generatorpvp.menus.SuperBootsMenu;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 
@@ -69,6 +70,19 @@ public class EnchantmentRegister {
 
     private void compileEnchantmentList(){
         enchantList.add(new AntiFallEnchant(plugin));
+        enchantList.add(new StrengthEnchant(plugin));
+        enchantList.add(new RegenEnchant(plugin));
+        enchantList.add(new GlowingEnchant(plugin));
+        enchantList.add(new SpeedEnchant(plugin));
+        enchantList.add(new DoubleJumpEnchant(plugin));
+        enchantList.add(new AbsorptionEnchant(plugin));
+        enchantList.add(new JumpBoostEnchant(plugin));
+        enchantList.add(new BlindnessEnchant(plugin));
+        enchantList.add(new CoinsEnchant(plugin));
+        enchantList.add(new AntiKBEnchant(plugin));
+        enchantList.add(new LevitationEnchant(plugin));
+        enchantList.add(new InvisibilityEnchant(plugin));
+        enchantList.add(new StonksEnchant(plugin));
     }
 
 }

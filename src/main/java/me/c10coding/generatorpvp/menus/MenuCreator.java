@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -108,7 +109,14 @@ public class MenuCreator extends Menu implements Listener {
                 newMenu = new SuperBootsMenu(plugin, p);
                 break;
             case 16:
-                //newMenu = new ChatMenu(plugin, "Chat", 27);
+                if(ecm.isPurchased("EnderChest", "EnderChest")){
+                    Inventory enderChest = p.getEnderChest();
+                    p.closeInventory();
+                    p.openInventory(enderChest);
+                    return;
+                }else{
+                    newMenu = new ConfirmPurchaseMenu(plugin, p, Material.ENDER_CHEST, cm.getEnderChestCost(), "EnderChest", this, 1);
+                }
                 break;
             default:
                 return;
