@@ -21,6 +21,26 @@ public class GPUtils {
         return enumName;
     }
 
+    public static String enumToName(Enum e){
+        String stringValue = e.toString();
+        String finalStringValue = "";
+
+        if(stringValue.contains("_")){
+            String[] enumSplit = stringValue.split("_");
+            for(int x = 0; x < enumSplit.length; x++){
+                if(x != enumSplit.length - 1){
+                    finalStringValue += firstLowerRestUpper(enumSplit[x]) + " ";
+                }else{
+                    finalStringValue += firstLowerRestUpper(enumSplit[x]);
+                }
+            }
+        }else{
+            finalStringValue = firstLowerRestUpper(stringValue);
+        }
+
+        return finalStringValue;
+    }
+
     public static String enumToConfigKey(Enum e){
         String stringValue = e.toString();
         String finalStringValue = "";

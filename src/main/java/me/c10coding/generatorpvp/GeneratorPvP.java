@@ -4,15 +4,22 @@ import me.c10coding.coreapi.CoreAPI;
 import me.c10coding.coreapi.holograms.HologramHelper;
 import me.c10coding.generatorpvp.commands.AdminCommands;
 import me.c10coding.generatorpvp.commands.MenuCommand;
+import me.c10coding.generatorpvp.files.GeneratorConfigManager;
 import me.c10coding.generatorpvp.listeners.GeneralListener;
 import me.c10coding.generatorpvp.listeners.TeleportListener;
 import me.c10coding.generatorpvp.listeners.WeaponsListener;
 import me.c10coding.generatorpvp.managers.Generator;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Location;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.logging.Logger;
 
 public final class GeneratorPvP extends JavaPlugin {
@@ -25,21 +32,27 @@ public final class GeneratorPvP extends JavaPlugin {
     @Override
     public void onEnable() {
 
-        this.enchantmentRegister = new EnchantmentRegister(this);
+        this.logger = this.getLogger();
 
         validateConfigs();
         registerEvents();
         initializeCommands();
         startAmplifierTimer();
-        startGenerators();
+
+        this.enchantmentRegister = new EnchantmentRegister(this);
+        enchantmentRegister.registerEnchantments();
 
         if (!setupEconomy() ) {
             this.getLogger().severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
             getServer().getPluginManager().disablePlugin(this);
         }
 
-        this.logger = this.getLogger();
-        enchantmentRegister.registerEnchantments();
+        GeneratorConfigManager gcm = new GeneratorConfigManager(this);
+        if(gcm.getWorldName() != null){
+            startGenerators();
+        }else{
+            this.getLogger().info("This is probably your first time running this. Make sure that the GenPvPWorld field in the generators.yml file is set!");
+        }
 
     }
 
@@ -54,7 +67,7 @@ public final class GeneratorPvP extends JavaPlugin {
     }
 
     public void validateConfigs(){
-        File[] files = {new File(this.getDataFolder(), "config.yml"), new File(this.getDataFolder(), "equipped.yml"), new File(this.getDataFolder(), "amplifiers.yml"), new File(this.getDataFolder(), "generators.yml")};
+        File[] files = {new File(this.getDataFolder(), "config.yml"), new File(this.getDataFolder(), "equipped.yml"), new File(this.getDataFolder(), "amplifiers.yml"), new File(this.getDataFolder(), "generators.yml"), new File(this.getDataFolder(), "animations.yml")};
         for(File f : files){
             if(!f.exists()){
                 this.saveResource(f.getName(),false);
@@ -135,9 +148,18 @@ public final class GeneratorPvP extends JavaPlugin {
     }
 
     private void disableHolograms(){
-        HologramHelper hh = new HologramHelper(this);
-        for(String hologramName : hh.getAllNames()){
-            hh.removeHologram(hologramName);
+
+        File hologramFile = new File(this.getDataFolder(), "holograms.yml");
+
+        if(hologramFile.exists()){
+            HologramHelper hh = new HologramHelper(this);
+
+            if(hh.getAllNames() != null){
+                for(String hologramName : hh.getAllNames()){
+                    hh.removeHologram(hologramName);
+                }
+            }
+
         }
     }
 

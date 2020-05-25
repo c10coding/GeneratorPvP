@@ -1,8 +1,7 @@
-GenPvPWorld: world
+GenPvPWorld:
 Generator Settings:
 
   CoalOre:
-    IsActive: true
     SpawnRateInSeconds: 2
     AmountSpawned: 1
     Locations:
@@ -21,11 +20,10 @@ Generator Settings:
 
     Hologram:
       Lines:
-        - "&7Coal &fGenerator [%status%]"
+        - "&7Coal &fGenerator Inactive"
         - "&7Spawning &c%amount% in &c%rate% &7Seconds"
 
   CoalBlock:
-    IsActive: true
     SpawnRateInSeconds: 5
     AmountSpawned: 1
     Locations:
@@ -40,11 +38,10 @@ Generator Settings:
 
     Hologram:
       Lines:
-        - "&7Coal &fGenerator [%status%]"
+        - "&7Coal Block &fGenerator Inactive"
         - "&7Spawning &c%amount% in &c%rate% &7Seconds"
 
   IronOre:
-    IsActive: true
     SpawnRateInSeconds: 10
     AmountSpawned: 1
     Locations:
@@ -59,11 +56,10 @@ Generator Settings:
 
     Hologram:
       Lines:
-        - "&fIron &fGenerator [%status%]"
+        - "&fIron &fGenerator Inactive"
         - "&7Spawning &c%amount% in &c%rate% &7Seconds"
 
   IronBlock:
-    IsActive: true
     SpawnRateInSeconds: 15
     AmountSpawned: 1
     Locations:
@@ -74,11 +70,10 @@ Generator Settings:
 
     Hologram:
       Lines:
-        - "&fIron &fGenerator [%status%]"
+        - "&fIron Block &fGenerator Inactive"
         - "&7Spawning &c%amount% in &c%rate% &7Seconds"
 
   GoldOre:
-    IsActive: true
     SpawnRateInSeconds: 20
     AmountSpawned: 1
     Locations:
@@ -89,13 +84,10 @@ Generator Settings:
 
     Hologram:
       Lines:
-        - "&eGold &fGenerator [%status%]"
+        - "&eGold &fGenerator Inactive"
         - "&7Spawning &c%amount% in &c%rate% &7Seconds"
 
-
-
   GoldBlock:
-    IsActive: true
     SpawnRateInSeconds: 25
     AmountSpawned: 1
     Locations:
@@ -106,11 +98,10 @@ Generator Settings:
 
     Hologram:
       Lines:
-        - "&eGold &fGenerator [%status%]"
+        - "&eGold Block &fGenerator Inactive"
         - "&7Spawning &c%amount% in &c%rate% &7Seconds"
 
   DiamondOre:
-    IsActive: true
     SpawnRateInSeconds: 30
     AmountSpawned: 1
     Locations:
@@ -121,11 +112,10 @@ Generator Settings:
 
     Hologram:
       Lines:
-        - "&bDiamond &fGenerator [%status%]"
+        - "&bDiamond &fGenerator Inactive"
         - "&7Spawning &c%amount% in &c%rate% &7Seconds"
 
   DiamondBlock:
-    IsActive: true
     SpawnRateInSeconds: 40
     AmountSpawned: 1
     Locations:
@@ -136,20 +126,19 @@ Generator Settings:
 
     Hologram:
       Lines:
-        - "&bDiamond &fGenerator [%status%]"
+        - "&bDiamond Block &fGenerator Inactive"
         - "&7Spawning &c%amount% in &c%rate% &7Seconds"
 
   EmeraldOre:
-    IsActive: true
-    SpawnRateInSeconds: 15
+    SpawnRateInSeconds: 60
     AmountSpawned: 1
     Locations:
       1:
-        X: -556
-        Y: 62
-        Z: -560
+        X: -551
+        Y: 89
+        Z: -473
 
     Hologram:
       Lines:
-        - "&aEmerald &fGenerator [%status%]"
+        - "&aEmerald &fGenerator Inactive"
         - "&7Spawning &c%amount% in &c%rate% &7Seconds"

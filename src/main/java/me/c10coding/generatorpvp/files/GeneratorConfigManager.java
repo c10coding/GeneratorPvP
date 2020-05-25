@@ -40,6 +40,10 @@ public class GeneratorConfigManager extends ConfigManager {
         return config.getDouble("Generator Settings." + GPUtils.enumToConfigKey(genType) + ".AmountSpawned");
     }
 
+    public String getWorldName(){
+        return config.getString("GenPvPWorld");
+    }
+
 
 
 }

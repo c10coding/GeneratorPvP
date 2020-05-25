@@ -9,15 +9,14 @@ import me.c10coding.generatorpvp.utils.GPUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class Generator {
 
@@ -30,6 +29,8 @@ public class Generator {
     private List<String> hologramLines;
     private Chat chatFactory;
     private ItemStack itemSpawned;
+    private int numGen;
+    private String hologramConfigName;
 
     public Generator(GeneratorPvP plugin, GeneratorTypes genType, int numGen){
         this.plugin = plugin;
@@ -41,11 +42,13 @@ public class Generator {
         this.hologramLines = gcm.getHologramLines(genType);
         this.chatFactory = plugin.getApi().getChatFactory();
         this.itemSpawned = new ItemStack(Material.getMaterial(genType.toString()), (int) amountSpawned);
+        this.numGen = numGen;
+        this.hologramConfigName = GPUtils.enumToConfigKey(genType) + numGen;
     }
 
     private void setupHolograms(){
+
         HologramHelper hologramHelper = new HologramHelper(plugin);
-        String hologramName = GPUtils.enumToConfigKey(genType);
 
         hologramLines = GPUtils.colorLore(hologramLines);
 
@@ -54,52 +57,60 @@ public class Generator {
         }
 
         String firstLine = chatFactory.chat(hologramLines.get(0));
-        hologramHelper.createHologram(genLoc, firstLine, hologramName);
+        hologramHelper.createHologram(genLoc, firstLine, hologramConfigName);
 
         for(int lineNum = 1; lineNum < hologramLines.size(); lineNum++){
-            hologramHelper.addLine(hologramName, chatFactory.chat(hologramLines.get(lineNum)));
+            hologramHelper.addLine(hologramConfigName, chatFactory.chat(hologramLines.get(lineNum)));
         }
-
-        if(!hologramHelper.hasAnimation(hologramName, 2)){
-            hologramHelper.setAsAnimatable(GPUtils.enumToConfigKey(genType), 2);
-        }
-
-        hologramHelper.setAnimationStatus(hologramName, 2, true);
 
     }
 
     public void startGenerator(){
         setupHolograms();
+        updateName();
         new BukkitRunnable(){
 
             @Override
             public void run() {
 
-                Collection<Entity> entitiesNearby = spawnInvArmorStand().getNearbyEntities(5, 5, 5);
-                if(!entitiesNearby.isEmpty()){
-                    for(Entity e : entitiesNearby){
-                        if(e instanceof Player){
-                            genLoc.getWorld().dropItem(genLoc, itemSpawned);
-                            Bukkit.broadcastMessage("Player near! Spawning at " + genType.name());
-                        }
-                    }
-                }else{
-                    Bukkit.broadcastMessage("Nobody near. Not spawning :(");
+                Collection<Entity> entitiesNearby = genLoc.getWorld().getNearbyEntities(genLoc, 5, 5, 5);
+                if(hasPlayer(entitiesNearby)){
+                    genLoc.getWorld().dropItem(genLoc, itemSpawned);
                 }
 
             }
         }.runTaskTimer(plugin, 10L, (long) (spawnRate * 20));
     }
 
-    private ArmorStand spawnInvArmorStand(){
-        ArmorStand as = (ArmorStand) genLoc.getWorld().spawnEntity(genLoc, EntityType.ARMOR_STAND);
-        as.setGravity(false);
-        as.setVisible(false);
-        return as;
+
+    public void updateName(){
+
+        new BukkitRunnable(){
+
+            @Override
+            public void run() {
+
+                HologramHelper hologramHelper = new HologramHelper(plugin);
+
+                Collection<Entity> entitiesNearby = genLoc.getWorld().getNearbyEntities(genLoc, 5, 5, 5);
+                String newLine;
+                String currentLine = chatFactory.chat(hologramHelper.getLine(hologramConfigName, 1));
+                if(hasPlayer(entitiesNearby)){
+                    newLine = chatFactory.chat(genType.getColorCode() + genType.getDisplayName() + " &fGenerator " + "&aActive");
+                }else{
+                    newLine = chatFactory.chat(genType.getColorCode() + genType.getDisplayName() + " &fGenerator " + "&cInactive");
+                }
+
+                if(!currentLine.equalsIgnoreCase(newLine)){
+                    Bukkit.broadcastMessage(hologramConfigName);
+                    hologramHelper.editLine(hologramConfigName, newLine, 1);
+                }
+
+            }
+        }.runTaskTimer(plugin, 11L, 20L);
     }
 
     private enum HologramPlaceholders{
-        STATUS("%status%", "IsActive"),
         SPAWN_RATE("%rate%", "SpawnRateInSeconds"),
         AMOUNT_SPAWNED("%amount%", "AmountSpawned");
 
@@ -108,6 +119,11 @@ public class Generator {
             this.placeholder = placeholder;
             this.configKey = configKey;
         }
+    }
+
+    private boolean hasPlayer(Collection<Entity> entities){
+        Predicate<Entity> entity = e -> e instanceof Player;
+        return entities.stream().anyMatch(entity);
     }
 
     private String replacePlaceholders(String s){
