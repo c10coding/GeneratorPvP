@@ -2,11 +2,9 @@ package me.c10coding.generatorpvp.listeners;
 
 import me.c10coding.coreapi.chat.Chat;
 import me.c10coding.generatorpvp.GeneratorPvP;
+import me.c10coding.generatorpvp.ScoreboardManager;
 import me.c10coding.generatorpvp.bootEnchants.EnchantmentKeys;
-import me.c10coding.generatorpvp.files.AmplifiersConfigManager;
-import me.c10coding.generatorpvp.files.DefaultConfigBootsSectionManager;
-import me.c10coding.generatorpvp.files.DefaultConfigManager;
-import me.c10coding.generatorpvp.files.EquippedConfigManager;
+import me.c10coding.generatorpvp.files.*;
 import me.c10coding.generatorpvp.menus.ChatMenu;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.NamespacedKey;
@@ -43,6 +41,13 @@ public class GeneralListener implements Listener {
             ecm.addPlayerToFile();
             ecm.saveConfig();
         }
+
+
+
+
+
+
+
     }
 
     @EventHandler
