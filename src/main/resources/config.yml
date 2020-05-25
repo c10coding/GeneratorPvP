@@ -44,6 +44,13 @@ SuperBoots Lores:
   Invisibility:
     - "&7Lets switch it up and go &e&oinvisible&7 for a bit!"
 
+Weapons Settings:
+  SnowBall Knockback Multiplier: 1.5
+  TNT Explosion Time: 2
+  FireCharge Velocity Multiplier: 2
+  Egg Velocity Multiplier: 2
+  Egg Damage: 10
+
 SuperBoots Properties:
   Anti Fall:
     Cooldown: 0
@@ -342,7 +349,7 @@ Menus:
       Material: LINGERING_POTION
       DisplayName: "&aBoosters"
       Lore:
-        - Speeds up the timer of generators by %boosterMult%x!
+        - Speeds up the timer of generatorRunnableIDs by %boosterMult%x!
     16:
       Material: LINGERING_POTION
       DisplayName: "&6Coins Multipliers"
@@ -368,18 +375,18 @@ Menus:
       Material: POTION
       DisplayName: "&c%boostLength1% &7Hour &dBooster"
       Lore:
-        - Speeds up the timer of generators by %boosterMult%x!
+        - Speeds up the timer of generatorRunnableIDs by %boosterMult%x!
         -
     13:
       Material: SPLASH_POTION
       DisplayName: "&c%boostLength2% &7Hour &dBooster"
       Lore:
-        - Speeds up the timer of generators by %boosterMult%x!
+        - Speeds up the timer of generatorRunnableIDs by %boosterMult%x!
     16:
       Material: LINGERING_POTION
       DisplayName: "&c%boostLength3% &7Hour &dBooster"
       Lore:
-        - Speeds up the timer of generators by %boosterMult%x!
+        - Speeds up the timer of generatorRunnableIDs by %boosterMult%x!
 
   CoinsMultMenu:
     10:

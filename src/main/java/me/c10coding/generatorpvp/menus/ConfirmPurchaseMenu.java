@@ -175,6 +175,33 @@ public class ConfirmPurchaseMenu extends MenuCreator {
                     item.setItemMeta(itemMeta);
                 }
             }
+        }else if(prevMenu instanceof WeaponsMenu){
+            ItemMeta meta = item.getItemMeta();
+            String displayName;
+            List<String> lore = new ArrayList<>();
+            if(matPurchasing.equals(Material.SNOWBALL)){
+                displayName = chatFactory.chat("&fKnockback");
+                lore.add("&eDeals a little knockback upon hit");
+            }else if(matPurchasing.equals(Material.SLIME_BALL)){
+                displayName = chatFactory.chat("&aPosition Swap");
+                lore.add("&eSwaps position with whoever gets hit with it");
+            }else if(matPurchasing.equals(Material.TNT)){
+                displayName = chatFactory.chat("&cTNT");
+                lore.add("&eYou better move out of the way after you place this stuff...");
+            }else if(matPurchasing.equals(Material.FIRE_CHARGE)){
+                displayName = chatFactory.chat("&4Fireball");
+                lore.add("&eOnce again, you're a human Ghast!");
+            }else if(matPurchasing.equals(Material.EGG)){
+                displayName = chatFactory.chat("&eInstant Kill");
+                lore.add("&ePretty much instantly kills whoever you throw this at.");
+            }else{
+                displayName = "";
+            }
+
+            lore = GPUtils.colorLore(lore);
+            meta.setLore(lore);
+            meta.setDisplayName(displayName);
+            item.setItemMeta(meta);
         }
 
         p.getInventory().addItem(item);

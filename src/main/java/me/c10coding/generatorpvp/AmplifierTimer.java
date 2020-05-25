@@ -22,6 +22,7 @@ public class AmplifierTimer extends BukkitRunnable {
                     acm.updateAmplifierTime(amplifierKey);
                 }else{
                     acm.removeAmplifier(amplifierKey);
+                    plugin.restartGenerators();
                 }
                 acm.saveConfig();
             }

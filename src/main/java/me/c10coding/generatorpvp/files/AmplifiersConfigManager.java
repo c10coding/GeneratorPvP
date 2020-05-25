@@ -5,7 +5,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class AmplifiersConfigManager extends ConfigManager {
 
@@ -84,6 +83,10 @@ public class AmplifiersConfigManager extends ConfigManager {
 
     public double getCoinsMultiplier(){
         return config.getDouble("Amplifier Info.Coin Multiplier.Multiplier");
+    }
+
+    public double getMultiplier(){
+        return config.getDouble("Amplifier Info.Multipliers.Multiplier");
     }
 
 }

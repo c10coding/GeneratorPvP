@@ -353,6 +353,7 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
                     }
                 }
 
+                p.setExp(0);
                 setSlotToEquipped(superBoot, slotClicked);
                 ecm.setEquipped(configKey, "SuperBoots");
                 chatFactory.sendPlayerMessage("You have equipped &e" + configKey + " boots!", true, p, prefix);

@@ -10,16 +10,13 @@ import me.c10coding.generatorpvp.listeners.TeleportListener;
 import me.c10coding.generatorpvp.listeners.WeaponsListener;
 import me.c10coding.generatorpvp.managers.Generator;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Location;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.Vector;
 
 import java.io.File;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 public final class GeneratorPvP extends JavaPlugin {
@@ -28,6 +25,7 @@ public final class GeneratorPvP extends JavaPlugin {
     private static Economy econ = null;
     private Logger logger;
     private EnchantmentRegister enchantmentRegister;
+    public List<Integer> generatorRunnableIDs = new ArrayList<>();
 
     @Override
     public void onEnable() {
@@ -49,9 +47,9 @@ public final class GeneratorPvP extends JavaPlugin {
 
         GeneratorConfigManager gcm = new GeneratorConfigManager(this);
         if(gcm.getWorldName() != null){
-            startGenerators();
+            //startGenerators();
         }else{
-            this.getLogger().info("This is probably your first time running this. Make sure that the GenPvPWorld field in the generators.yml file is set!");
+            this.getLogger().info("This is probably your first time running this. Make sure that the GenPvPWorld field in the generatorRunnableIDs.yml file is set!");
         }
 
     }
@@ -67,7 +65,7 @@ public final class GeneratorPvP extends JavaPlugin {
     }
 
     public void validateConfigs(){
-        File[] files = {new File(this.getDataFolder(), "config.yml"), new File(this.getDataFolder(), "equipped.yml"), new File(this.getDataFolder(), "amplifiers.yml"), new File(this.getDataFolder(), "generators.yml"), new File(this.getDataFolder(), "animations.yml")};
+        File[] files = {new File(this.getDataFolder(), "config.yml"), new File(this.getDataFolder(), "equipped.yml"), new File(this.getDataFolder(), "amplifiers.yml"), new File(this.getDataFolder(), "generators.yml"), new File(this.getDataFolder(), "animations.yml"), new File(this.getDataFolder(), "holograms.yml")};
         for(File f : files){
             if(!f.exists()){
                 this.saveResource(f.getName(),false);
@@ -145,6 +143,20 @@ public final class GeneratorPvP extends JavaPlugin {
         Generator emeraldOre1 = new Generator(this, GeneratorTypes.EMERALD_ORE, 1);
         emeraldOre1.startGenerator();
 
+        generatorRunnableIDs.add(coalOre1.getRunnableID());
+        generatorRunnableIDs.add(coalOre2.getRunnableID());
+        generatorRunnableIDs.add(coalOre3.getRunnableID());
+        generatorRunnableIDs.add(coalBlock1.getRunnableID());
+        generatorRunnableIDs.add(coalBlock2.getRunnableID());
+        generatorRunnableIDs.add(ironOre1.getRunnableID());
+        generatorRunnableIDs.add(ironOre2.getRunnableID());
+        generatorRunnableIDs.add(ironBlock1.getRunnableID());
+        generatorRunnableIDs.add(goldOre1.getRunnableID());
+        generatorRunnableIDs.add(goldBlock1.getRunnableID());
+        generatorRunnableIDs.add(diamondOre1.getRunnableID());
+        generatorRunnableIDs.add(diamondBlock1.getRunnableID());
+        generatorRunnableIDs.add(emeraldOre1.getRunnableID());
+
     }
 
     private void disableHolograms(){
@@ -160,6 +172,18 @@ public final class GeneratorPvP extends JavaPlugin {
                 }
             }
 
+        }
+    }
+
+    public void restartGenerators(){
+        stopGeneratorRunnables();
+        disableHolograms();
+        startGenerators();
+    }
+
+    public void stopGeneratorRunnables(){
+        for(Integer id : generatorRunnableIDs){
+            Bukkit.getScheduler().cancelTask(id);
         }
     }
 

@@ -1,5 +1,6 @@
 package me.c10coding.generatorpvp.menus;
 
+import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.utils.GPUtils;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -111,6 +112,7 @@ public class BoostersMenu extends AmplifiersMenu{
                 em.decreaseAmplifierAmount("Boosters", levelAmplifier);
                 em.saveConfig();
                 activateAmplifier("Boosters", levelAmplifier, playerClicked.getName());
+                ((GeneratorPvP)plugin).restartGenerators();
             }
         }
     }

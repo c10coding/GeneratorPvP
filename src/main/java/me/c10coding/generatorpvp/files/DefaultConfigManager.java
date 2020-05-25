@@ -96,6 +96,26 @@ public class DefaultConfigManager extends me.c10coding.coreapi.files.ConfigManag
         return config.getInt("Costs.EnderChest");
     }
 
+    public double getSnowballVelocityMultiplier(){
+        return config.getDouble("Weapons Settings.SnowBall Knockback Multiplier");
+    }
+
+    public double getTNTExplosionTime(){
+        return config.getDouble("Weapons Settings.TNT Explosion Time");
+    }
+
+    public double getFireChargeVelocityMultiplier(){
+        return config.getDouble("Weapons Settings.FireCharge Velocity Multiplier");
+    }
+
+    public double getEggVelocityMultiplier(){
+        return config.getDouble("Weapons Settings.Egg Velocity Multiplier");
+    }
+
+    public double getEggDamageAmount(){
+        return config.getDouble("Weapons Settings.Egg Damage");
+    }
+
     private String getMenuPath(String menuType, int slotNum, String key){
         return "Menus." + menuType + "." + slotNum + "." + key;
     }

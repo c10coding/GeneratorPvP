@@ -4,6 +4,7 @@ import me.c10coding.coreapi.chat.Chat;
 import me.c10coding.coreapi.holograms.HologramHelper;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.GeneratorTypes;
+import me.c10coding.generatorpvp.files.AmplifiersConfigManager;
 import me.c10coding.generatorpvp.files.GeneratorConfigManager;
 import me.c10coding.generatorpvp.utils.GPUtils;
 import org.bukkit.Bukkit;
@@ -14,8 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class Generator {
@@ -23,27 +23,39 @@ public class Generator {
     private GeneratorTypes genType;
     private GeneratorPvP plugin;
     private GeneratorConfigManager gcm;
+    private AmplifiersConfigManager acm;
     private Location genLoc;
     private double amountSpawned;
     private double spawnRate;
     private List<String> hologramLines;
     private Chat chatFactory;
-    private ItemStack itemSpawned;
     private int numGen;
+    private int runnableID = 0;
     private String hologramConfigName;
 
     public Generator(GeneratorPvP plugin, GeneratorTypes genType, int numGen){
         this.plugin = plugin;
         this.genType = genType;
         this.gcm = new GeneratorConfigManager(plugin);
+        this.acm = new AmplifiersConfigManager(plugin);
         this.genLoc = gcm.getGenLocation(genType, numGen);
         this.amountSpawned = gcm.getAmountSpawned(genType);
         this.spawnRate = gcm.getSpawnRate(genType);
         this.hologramLines = gcm.getHologramLines(genType);
         this.chatFactory = plugin.getApi().getChatFactory();
-        this.itemSpawned = new ItemStack(Material.getMaterial(genType.toString()), (int) amountSpawned);
         this.numGen = numGen;
         this.hologramConfigName = GPUtils.enumToConfigKey(genType) + numGen;
+
+        if(acm.isAmplifierActivated("Boosters")){
+            double multiplier = acm.getBoostersMultiplier();
+            spawnRate = spawnRate / multiplier;
+        }
+
+        if(acm.isAmplifierActivated("Multipliers")){
+            double multiplier = acm.getBoostersMultiplier();
+            amountSpawned = amountSpawned * multiplier;
+        }
+
     }
 
     private void setupHolograms(){
@@ -65,6 +77,7 @@ public class Generator {
 
     }
 
+
     public void startGenerator(){
         setupHolograms();
         updateName();
@@ -73,7 +86,22 @@ public class Generator {
             @Override
             public void run() {
 
+                if(runnableID == 0){
+                    runnableID = this.getTaskId();
+                }
+
+                acm.reloadConfig();
                 Collection<Entity> entitiesNearby = genLoc.getWorld().getNearbyEntities(genLoc, 5, 5, 5);
+                ItemStack itemSpawned;
+                int amountDropped = 1;
+
+                if(acm.isAmplifierActivated("Multipliers")){
+                    double multiplier = acm.getMultiplier();
+                    itemSpawned = new ItemStack(Material.matchMaterial(genType.toString()), (int) (amountDropped * multiplier));
+                }else{
+                    itemSpawned = new ItemStack(Material.matchMaterial(genType.toString()), amountDropped);
+                }
+
                 if(hasPlayer(entitiesNearby)){
                     genLoc.getWorld().dropItem(genLoc, itemSpawned);
                 }
@@ -102,7 +130,6 @@ public class Generator {
                 }
 
                 if(!currentLine.equalsIgnoreCase(newLine)){
-                    Bukkit.broadcastMessage(hologramConfigName);
                     hologramHelper.editLine(hologramConfigName, newLine, 1);
                 }
 
@@ -110,7 +137,7 @@ public class Generator {
         }.runTaskTimer(plugin, 11L, 20L);
     }
 
-    private enum HologramPlaceholders{
+    public enum HologramPlaceholders{
         SPAWN_RATE("%rate%", "SpawnRateInSeconds"),
         AMOUNT_SPAWNED("%amount%", "AmountSpawned");
 
@@ -127,12 +154,24 @@ public class Generator {
     }
 
     private String replacePlaceholders(String s){
-        for(HologramPlaceholders p : HologramPlaceholders.values()){
-            if(s.contains(p.placeholder)){
-                s = s.replace(p.placeholder, gcm.getValue("Generator Settings." + GPUtils.enumToConfigKey(genType) + "." + p.configKey));
+
+        HashMap<String, Integer> placeholders = new HashMap<>();
+        placeholders.put("%rate%", (int) spawnRate);
+        placeholders.put("%amount%", (int) amountSpawned);
+
+        for(Map.Entry placeholder : placeholders.entrySet()){
+            String p = (String) placeholder.getKey();
+            if(s.contains(p)){
+                String value = String.valueOf(placeholder.getValue());
+                s = s.replace(p, value);
             }
         }
+
         return s;
+    }
+
+    public int getRunnableID(){
+        return runnableID;
     }
 
 }
