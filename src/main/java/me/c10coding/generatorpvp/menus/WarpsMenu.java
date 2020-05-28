@@ -19,13 +19,29 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class WarpsMenu extends MenuCreator implements Listener {
 
     public WarpsMenu(JavaPlugin plugin, Player p) {
         super(plugin, "Warps", 27, p);
         createMenu("WarpMenu");
+        adjustSpecial();
         fillMenu();
         setHasGivables(false);
+    }
+
+    public void adjustSpecial(){
+        if(ecm.isPurchased("Special", "Warps")){
+            Map<String, Object> slotInfo = cm.getSlotInfo("WarpMenu", 17);
+            String displayName = (String) slotInfo.get("DisplayName");
+            Material mat = (Material) slotInfo.get("Material");
+
+            inv.setItem(17, createGuiItem(mat, displayName, 1, new ArrayList<>()));
+
+        }
     }
 
     @Override
@@ -69,58 +85,90 @@ public class WarpsMenu extends MenuCreator implements Listener {
 
         Player playerClicked = (Player) e.getWhoClicked();
         int slotClicked = e.getSlot();
+        int tpDelay = (int) cm.getTPDelay();
 
         switch(slotClicked){
             case 9:
+                chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
+                chatFactory.sendPlayerMessage("&cTeleporting &fyou in &c" + tpDelay + " &fseconds.&4 Do Not Move!", false, playerClicked, prefix);
+                chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
                 enterTPProcess(new Location(playerClicked.getWorld(), -563, 60, -645), false);
                 p.closeInventory();
                 break;
             case 11:
                 if(playerClicked.hasPermission("gp.teleport.vip")){
+                    chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
+                    chatFactory.sendPlayerMessage("&cTeleporting &fyou in &c" + tpDelay + " &fseconds.&4 Do Not Move!", false, playerClicked, prefix);
+                    chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
                     enterTPProcess(new Location(playerClicked.getWorld(), -563, 85, -645), false);
                 }else{
-                    chatFactory.sendPlayerMessage("You don't have permission to do that!", true, playerClicked, prefix);
+                    chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
+                    chatFactory.sendPlayerMessage("&7You must atleast purchase &9VIP &7rank", false, playerClicked, prefix);
+                    chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
                 }
                 p.closeInventory();
                 break;
             case 13:
                 if(playerClicked.hasPermission("gp.teleport.mvp")){
+                    chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
+                    chatFactory.sendPlayerMessage("&cTeleporting &fyou in &c" + tpDelay + " &fseconds.&4 Do Not Move!", false, playerClicked, prefix);
+                    chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
                     enterTPProcess(new Location(playerClicked.getWorld(), -563, 107, -645), false);
                 }else{
-                    chatFactory.sendPlayerMessage("You don't have permission to do that!", true, playerClicked, prefix);
+                    chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
+                    chatFactory.sendPlayerMessage("&7You must atleast purchase &6MVP &7rank", false, playerClicked, prefix);
+                    chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
                 }
                 p.closeInventory();
                 break;
             case 15:
                 if(playerClicked.hasPermission("gp.teleport.ultra")){
+                    chatFactory.sendPlayerMessage(" ", false, playerClicked, prefix);
+                    chatFactory.sendPlayerMessage("&cTeleporting &fyou in &c5 &fseconds.&4 Do Not Move!", false, playerClicked, prefix);
+                    chatFactory.sendPlayerMessage(" ", false, playerClicked, prefix);
                     enterTPProcess(new Location(playerClicked.getWorld(), -563, 140, -645), false);
                 }else{
-                    chatFactory.sendPlayerMessage("You don't have permission to do that!", true, playerClicked, prefix);
+                    chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
+                    chatFactory.sendPlayerMessage("&7You must atleast purchase &d&lULTRA &7rank", false, playerClicked, prefix);
+                    chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
                 }
                 p.closeInventory();
                 break;
             case 17:
-                double coins = GeneratorPvP.getEconomy().getBalance(playerClicked);
-                double cost = cm.getTPCost("SpecialTP");
+                int coins = (int) GeneratorPvP.getEconomy().getBalance(playerClicked);
+                int cost = (int) cm.getTPCost("SpecialTP");
                 if(playerClicked.hasPermission("gp.teleport.special")){
-                    if(coins >= cost){
-                        chatFactory.sendPlayerMessage("&4&l- " + cost, true, p, prefix);
-                        GeneratorPvP.getEconomy().withdrawPlayer(playerClicked, cm.getTPCost("SpecialTP"));
-                        enterTPProcess(new Location(playerClicked.getWorld(), -563, 160, -645), true);
+                    if(!ecm.isPurchased("Special", "Warps")){
+                        if(coins >= cost){
+                            chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
+                            chatFactory.sendPlayerMessage("&You just purchased the &eSpecial Warp &7for " + cost + " &6Coins", false, p, prefix);
+                            chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
+                            GeneratorPvP.getEconomy().withdrawPlayer(playerClicked, cm.getTPCost("SpecialTP"));
+                            enterTPProcess(new Location(playerClicked.getWorld(), -563, 160, -645), true);
+                        }else{
+                            //&fYou are missing &6[AMOUNT] Coins&f to purchase [ITEM NAME AND COLOUR]&f. You can purchase more coins from &eStore.HeightsMC.com
+                            int amountMissing = cost - coins;
+                            chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
+                            chatFactory.sendPlayerMessage("&7You are missing &6" + amountMissing + " Coins&f " + " to purchase the Special Warp. You can purchase more coins from &eStore.HeightsMC.com", false, playerClicked, prefix);
+                            chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
+                        }
+                        p.closeInventory();
+                        break;
                     }else{
-                        chatFactory.sendPlayerMessage("You don't have enough coins!", true, playerClicked, prefix);
+                        enterTPProcess(new Location(playerClicked.getWorld(), -563, 160, -645), true);
+                        p.closeInventory();
                     }
-                    p.closeInventory();
-                    break;
                 }else{
-                   chatFactory.sendPlayerMessage("You don't have permission to do that!", true, playerClicked, prefix);
+                    chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
+                    chatFactory.sendPlayerMessage("You don't have permission to do that!", false, playerClicked, prefix);
+                    chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
                     p.closeInventory();
                 }
                 break;
         }
     }
 
-    private void enterTPProcess(Location loc, boolean isSpecialTP){
+    public void enterTPProcess(Location loc, boolean isSpecialTP){
 
         BukkitRunnable br = new BukkitRunnable() {
             double counter = cm.getTPDelay();
@@ -128,11 +176,17 @@ public class WarpsMenu extends MenuCreator implements Listener {
             public void run() {
                 if(counter == 0){
                     p.teleport(loc);
-                    chatFactory.sendPlayerMessage("Teleporting...", true, p, prefix);
+                    chatFactory.sendPlayerMessage(" ", false, p, null);
+                    chatFactory.sendPlayerMessage("&7Teleporting...", false, p, prefix);
+                    chatFactory.sendPlayerMessage(" ", false, p, null);
+
+                    ecm.setPurchased("Special", "Warps", true);
+                    ecm.saveConfig();
+
                     removeMetadata();
                     this.cancel();
                 }else{
-                    p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new ComponentBuilder(chatFactory.chat("&d&l" + (int)counter) + "...").create());
+                    p.sendTitle("Teleporting you...", chatFactory.chat("&d&l") + (int)counter + "...", 5, 20, 5);
                 }
                 counter--;
             }
@@ -146,12 +200,16 @@ public class WarpsMenu extends MenuCreator implements Listener {
 
     private void setMetadata(int taskID, boolean isSpecialTP){
         p.setMetadata("TP", new FixedMetadataValue(plugin, taskID));
-        p.setMetadata("isSpecial", new FixedMetadataValue(plugin, isSpecialTP));
+        if(isSpecialTP){
+            p.setMetadata("isSpecial", new FixedMetadataValue(plugin, true));
+        }
     }
 
     private void removeMetadata(){
         p.removeMetadata("TP", plugin);
-        p.removeMetadata("isSpecial", plugin);
+        if(p.hasMetadata("isSpecial")){
+            p.removeMetadata("isSpecial", plugin);
+        }
     }
 
 }

@@ -103,12 +103,13 @@ public class MultipliersMenu extends AmplifiersMenu{
 
         if(hasAtleastOneAmplifier){
             if(amplifierIsAlreadyActive){
-                chatFactory.sendPlayerMessage("&7There is already a &eMultiplier &7activated!", true, playerClicked, prefix);
+                chatFactory.sendPlayerMessage(" ", false, p, null);
+                chatFactory.sendPlayerMessage("&7There is already a &eMultiplier &7activated!", false, playerClicked, prefix);
+                chatFactory.sendPlayerMessage(" ", false, p, null);
             }else{
                 em.decreaseAmplifierAmount("Multipliers", levelAmplifier);
                 em.saveConfig();
                 activateAmplifier("Multipliers", levelAmplifier, playerClicked.getName());
-
             }
         }
     }

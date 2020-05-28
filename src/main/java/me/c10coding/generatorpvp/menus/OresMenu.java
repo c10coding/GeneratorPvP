@@ -23,11 +23,12 @@ public class OresMenu extends MenuCreator implements Listener {
         inv.setItem(10, createGuiItem(Material.EMERALD, chatFactory.chat("&aEmerald"), new ArrayList<>()));
         inv.setItem(11, createGuiItem(Material.DIAMOND_BLOCK, chatFactory.chat("&bDiamond Block"), new ArrayList<>()));
         inv.setItem(12, createGuiItem(Material.DIAMOND, chatFactory.chat("&bDiamond"), new ArrayList<>()));
-        inv.setItem(13, createGuiItem(Material.GOLD_INGOT, chatFactory.chat("&eGold"), new ArrayList<>()));
-        inv.setItem(14, createGuiItem(Material.GOLD_BLOCK, chatFactory.chat("&eGold Block"), new ArrayList<>()));
+        inv.setItem(13, createGuiItem(Material.GOLD_BLOCK, chatFactory.chat("&eGold Block"), new ArrayList<>()));
+        inv.setItem(14, createGuiItem(Material.GOLD_INGOT, chatFactory.chat("&eGold"), new ArrayList<>()));
         inv.setItem(15, createGuiItem(Material.IRON_BLOCK, chatFactory.chat("&fIron Block"), new ArrayList<>()));
         inv.setItem(16, createGuiItem(Material.IRON_INGOT, chatFactory.chat("&fIron"), new ArrayList<>()));
         inv.setItem(17, createGuiItem(Material.COAL_BLOCK, chatFactory.chat("&8Coal Block"), new ArrayList<>()));
+        fillMenu();
     }
 
     @EventHandler
@@ -40,7 +41,7 @@ public class OresMenu extends MenuCreator implements Listener {
 
         final ItemStack clickedItem = e.getCurrentItem();
 
-        if (clickedItem == null || clickedItem.getType().equals(Material.AIR)) return;
+        if (clickedItem == null || clickedItem.getType().equals(Material.AIR) || clickedItem.getType().equals(fillerMat)) return;
 
         Player p = (Player) e.getWhoClicked();
         OrePurchaseMenu opm = new OrePurchaseMenu(plugin, clickedItem.getType(), p);

@@ -1,7 +1,9 @@
 package me.c10coding.generatorpvp.menus;
 
+import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.files.DefaultConfigManager;
 import me.c10coding.generatorpvp.files.EquippedConfigManager;
+import me.c10coding.generatorpvp.managers.ScoreboardManager;
 import me.c10coding.generatorpvp.utils.GPUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -20,33 +22,37 @@ import java.util.List;
 public class ConfirmPurchaseMenu extends MenuCreator {
 
     private Material matPurchasing;
-    private String configKey;
+    private String configKey, itemName;
     private int cost;
     private MenuCreator prevMenu;
     private int amount;
     final String ORE_PURCHASE_LORE = "&c[!] &rUse this item to trade &c[!]";
     private EquippedConfigManager ecm;
+    private ScoreboardManager sm;
 
-    public ConfirmPurchaseMenu(JavaPlugin plugin, Player p, Material mat, double cost, String configKey, MenuCreator prevMenu, int amount) {
-        super(plugin, "Purchasing: &b&l" + GPUtils.matToName(mat), 27, p);
+    public ConfirmPurchaseMenu(JavaPlugin plugin, Player p, Material mat, double cost, String configKey, MenuCreator prevMenu, int amount, String itemName) {
+        super(plugin, "Purchasing: " + itemName, 27, p);
         this.matPurchasing = mat;
         this.configKey = configKey;
         this.cost = (int) cost;
         this.prevMenu = prevMenu;
         this.amount = amount;
+        this.itemName = itemName;
         this.ecm = new EquippedConfigManager(plugin,p.getUniqueId());
+        this.sm = new ScoreboardManager((GeneratorPvP) plugin);
+        sm.setSB(p);
         createMenu();
     }
 
     public void createMenu(){
         int playerBalance = (int) econ.getBalance(p);
         List<String> lore = new ArrayList<>();
-        lore.add(chatFactory.chat("&7Cost: &c" + cost + " coins"));
+        lore.add(chatFactory.chat("&aCost: &6" + cost + " Coins"));
         if(prevMenu instanceof SuperBootsMenu){
             ItemStack boots = createEnchantedBoot();
             inv.setItem(13, boots);
         }else{
-            inv.setItem(13, createGuiItem(matPurchasing, chatFactory.chat(GPUtils.matToName(matPurchasing)), amount, lore));
+            inv.setItem(13, createGuiItem(matPurchasing, chatFactory.chat(itemName), amount, lore));
         }
         inv.setItem(22, createGuiItem(Material.SUNFLOWER, chatFactory.chat("&7Coins: &c" + playerBalance), new ArrayList<>()));
         fillMenu();
@@ -102,8 +108,10 @@ public class ConfirmPurchaseMenu extends MenuCreator {
         itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         if(fillerMat.equals(Material.GREEN_STAINED_GLASS_PANE)){
             itemMeta.setDisplayName(chatFactory.chat("&aPurchase"));
-        }else{
+        }else if(fillerMat.equals(Material.RED_STAINED_GLASS_PANE)){
             itemMeta.setDisplayName(chatFactory.chat("&cCancel"));
+        }else{
+            itemMeta.setDisplayName(" ");
         }
         glassPane.setItemMeta(itemMeta);
         return glassPane;
@@ -136,25 +144,33 @@ public class ConfirmPurchaseMenu extends MenuCreator {
         }
 
         if(clickedItem.getType().equals(Material.GREEN_STAINED_GLASS_PANE)){
+
             if(prevMenu.hasGivables()){
                 giveItems();
             }
+
             econ.withdrawPlayer(p, cost);
             p.closeInventory();
-            chatFactory.sendPlayerMessage("&c&l- &c" + cost + "&e coins", true, p, prefix);
+            chatFactory.sendPlayerMessage(" ", false, p, null);
+            chatFactory.sendPlayerMessage(chatFactory.chat("&fYou just &apurchased " + itemName + " &ffor &6" + cost + " coins"), false, p, prefix);
+            chatFactory.sendPlayerMessage(" ", false, p, null);
 
             if(prevMenu instanceof ChatMenu) {
                 ecm.setPurchased(configKey, "Chat", true);
                 ecm.saveConfig();
+                prevMenu = new ChatMenu(plugin, p);
             }else if(prevMenu instanceof SuperBootsMenu){
                 ecm.setPurchased(configKey, "SuperBoots", true);
                 ecm.saveConfig();
-            }else if(prevMenu instanceof MenuCreator){
+                prevMenu = new SuperBootsMenu(plugin, p);
+            }else if(matPurchasing.equals(Material.ENDER_CHEST)){
                 ecm.setPurchased(configKey, "EnderChest", true);
                 ecm.saveConfig();
+                p.openInventory(p.getEnderChest());
+                return;
             }
 
-            p.closeInventory();
+            prevMenu.openInventory(p);
         }else if(clickedItem.getType().equals(Material.RED_STAINED_GLASS_PANE)){
             p.closeInventory();
             prevMenu.openInventory(p);

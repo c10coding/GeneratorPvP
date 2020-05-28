@@ -107,12 +107,13 @@ public class BoostersMenu extends AmplifiersMenu{
 
         if(hasAtleastOneAmplifier){
             if(amplifierIsAlreadyActive){
-                chatFactory.sendPlayerMessage("&7There is already a &eBooster &7activated!", true, playerClicked, prefix);
+                chatFactory.sendPlayerMessage(" ", false, p, null);
+                chatFactory.sendPlayerMessage("&7There is already a &eBooster &7activated!", false, playerClicked, prefix);
+                chatFactory.sendPlayerMessage(" ", false, p, null);
             }else{
                 em.decreaseAmplifierAmount("Boosters", levelAmplifier);
                 em.saveConfig();
                 activateAmplifier("Boosters", levelAmplifier, playerClicked.getName());
-                ((GeneratorPvP)plugin).restartGenerators();
             }
         }
     }

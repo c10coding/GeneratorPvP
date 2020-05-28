@@ -22,13 +22,17 @@ public class AnnouncementsManager {
         this.chatFactory = plugin.getApi().getChatFactory();
     }
 
-    public void announceAmplifierActivated(Player playerWhoActivated, String amplifierName, double durationAmplifier){
-        Bukkit.broadcastMessage(chatFactory.chat(announcerPrefix + "&e" + playerWhoActivated.getName() + " &7has activated a &e" + removeSFromEndOfString(amplifierName) + " &7for &e" + durationAmplifier + "&7 hours!"));
+    public void announceAmplifierActivated(String playerName, String amplifierName, double durationAmplifier){
 
-        TextComponent clickablePart = new TextComponent(chatFactory.chat(announcerPrefix + "&eClick Here"));
+        Bukkit.broadcastMessage(chatFactory.chat("&e" + playerName + " &7has activated a &e" + amplifierName + " &7for &e" + durationAmplifier + "&7 hours!"));
+        TextComponent clickablePart = new TextComponent(chatFactory.chat("&eClick Here"));
         TextComponent message = new TextComponent(chatFactory.chat("&7 to thank them and get &6" + getThankRewardAmount() + " coins!"));
 
-        clickablePart.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gp givecoins %playerName% " + getThankRewardAmount() + " " + playerWhoActivated.getName() + " " + amplifierName));
+        if(amplifierName.equalsIgnoreCase("Coin Multiplier")){
+            amplifierName = "Coin_Multiplier";
+        }
+
+        clickablePart.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gp givecoins %playerName% " + getThankRewardAmount() + " " + playerName + " " + amplifierName));
         clickablePart.addExtra(message);
         Bukkit.spigot().broadcast(clickablePart);
 

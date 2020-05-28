@@ -6,6 +6,8 @@ import me.c10coding.generatorpvp.bootEnchants.SuperBootEnchant;
 import me.c10coding.generatorpvp.files.DefaultConfigBootsSectionManager;
 import me.c10coding.generatorpvp.utils.GPUtils;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -49,10 +51,10 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
         BLINDNESS("Blindness", "gp.purchase.blindness", "gp.unlock.blindness", true, Color.BLACK, EnchantmentKeys.BLINDNESS),
 
         COIN("Coin", "gp.purchase.coin", "gp.unlock.coin", false, Color.fromBGR(197,179,88), EnchantmentKeys.COIN),
-        ANTI_KB("AntiKB", "gp.purchase.antikb", "gp.unlock.antikb", true, Color.BLACK, EnchantmentKeys.ANTIKB),
+        ANTI_KB("AntiKB", "gp.purchase.antikb", "gp.unlock.antikb", true, Color.GRAY, EnchantmentKeys.ANTIKB),
         STONKS("Stonks", "gp.purchase.stonks", "gp.unlock.stonks", true, Color.fromBGR(197, 179, 88), EnchantmentKeys.STONKS),
-        LEVITATION("Levitation", "gp.purchase.levitation", "gp.unlock.levitation", true, Color.WHITE, EnchantmentKeys.LEVITATION),
-        INVISIBILITY("Invisibility", "gp.purchase.invisibility", "gp.unlock.invisibility", false, Color.WHITE, EnchantmentKeys.INVISIBILITY);
+        LEVITATION("Levitation", "gp.purchase.levitation", "gp.unlock.levitation", true, Color.PURPLE, EnchantmentKeys.LEVITATION),
+        INVISIBILITY("Invisibility", "gp.purchase.invisibility", "gp.unlock.invisibility", true, Color.WHITE, EnchantmentKeys.INVISIBILITY);
 
         private String unlockPermission;
         private String purchasePermission;
@@ -60,6 +62,7 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
         private String configKey;
         private Color colorOfArmor;
         private EnchantmentKeys enchantmentKey;
+        private String displayName;
         SuperBoots(String configKey, String purchasePermission, String unlockPermission, boolean isPurchasable, Color colorOfArmor, EnchantmentKeys enchantmentKey){
             this.configKey = configKey;
             this.unlockPermission = unlockPermission;
@@ -67,6 +70,7 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
             this.isPurchasable = isPurchasable;
             this.colorOfArmor = colorOfArmor;
             this.enchantmentKey = enchantmentKey;
+            this.displayName = GPUtils.matchArmorColorWithChatColor(colorOfArmor) + GPUtils.enumToName(this) + " Boots";
         }
 
         public String getConfigKey(){
@@ -133,6 +137,7 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
         boolean isPurchased = ecm.isPurchased(superBoot.configKey, "SuperBoots");
         boolean isEquipped = ecm.isEquipped(superBoot.configKey, "SuperBoots");
         ItemStack boots = getBootType(isPurchased);
+        ChatColor colorCode = GPUtils.matchArmorColorWithChatColor(superBoot.colorOfArmor);
 
         if(p.hasPermission(superBoot.unlockPermission)){
             boots = getBootType(true);
@@ -143,24 +148,25 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
         bootMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         if(isPurchaseAble && !isPurchased){
-            lore.add("&7Cost: %cost%");
+            lore.add("&aCost: &6" + cost + " Coins");
             lore = replaceCostPlaceholder(lore, cost);
         }
 
         lore = replaceRestOfPlaceholders(lore, superBoot.configKey);
+        bootMeta.setDisplayName(chatFactory.chat(colorCode + displayName));
 
         if(isPurchased || p.hasPermission(superBoot.unlockPermission)){
             if(isEquipped){
                 boots = addEmptyEnchantment(bootMeta, boots);
-                bootMeta.setDisplayName(chatFactory.chat(displayName + " &e[Equipped]"));
+                lore.add(chatFactory.chat("&aEquipped"));
             }else{
-                bootMeta.setDisplayName(chatFactory.chat(displayName + " &a[Purchased]"));
+                lore.add(chatFactory.chat("&aPurchased"));
             }
         }else{
             if(isPurchaseAble){
-                bootMeta.setDisplayName(chatFactory.chat(displayName + " &c[Not Purchased]"));
+                lore.add(chatFactory.chat("&cNot Purchased"));
             }else{
-                bootMeta.setDisplayName(chatFactory.chat(displayName + " &f[&bBuy&eCraft &7Only&f]"));
+                lore.add(chatFactory.chat("&f[&bBuy&eCraft &7Only&f]"));
             }
         }
 
@@ -248,15 +254,24 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
                 if(ecm.hasSomethingEquipped("SuperBoots")){
                     String bootsEquipped = ecm.getThingEquipped("SuperBoots");
                     int slotEquipped = getSlotEquipped();
+
                     setSlotToNormal(slotEquipped);
                     ecm.setEquipped(bootsEquipped, "SuperBoots", false);
                     ecm.saveConfig();
+
                     p.getInventory().setBoots(null);
                     p.closeInventory();
-                    chatFactory.sendPlayerMessage("You have unequipped your boots!", true, p, prefix);
+
+                    chatFactory.sendPlayerMessage(" ", false, p, null);
+                    chatFactory.sendPlayerMessage("You have unequipped your boots!", false, p, prefix);
+                    chatFactory.sendPlayerMessage(" ", false, p, null);
+
                     removePotions();
                     removeFlight();
                     removeExtraHealth();
+
+                    p.setLevel(0);
+                    p.setExp(0);
                 }
                 return;
             case 2:
@@ -317,23 +332,30 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
             if(playerBalance >= cost) {
 
                 if(p.hasPermission(purchasePermission)){
-                    ConfirmPurchaseMenu cpm = new ConfirmPurchaseMenu(plugin, p, Material.LEATHER_BOOTS, cost, configKey,this, 1);
+                    ConfirmPurchaseMenu cpm = new ConfirmPurchaseMenu(plugin, p, Material.LEATHER_BOOTS, cost, configKey,this, 1,  superBoot.displayName);
                     p.closeInventory();
                     cpm.openInventory(p);
                 }else{
-                    chatFactory.sendPlayerMessage("You don't have permissions to do that!", true, p, prefix);
+                    chatFactory.sendPlayerMessage(" ", false, p, null);
+                    chatFactory.sendPlayerMessage("You don't have permissions to do that!", false, p, prefix);
+                    chatFactory.sendPlayerMessage(" ", false, p, null);
                     p.closeInventory();
                 }
 
             }else{
-                chatFactory.sendPlayerMessage("You're too broke for that. Go kill some people to get more coins!", true, p, prefix);
+                int amountMissing = cost - playerBalance;
+                chatFactory.sendPlayerMessage(" ", false, p, null);
+                chatFactory.sendPlayerMessage("&fYou are missing &6" + amountMissing + " Coins&f to purchase " + superBoot.displayName + " Boots" + ".&f You can purchase more coins from &eStore.HeightsMC.com", false, p, prefix);
+                chatFactory.sendPlayerMessage(" ", false, p, null);
                 p.closeInventory();
             }
 
         }else{
 
             if(!superBoot.isPurchasable && !p.hasPermission(unlockPermission)){
-                chatFactory.sendPlayerMessage("This is not purchase-able! You must buy a rank to unlock this", true, p, prefix);
+                chatFactory.sendPlayerMessage(" ", false, p, null);
+                chatFactory.sendPlayerMessage("This is not purchase-able! You must buy a rank to unlock this", false, p, prefix);
+                chatFactory.sendPlayerMessage(" ", false, p, null);
                 p.closeInventory();
             }
 
@@ -353,10 +375,19 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
                     }
                 }
 
+                p.setLevel(0);
                 p.setExp(0);
                 setSlotToEquipped(superBoot, slotClicked);
                 ecm.setEquipped(configKey, "SuperBoots");
-                chatFactory.sendPlayerMessage("You have equipped &e" + configKey + " boots!", true, p, prefix);
+                chatFactory.sendPlayerMessage(" ", false, p, null);
+                chatFactory.sendPlayerMessage("&fYou have equipped &e" +  superBoot.displayName, false, p, prefix);
+                chatFactory.sendPlayerMessage(" ", false, p, null);
+
+                if(bm.getBootsProperty(superBoot.getConfigKey(), DefaultConfigBootsSectionManager.SuperBootsProperty.DURATION) != 0){
+                    chatFactory.sendPlayerMessage(" ", false, p, null);
+                    chatFactory.sendPlayerMessage("&cCrouch &fto active its powers", false, p, prefix);
+                    chatFactory.sendPlayerMessage(" ", false, p, null);
+                }
 
                 ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
                 LeatherArmorMeta bootsMeta = (LeatherArmorMeta) boots.getItemMeta();
@@ -374,15 +405,21 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
                 p.getInventory().setBoots(boots);
 
                 if(superBoot.equals(SuperBoots.REGEN)){
+                    p.setLevel(0);
                     p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,Integer.MAX_VALUE, bm.getBootsProperty(configKey, DefaultConfigBootsSectionManager.SuperBootsProperty.LEVEL) - 1));
                 }else if(superBoot.equals(SuperBoots.STRENGTH)){
+                    p.setLevel(0);
                     p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,Integer.MAX_VALUE, bm.getBootsProperty(configKey, DefaultConfigBootsSectionManager.SuperBootsProperty.LEVEL) - 1));
                 }else if(superBoot.equals(SuperBoots.DOUBLE_JUMP)){
                     p.setAllowFlight(true);
-                }else if(superBoot.equals(SuperBoots.ABSORPTION)){
+                    p.setLevel(0);
+                }else if(superBoot.equals(SuperBoots.ABSORPTION)) {
                     double maxHealthAdditive = bm.getBootsProperty(configKey, DefaultConfigBootsSectionManager.SuperBootsProperty.EXTRA_HEART_AMOUNT);
-                    p.setMaxHealth(p.getMaxHealth() + maxHealthAdditive);
-                    p.setHealth(p.getMaxHealth());
+                    AttributeInstance attribute = p.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+                    attribute.setBaseValue(19D + maxHealthAdditive);
+                    p.setHealth(29.5 + maxHealthAdditive);
+                }else if(superBoot.equals(SuperBoots.STONKS) || superBoot.equals(SuperBoots.ANTI_FALL) || superBoot.equals(SuperBoots.COIN)){
+                    p.setLevel(0);
                 }
 
                 p.closeInventory();
@@ -449,8 +486,8 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
     }
 
     private void removeExtraHealth(){
-        p.setMaxHealth(10);
-        p.setHealth(p.getMaxHealth());
+        AttributeInstance attribute = p.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        attribute.setBaseValue(9);
     }
 
 }

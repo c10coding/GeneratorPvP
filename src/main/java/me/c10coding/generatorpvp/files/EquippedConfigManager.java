@@ -52,6 +52,7 @@ public class EquippedConfigManager extends ConfigManager {
         setAmplifiersCategory();
         setBootsCategory();
         setEnderChestCategory();
+        setWarpsCategory();
     }
 
     public Map<Object, Object> mapIsEquipped(String category){
@@ -97,6 +98,9 @@ public class EquippedConfigManager extends ConfigManager {
      */
     public void increaseAmplifierAmount(String amplifierName, int levelAmplifier, int amount){
         String newAmplifierName = GPUtils.firstLowerRestUpper(amplifierName);
+        if(newAmplifierName.equalsIgnoreCase("Booster")){
+            newAmplifierName = "Boosters";
+        }
         int currentAmount = getAmplifierAmount(newAmplifierName, levelAmplifier);
         int newAmount = currentAmount + amount;
 
@@ -119,14 +123,14 @@ public class EquippedConfigManager extends ConfigManager {
 
     private void setChatCategory(){
         config.set("Chat." + u.toString() + ".IsPurchased.Gray", true);
-        config.set("Chat." + u.toString() + ".IsPurchased.Green", false);
+        config.set("Chat." + u.toString() + ".IsPurchased.LimeGreen", false);
         config.set("Chat." + u.toString() + ".IsPurchased.Yellow", false);
         config.set("Chat." + u.toString() + ".IsPurchased.Blue", false);
         config.set("Chat." + u.toString() + ".IsPurchased.Gold", false);
         config.set("Chat." + u.toString() + ".IsPurchased.Purple", false);
 
         config.set("Chat." + u.toString() + ".IsEquipped.Gray", true);
-        config.set("Chat." + u.toString() + ".IsEquipped.Green", false);
+        config.set("Chat." + u.toString() + ".IsEquipped.LimeGreen", false);
         config.set("Chat." + u.toString() + ".IsEquipped.Yellow", false);
         config.set("Chat." + u.toString() + ".IsEquipped.Blue", false);
         config.set("Chat." + u.toString() + ".IsEquipped.Gold", false);
@@ -189,6 +193,10 @@ public class EquippedConfigManager extends ConfigManager {
 
     private void setEnderChestCategory(){
         config.set("EnderChest." + u.toString() + ".IsPurchased.EnderChest", false);
+    }
+
+    private void setWarpsCategory(){
+        config.set("Warps." + u.toString() + ".IsPurchased.Special", false);
     }
 
 }

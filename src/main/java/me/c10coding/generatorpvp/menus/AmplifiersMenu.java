@@ -4,12 +4,11 @@ package me.c10coding.generatorpvp.menus;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.files.AmplifiersConfigManager;
 import me.c10coding.generatorpvp.files.EquippedConfigManager;
+import me.c10coding.generatorpvp.files.GeneratorConfigManager;
 import me.c10coding.generatorpvp.managers.AnnouncementsManager;
+import me.c10coding.generatorpvp.managers.Generator;
 import me.c10coding.generatorpvp.utils.GPUtils;
-import org.bukkit.Color;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -41,6 +40,7 @@ public class AmplifiersMenu extends MenuCreator {
 
         BOOSTER_MULT("%boosterMult%", "Amplifier Info.Boosters.Multiplier"),
         COINS_MULT("%coinsMult%", "Amplifier Info.Coin Multiplier.Multiplier"),
+        MULTIPLIERS_MULT("%multiplierMult%", "Amplifier Info.Multipliers.Multiplier"),
 
         MULT_LENGTH_1("%multLength1%", "Amplifier Info.Multipliers.1.Duration"),
         MULT_LENGTH_2("%multLength2%", "Amplifier Info.Multipliers.2.Duration"),
@@ -104,9 +104,9 @@ public class AmplifiersMenu extends MenuCreator {
 
             if(isActive){
                 amplifierInfo.put(numSlot, amplifierName);
-                displayName = chatFactory.chat(displayName + " &a&l[Active]");
+                lore.add(chatFactory.chat("&aActive"));
             }else{
-                displayName = chatFactory.chat(displayName + chatFactory.chat(" &c&l[Inactive]"));
+                lore.add(chatFactory.chat("&cInactive"));
             }
 
             for(int x = 0; x < lore.size(); x++){
@@ -187,6 +187,7 @@ public class AmplifiersMenu extends MenuCreator {
         if(clickedItem == null || clickedItem.getType().equals(Material.AIR)) return;
 
         int slotClicked = e.getSlot();
+
         MenuCreator newMenu;
 
         switch(slotClicked){
@@ -237,15 +238,18 @@ public class AmplifiersMenu extends MenuCreator {
 
         am.setWhoActivatedAmplifier(amplifierName, nameOfActivator);
         am.setAmplifierToActive(amplifierName);
+        am.setAmplifierLevel(amplifierName, levelAmplifier);
         am.setAmplifierTimer(amplifierName, levelAmplifier);
         am.saveConfig();
 
         AnnouncementsManager announcementsManager = new AnnouncementsManager((GeneratorPvP) plugin);
-        announcementsManager.announceAmplifierActivated(p, amplifierName, am.getAmplifierDuration(amplifierName, levelAmplifier));
+        announcementsManager.announceAmplifierActivated(p.getName(), amplifierName, am.getAmplifierDuration(amplifierName, levelAmplifier));
 
         p.closeInventory();
         p.getWorld().playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10, 10);
         p.getWorld().spawnParticle(Particle.FLAME, p.getLocation(), 50);
+
+        ((GeneratorPvP) plugin).restartGenerators();
 
     }
 

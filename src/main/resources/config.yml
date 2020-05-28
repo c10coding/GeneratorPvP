@@ -1,6 +1,6 @@
 
-Prefix: "&d&l[GeneratorPvP]"
-AnnouncerPrefix: "&b&l[Announcer] "
+Prefix: ""
+AnnouncerPrefix: ""
 ThankingRewardAmount: 5
 ActivatorRewardAmount: 10
 BootsActivationTime: 3
@@ -17,7 +17,7 @@ SuperBoots Lores:
     - "&7Gives you regen &e%level%&7 permanently"
   Glowing:
     - "&7You can pretty much x-ray with these bad boys on"
-    - "&7Gives the glowing effect to everyone within &e%glowBlockRange% blocks &7(Only you see)"
+    - "&7Gives the glowing effect to everyone within &e%glowBlockRange% blocks"
   Speed:
     - "&7Gotta go fast &e™"
   Jump Boost:
@@ -159,7 +159,7 @@ Costs:
 
   Chat:
     Gray: 0
-    Green: 500
+    LimeGreen: 500
     Yellow: 500
     Blue: 0
     Gold: 0
@@ -188,37 +188,31 @@ Menus:
       Material: SUNFLOWER
       DisplayName: "&eShop"
       Lore:
-        - This is the lore
     11:
       Material: ENDER_PEARL
-      DisplayName: "&eWarps"
+      DisplayName: "&dWarps"
       Lore:
-        - This is the lore
     12:
       Material: ORANGE_DYE
       DisplayName: "&bC&ah&ea&dt"
       Lore:
-        - This is the lore
     13:
       Material: PLAYER_HEAD
       DisplayName: "&7Statistics"
       Lore:
-        - "You have &b&l%coins%&r coins!"
+        - "&bYou own &6%coins% Coins"
     14:
       Material: POTION
       DisplayName: "&6Amplifiers"
       Lore:
-        - This is the lore
     15:
       Material: DIAMOND_BOOTS
       DisplayName: "&bSuper Boots"
       Lore:
-        - This is the lore
     16:
       Material: ENDER_CHEST
       DisplayName: "&5Ender Chest"
       Lore:
-        - This is the lore
   ## SHOP MENU
   ShopMenu:
     12:
@@ -254,7 +248,23 @@ Menus:
       Material: ENDER_EYE
       DisplayName: "&dS&bp&ae&ec&ci&3a&6l"
       Lore:
-
+        - "&aCost: &6500 Coins"
+  OrePurchaseMenu:
+    11:
+      Material: EMERALD
+      DisplayName: "Purchase 64"
+      Lore:
+        - "&aCost: &6%cost% Coins"
+    13:
+      Material: EMERALD
+      DisplayName: "Purchase 32"
+      Lore:
+        - "&aCost: &6%cost% Coins"
+    15:
+      Material: EMERALD
+      DisplayName: "Purchase 1"
+      Lore:
+        - "&aCost: &6%cost% Coins"
   TeleportationsMenu:
     10:
       Material: EMERALD
@@ -268,11 +278,11 @@ Menus:
       Material: DIAMOND
       DisplayName: "&bDiamond"
       Lore:
-    13:
+    14:
       Material: GOLD_INGOT
       DisplayName: "&eGold"
       Lore:
-    14:
+    13:
       Material: GOLD_BLOCK
       DisplayName: "&eGold Block"
       Lore:
@@ -284,7 +294,6 @@ Menus:
       Material: IRON_INGOT
       DisplayName: "&fIron"
       Lore:
-        - This is the lore
 
   WeaponsMenu:
     9:
@@ -319,8 +328,8 @@ Menus:
       DisplayName: "&7Gray"
       Lore:
     11:
-      Material: GREEN_CONCRETE
-      DisplayName: "&aGreen"
+      Material: LIME_CONCRETE
+      DisplayName: "&aLime Green"
       Lore:
     12:
       Material: YELLOW_CONCRETE
@@ -328,7 +337,7 @@ Menus:
       Lore:
     14:
       Material: LIGHT_BLUE_CONCRETE
-      DisplayName: "&3Blue"
+      DisplayName: "&bBlue"
       Lore:
     15:
       Material: ORANGE_CONCRETE
@@ -336,7 +345,7 @@ Menus:
       Lore:
     16:
       Material: MAGENTA_CONCRETE
-      DisplayName: "&dPurple"
+      DisplayName: "&dLight Purple"
       Lore:
 
   AmplifiersMenu:
@@ -344,66 +353,79 @@ Menus:
       Material: LINGERING_POTION
       DisplayName: "&dMultipliers"
       Lore:
-        - Want faster ore drops? Purchase a Multiplier!
+        - "&bIncreases the amount of items gained by %multiplierMult%x!"
+        - "&BPurchase one at &eStore&f.&EHeightsMC&f.&Ecom"
     13:
       Material: LINGERING_POTION
       DisplayName: "&aBoosters"
       Lore:
-        - Speeds up the timer of generatorRunnableIDs by %boosterMult%x!
+        - "&bSpeeds up the spawn rate of items by %boosterMult%x!"
+        - "&BPurchase one at &eStore&f.&EHeightsMC&f.&Ecom"
     16:
       Material: LINGERING_POTION
       DisplayName: "&6Coins Multipliers"
       Lore:
-        - Duh, it increases the amount of coins you can get!
-
+        - "&bDuh, it increases the amount of coins you can get!"
+        - "&BPurchase one at &eStore&f.&EHeightsMC&f.&Ecom"
   MultipliersMenu:
     10:
       Material: POTION
       DisplayName: "&c%multLength1% &7Hour &dMultiplier"
       Lore:
-        - Increases the amount of
+        - "&bIncreases the amount of items gained by %multiplierMult%x!"
+        - "&BPurchase one at &eStore&f.&EHeightsMC&f.&Ecom"
     13:
       Material: SPLASH_POTION
       DisplayName: "&c%multLength2% &7Hour &dMultiplier"
       Lore:
+        - "&bIncreases the amount of items gained by %multiplierMult%x!"
+        - "&BPurchase one at &eStore&f.&EHeightsMC&f.&Ecom"
     16:
       Material: LINGERING_POTION
       DisplayName: "&c%multLength3% &7Hour &dMultiplier"
       Lore:
+        - "&bIncreases the amount of items gained by %multiplierMult%x!"
+        - "&BPurchase one at &eStore&f.&EHeightsMC&f.&Ecom"
   BoostersMenu:
     10:
       Material: POTION
       DisplayName: "&c%boostLength1% &7Hour &dBooster"
       Lore:
-        - Speeds up the timer of generatorRunnableIDs by %boosterMult%x!
-        -
+        - "&bSpeeds up the spawn rate of items by %boosterMult%x!"
+        - "&BPurchase one at &eStore&f.&EHeightsMC&f.&Ecom"
     13:
       Material: SPLASH_POTION
       DisplayName: "&c%boostLength2% &7Hour &dBooster"
       Lore:
-        - Speeds up the timer of generatorRunnableIDs by %boosterMult%x!
+        - "&bSpeeds up the spawn rate of items by %boosterMult%x!"
+        - "&BPurchase one at &eStore&f.&EHeightsMC&f.&Ecom"
     16:
       Material: LINGERING_POTION
       DisplayName: "&c%boostLength3% &7Hour &dBooster"
       Lore:
-        - Speeds up the timer of generatorRunnableIDs by %boosterMult%x!
+        - "&bSpeeds up the spawn rate of items by %boosterMult%x!"
+        - "&BPurchase one at &eStore&f.&EHeightsMC&f.&Ecom"
 
   CoinsMultMenu:
     10:
       Material: POTION
       DisplayName: "&c%coinsMultLength1% &7Hour &dCoin Multiplier"
       Lore:
-        - Increases the amount of coins you get per kill by %coinsMult%x!
+        - "&bIncreases the amount of coins you get per kill by %coinsMult%x!"
+        - "&BPurchase one at &eStore&f.&EHeightsMC&f.&Ecom"
     13:
       Material: SPLASH_POTION
       DisplayName: "&c%coinsMultLength2% &7Hour &dCoin Multiplier"
       Lore:
-        - Increases the amount of coins you get per kill by %coinsMult%x!
+        - "&bIncreases the amount of coins you get per kill by %coinsMult%x!"
+        - "&BPurchase one at &eStore&f.&EHeightsMC&f.&Ecom"
     16:
       Material: LINGERING_POTION
       DisplayName: "&c%coinsMultLength3% &7Hour &dCoin Multiplier"
       Lore:
-        - Increases the amount of coins you get per kill by %coinsMult%x!
+        - "&bIncreases the amount of coins you get per kill by %coinsMult%x!"
+        - "&BPurchase one at &eStore&f.&EHeightsMC&f.&Ecom"
+
 
 
 

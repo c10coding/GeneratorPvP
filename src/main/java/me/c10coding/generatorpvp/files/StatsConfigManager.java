@@ -35,7 +35,7 @@ public class StatsConfigManager extends ConfigManager {
 
     public void increaseDeaths(UUID u){
         int deaths = getDeaths(u);
-        config.set(u.toString() + ".Kills", deaths + 1);
+        config.set(u.toString() + ".Deaths", deaths + 1);
     }
 
 }

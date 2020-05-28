@@ -28,6 +28,10 @@ public class AmplifiersConfigManager extends ConfigManager {
         config.set("Amplifier Activation Status." + amplifierName + ".Active", false);
     }
 
+    public void resetAmplifierLevel(String amplifierName){
+        config.set("Amplifier Activation Status." + amplifierName + ".Level", 0);
+    }
+
     public String getWhoActivatedAmplifier(String amplifierName){
         return config.getString("Amplifier Activation Status." + amplifierName + ".Person Who Activated");
     }
@@ -42,6 +46,14 @@ public class AmplifiersConfigManager extends ConfigManager {
         config.set("Amplifier Activation Status." + amplifierName + ".TimeLeft", seconds);
     }
 
+    public void setAmplifierLevel(String amplifierName, int levelAmplifier){
+        config.set("Amplifier Activation Status." + amplifierName + ".Level", levelAmplifier);
+    }
+
+    public int getActivatedAmplifierLevel(String amplifierName){
+        return config.getInt("Amplifier Activation Status." + amplifierName + ".Level");
+    }
+
     public void updateAmplifierTime(String amplifierName){
         int secondsLeft = getAmplifierSecondsLeft(amplifierName);
         config.set("Amplifier Activation Status." + amplifierName + ".TimeLeft", secondsLeft - 1);
@@ -53,6 +65,8 @@ public class AmplifiersConfigManager extends ConfigManager {
     public void removeAmplifier(String amplifierName){
         setWhoActivatedAmplifier(amplifierName, "");
         setAmplifierToNotActive(amplifierName);
+        getAmplifierSecondsLeft(amplifierName);
+        clearThankfulPeopleList(amplifierName);
     }
 
     public int getAmplifierSecondsLeft(String amplifierName){
@@ -73,7 +87,7 @@ public class AmplifiersConfigManager extends ConfigManager {
         return config.getStringList("Amplifier Activation Status." + amplifierName + ".ThankfulPeople").contains(playerName);
     }
 
-    public void clearThankfulPeopleList(String playerName, String amplifierName){
+    public void clearThankfulPeopleList(String amplifierName){
         config.set("Amplifier Activation Status." + amplifierName + ".ThankfulPeople", new ArrayList<>());
     }
 

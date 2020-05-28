@@ -1,5 +1,6 @@
 package me.c10coding.generatorpvp.menus;
 
+import me.c10coding.generatorpvp.utils.GPUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class OrePurchaseMenu extends MenuCreator implements Listener {
 
@@ -27,14 +29,14 @@ public class OrePurchaseMenu extends MenuCreator implements Listener {
 
     enum OreTypes{
 
-        COAL_BLOCK(Material.COAL_BLOCK, "CoalBlock", "Coal Block", "&0"),
+        COAL_BLOCK(Material.COAL_BLOCK, "CoalBlock", "Coal Block", "&7"),
         IRON(Material.IRON_INGOT, "Iron", "Iron", "&f"),
         IRON_BLOCK(Material.IRON_BLOCK, "IronBlock", "Iron Block", "&f"),
         GOLD(Material.GOLD_INGOT, "Gold", "Gold", "&e"),
         GOLD_BLOCK(Material.GOLD_BLOCK, "GoldBlock", "Gold Block", "&e"),
         DIAMOND(Material.DIAMOND, "Diamond", "Diamond", "&b"),
         DIAMOND_BLOCK(Material.DIAMOND_BLOCK, "DiamondBlock", "Diamond Block", "&b"),
-        EMERALD(Material.EMERALD, "Emerald", "Emerald Block", "&a"),
+        EMERALD(Material.EMERALD, "Emerald", "Emerald", "&a"),
         EMERALD_BLOCK(Material.EMERALD_BLOCK, "EmeraldBlock", "Emerald Block", "&a");
 
         private Material mat;
@@ -66,17 +68,35 @@ public class OrePurchaseMenu extends MenuCreator implements Listener {
     }
 
     public void createMenu(){
-        Material emBlock = Material.EMERALD_BLOCK;
-        int cost1 = (int) cm.getOreCost(oreType.configKey , 1);
-        int cost32 = (int) cm.getOreCost(oreType.configKey, 32);
-        int cost64 = (int) cm.getOreCost(oreType.configKey, 64);
-        List<String> cost1Lore = new ArrayList((Arrays.asList(chatFactory.chat("&b&lCost: &a&l" + cost1))));
-        List<String> cost32Lore = new ArrayList((Arrays.asList(chatFactory.chat("&b&lCost: &a&l" + cost32))));
-        List<String> cost64Lore = new ArrayList((Arrays.asList(chatFactory.chat("&b&lCost: &a&l" + cost64))));
 
-        inv.setItem(11, createGuiItem(emBlock, "Purchase 64", 64, cost64Lore));
-        inv.setItem(13, createGuiItem(emBlock, "Purchase 32", 32, cost32Lore));
-        inv.setItem(15, createGuiItem(emBlock, "Purchase 1", 1, cost1Lore));
+        List<Integer> menuSlots = cm.getSlots("OrePurchaseMenu");
+
+        for(Integer i : menuSlots){
+
+            Map<String, Object> slotInfo = cm.getSlotInfo("OrePurchaseMenu", i);
+            String displayName = chatFactory.chat("&f" + (String) slotInfo.get("DisplayName"));
+            Material mat = oreType.mat;
+            List<String> lore = (List<String>) slotInfo.get("Lore");
+
+            int amount;
+
+            if(i == 11){
+                amount = 64;
+            }else if(i == 13){
+                amount = 32;
+            }else{
+                amount = 1;
+            }
+
+            for(int x = 0; x < lore.size(); x++){
+                lore.set(x, applyPlaceholders(lore.get(x), amount));
+            }
+
+            inv.setItem(i, createGuiItem(mat, displayName, amount, lore));
+        }
+
+        fillMenu();
+
     }
 
     @EventHandler
@@ -89,7 +109,7 @@ public class OrePurchaseMenu extends MenuCreator implements Listener {
 
         final ItemStack clickedItem = e.getCurrentItem();
 
-        if (clickedItem == null || clickedItem.getType().equals(Material.AIR)) return;
+        if (clickedItem == null || clickedItem.getType().equals(Material.AIR) || clickedItem.getType().equals(fillerMat)) return;
 
         Player p = (Player) e.getWhoClicked();
         int slotNum = e.getSlot();
@@ -97,7 +117,8 @@ public class OrePurchaseMenu extends MenuCreator implements Listener {
         double cost;
         double playerBalance = econ.getBalance(p);
 
-        if(clickedItem.getType().equals(Material.EMERALD_BLOCK)){
+        if(clickedItem.getType().equals(oreType.mat)){
+
             if(slotNum == 11){
                 amount = 64;
             }else if(slotNum == 13){
@@ -110,21 +131,17 @@ public class OrePurchaseMenu extends MenuCreator implements Listener {
             cost = cm.getOreCost(configKey, amount);
 
             if(playerBalance >= cost){
-                ConfirmPurchaseMenu cpm = new ConfirmPurchaseMenu(plugin, p, oreType.mat , cost, configKey, this, amount);
+                ConfirmPurchaseMenu cpm = new ConfirmPurchaseMenu(plugin, p, oreType.mat , cost, configKey, this, amount, oreType.name);
                 p.closeInventory();
                 cpm.openInventory(p);
-                //econ.withdrawPlayer(p, cost);
-                //giveItems(p, amount);
-                //chatFactory.sendPlayerMessage("You have been given &b&l" + amount + "&a " + oreType.name, true, p, prefix);
             }else{
-                chatFactory.sendPlayerMessage("You can't afford this! It costs &c&l" + cost + "&r coins!", true, p, prefix);
+                int amountMissing = (int) (cost - playerBalance);
+                chatFactory.sendPlayerMessage(" ", false, p, null);
+                chatFactory.sendPlayerMessage("&fYou are missing &6" + amountMissing + " Coins&f to purchase " + oreType.getName() + ".You can purchase more coins from &eStore.HeightsMC.com", false, p, prefix);
+                chatFactory.sendPlayerMessage(" ", false, p, null);
                 p.closeInventory();
             }
         }
-    }
-
-    public void giveItems(Player p , int amount){
-        p.getInventory().addItem(new ItemStack(oreClicked, amount));
     }
 
     public OreTypes getOreType(){
@@ -136,6 +153,13 @@ public class OrePurchaseMenu extends MenuCreator implements Listener {
             }
         }
         return oreType;
+    }
+
+    private String applyPlaceholders(String s, int amount){
+        if(s.contains("%cost%")){
+            s = s.replace("%cost%", String.valueOf((int)cm.getOreCost(oreType.configKey, amount)));
+        }
+        return s;
     }
 
 }

@@ -3,14 +3,20 @@ package me.c10coding.generatorpvp;
 import me.c10coding.coreapi.CoreAPI;
 import me.c10coding.coreapi.holograms.HologramHelper;
 import me.c10coding.generatorpvp.commands.AdminCommands;
+import me.c10coding.generatorpvp.commands.LeaderboardCommand;
 import me.c10coding.generatorpvp.commands.MenuCommand;
 import me.c10coding.generatorpvp.files.GeneratorConfigManager;
 import me.c10coding.generatorpvp.listeners.GeneralListener;
 import me.c10coding.generatorpvp.listeners.TeleportListener;
 import me.c10coding.generatorpvp.listeners.WeaponsListener;
 import me.c10coding.generatorpvp.managers.Generator;
+import me.c10coding.generatorpvp.managers.ScoreboardManager;
+import me.c10coding.generatorpvp.runnables.AmplifierTimer;
+import me.c10coding.generatorpvp.runnables.ScoreboardUpdater;
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -19,26 +25,35 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+/*
+    Plugin: GeneratorPvP
+    Finished: 5/27/2020
+    Author: Caleb Owens // C10coding
+    Plugin for: Minhas
+ */
+
 public final class GeneratorPvP extends JavaPlugin {
 
     private CoreAPI api = new CoreAPI();
     private static Economy econ = null;
+    private static Permission perms = null;
     private Logger logger;
     private EnchantmentRegister enchantmentRegister;
-    public List<Integer> generatorRunnableIDs = new ArrayList<>();
+    public List<Generator> generators = new ArrayList<>();
 
     @Override
     public void onEnable() {
 
         this.logger = this.getLogger();
 
+        this.getLogger().info("==================================================================");
         validateConfigs();
+        setupPermissions();
         registerEvents();
         initializeCommands();
         startAmplifierTimer();
-
-        this.enchantmentRegister = new EnchantmentRegister(this);
-        enchantmentRegister.registerEnchantments();
+        registerEnchants();
+        new ScoreboardUpdater(this).runTaskTimer(this, 0L, 20L);
 
         if (!setupEconomy() ) {
             this.getLogger().severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
@@ -46,16 +61,26 @@ public final class GeneratorPvP extends JavaPlugin {
         }
 
         GeneratorConfigManager gcm = new GeneratorConfigManager(this);
+
         if(gcm.getWorldName() != null){
-            //startGenerators();
+            startGenerators();
         }else{
-            this.getLogger().info("This is probably your first time running this. Make sure that the GenPvPWorld field in the generatorRunnableIDs.yml file is set!");
+            this.getLogger().info("===========================================");
+            this.getLogger().info("=====================================================");
+            this.getLogger().info("This is probably your first time running this plugin!");
+            this.getLogger().info("Make sure that the GenPvPWorld field in the generatorRunnableIDs.yml file is set!");
+            this.getLogger().info("After that, reload the plugin :)");
+            this.getLogger().info("===========================================");
+            this.getLogger().info("=====================================================");
         }
+
+        this.getLogger().info("==================================================================");
 
     }
 
     @Override
     public void onDisable() {
+        updatePlayerXP();
         enchantmentRegister.unRegisterEnchantments();
         disableHolograms();
     }
@@ -91,17 +116,32 @@ public final class GeneratorPvP extends JavaPlugin {
         return econ != null;
     }
 
+    private boolean setupPermissions() {
+        this.getLogger().info("Hooking Permissions...");
+        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        perms = rsp.getProvider();
+        return perms != null;
+    }
+
     private void registerEvents(){
         getLogger().info("Registering events...");
         this.getServer().getPluginManager().registerEvents(new WeaponsListener(this), this);
         this.getServer().getPluginManager().registerEvents(new GeneralListener(this), this);
         this.getServer().getPluginManager().registerEvents(new TeleportListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new ScoreboardManager(this), this);
     }
 
     private void initializeCommands(){
         getLogger().info("Setting up commands...");
         this.getServer().getPluginCommand("menu").setExecutor(new MenuCommand(this));
         this.getServer().getPluginCommand("genpvp").setExecutor(new AdminCommands(this));
+        this.getServer().getPluginCommand("leaderboard").setExecutor(new LeaderboardCommand(this));
+    }
+
+    private void registerEnchants(){
+        getLogger().info("Registering enchantments...");
+        this.enchantmentRegister = new EnchantmentRegister(this);
+        enchantmentRegister.registerEnchantments();
     }
 
     private void startGenerators(){
@@ -143,19 +183,19 @@ public final class GeneratorPvP extends JavaPlugin {
         Generator emeraldOre1 = new Generator(this, GeneratorTypes.EMERALD_ORE, 1);
         emeraldOre1.startGenerator();
 
-        generatorRunnableIDs.add(coalOre1.getRunnableID());
-        generatorRunnableIDs.add(coalOre2.getRunnableID());
-        generatorRunnableIDs.add(coalOre3.getRunnableID());
-        generatorRunnableIDs.add(coalBlock1.getRunnableID());
-        generatorRunnableIDs.add(coalBlock2.getRunnableID());
-        generatorRunnableIDs.add(ironOre1.getRunnableID());
-        generatorRunnableIDs.add(ironOre2.getRunnableID());
-        generatorRunnableIDs.add(ironBlock1.getRunnableID());
-        generatorRunnableIDs.add(goldOre1.getRunnableID());
-        generatorRunnableIDs.add(goldBlock1.getRunnableID());
-        generatorRunnableIDs.add(diamondOre1.getRunnableID());
-        generatorRunnableIDs.add(diamondBlock1.getRunnableID());
-        generatorRunnableIDs.add(emeraldOre1.getRunnableID());
+        generators.add(coalOre1);
+        generators.add(coalOre2);
+        generators.add(coalOre3);
+        generators.add(coalBlock1);
+        generators.add(coalBlock2);
+        generators.add(ironOre1);
+        generators.add(ironOre2);
+        generators.add(ironBlock1);
+        generators.add(goldOre1);
+        generators.add(goldBlock1);
+        generators.add(diamondOre1);
+        generators.add(diamondBlock1);
+        generators.add(emeraldOre1);
 
     }
 
@@ -175,44 +215,43 @@ public final class GeneratorPvP extends JavaPlugin {
         }
     }
 
+    private void updatePlayerXP(){
+        for(Player p : Bukkit.getOnlinePlayers()){
+            p.setExp(0);
+            p.setLevel(0);
+        }
+    }
+
     public void restartGenerators(){
+        this.getLogger().info("Restarting generators!");
         stopGeneratorRunnables();
         disableHolograms();
         startGenerators();
     }
 
     public void stopGeneratorRunnables(){
-        for(Integer id : generatorRunnableIDs){
-            Bukkit.getScheduler().cancelTask(id);
+        for(Generator generator : generators){
+            List<Integer> genRunnables = generator.getRunnableIds();
+            for(Integer id : genRunnables){
+                Bukkit.getScheduler().cancelTask(id);
+            }
         }
+    }
+
+    public List<Generator> getGenerators(){
+        return generators;
     }
 
     private void startAmplifierTimer(){
         new AmplifierTimer(this).runTaskTimer(this, 0L, 20L);
     }
 
-    /*
-    private void registerEmptyEnchant(Enchantment ench){
-        boolean registered = true;
-        //Using Reflection
-        try {
-            Field f = Enchantment.class.getDeclaredField("acceptingNew");
-            f.setAccessible(true);
-            f.set(null, true);
-            Enchantment.registerEnchantment(ench);
-        }catch(Exception e) {
-            registered = false;
-        }
-
-        if(registered) {
-            this.getLogger().info("The empty enchant is registered!");
-        }else{
-            this.getLogger().info("The empty enchant is already registered. Ignoring...");
-        }
-    }*/
-
     public static Economy getEconomy() {
         return econ;
+    }
+
+    public static Permission getPerms(){
+        return perms;
     }
 
     public Logger getPluginLogger(){

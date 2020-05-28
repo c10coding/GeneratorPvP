@@ -9,7 +9,10 @@ commands:
     description: "Other commands that may come with the plugin. Primarily admin commands."
     aliases:
       - gp
-
+  leaderboard:
+    description: "Opens the leaderboard for GenPvP"
+    aliases:
+      - lb
 permissions:
   gp.*:
     description: Gives access to all GeneratorPvP commands and what-not
@@ -29,11 +32,11 @@ permissions:
   gp.teleport.ultra:
     default: op
   gp.teleport.special:
-    default: op
+    default: true
   #Whether a player can purchase the color or not
   gp.purchase.gray:
     default: true
-  gp.purchase.green:
+  gp.purchase.limegreen:
     default: true
   gp.purchase.yellow:
     default: true
@@ -41,7 +44,7 @@ permissions:
     default: op
   gp.purchase.gold:
     default: op
-  gp.purchase.pink:
+  gp.purchase.lightpurple:
     default: op
   #If they have this permission, they already have the chat color purchased
   gp.unlock.gray:
@@ -50,9 +53,9 @@ permissions:
     default: op
   gp.unlock.gold:
     default: op
-  gp.unlock.purple:
+  gp.unlock.lightpurple:
     default: op
-  gp.unlock.green:
+  gp.unlock.limegreen:
     default: op
   gp.unlock.yellow:
     default: op

@@ -1,6 +1,10 @@
-package me.c10coding.generatorpvp;
+package me.c10coding.generatorpvp.runnables;
 
+import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.files.AmplifiersConfigManager;
+import me.c10coding.generatorpvp.managers.AnnouncementsManager;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class AmplifierTimer extends BukkitRunnable {
@@ -19,12 +23,20 @@ public class AmplifierTimer extends BukkitRunnable {
             if(acm.isAmplifierActivated(amplifierKey)){
                 int secondsLeft = acm.getAmplifierSecondsLeft(amplifierKey);
                 if(secondsLeft != 0){
+                    int amplifierLevel = acm.getActivatedAmplifierLevel(amplifierKey);
+                    int duration = (int) acm.getAmplifierDuration(amplifierKey, amplifierLevel);
+                    if(duration / 2 == secondsLeft || secondsLeft == 300){
+                        AnnouncementsManager am = new AnnouncementsManager(plugin);
+                        String whoActivatedAmplifier = acm.getWhoActivatedAmplifier(amplifierKey);
+                        am.announceAmplifierActivated(whoActivatedAmplifier, amplifierKey, duration);
+                    }
                     acm.updateAmplifierTime(amplifierKey);
+                    acm.saveConfig();
                 }else{
                     acm.removeAmplifier(amplifierKey);
+                    acm.saveConfig();
                     plugin.restartGenerators();
                 }
-                acm.saveConfig();
             }
         }
     }

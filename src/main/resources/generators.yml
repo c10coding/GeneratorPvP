@@ -38,7 +38,7 @@ Generator Settings:
 
     Hologram:
       Lines:
-        - "&7Coal Block &fGenerator Inactive"
+        - "&7Coal Block &fGenerator &cInactive"
         - "&7Spawning &c%amount% in &c%rate% &7Seconds"
 
   IronOre:
@@ -56,7 +56,7 @@ Generator Settings:
 
     Hologram:
       Lines:
-        - "&fIron &fGenerator Inactive"
+        - "&fIron &fGenerator &cInactive"
         - "&7Spawning &c%amount% in &c%rate% &7Seconds"
 
   IronBlock:
@@ -70,7 +70,7 @@ Generator Settings:
 
     Hologram:
       Lines:
-        - "&fIron Block &fGenerator Inactive"
+        - "&fIron Block &fGenerator &cInactive"
         - "&7Spawning &c%amount% in &c%rate% &7Seconds"
 
   GoldOre:
@@ -84,7 +84,7 @@ Generator Settings:
 
     Hologram:
       Lines:
-        - "&eGold &fGenerator Inactive"
+        - "&eGold &fGenerator &cInactive"
         - "&7Spawning &c%amount% in &c%rate% &7Seconds"
 
   GoldBlock:
@@ -98,7 +98,7 @@ Generator Settings:
 
     Hologram:
       Lines:
-        - "&eGold Block &fGenerator Inactive"
+        - "&eGold Block &fGenerator &cInactive"
         - "&7Spawning &c%amount% in &c%rate% &7Seconds"
 
   DiamondOre:
@@ -112,7 +112,7 @@ Generator Settings:
 
     Hologram:
       Lines:
-        - "&bDiamond &fGenerator Inactive"
+        - "&bDiamond &fGenerator &cInactive"
         - "&7Spawning &c%amount% in &c%rate% &7Seconds"
 
   DiamondBlock:
@@ -126,7 +126,7 @@ Generator Settings:
 
     Hologram:
       Lines:
-        - "&bDiamond Block &fGenerator Inactive"
+        - "&bDiamond Block &fGenerator &cInactive"
         - "&7Spawning &c%amount% in &c%rate% &7Seconds"
 
   EmeraldOre:
@@ -140,5 +140,5 @@ Generator Settings:
 
     Hologram:
       Lines:
-        - "&aEmerald &fGenerator Inactive"
+        - "&aEmerald &fGenerator &cInactive"
         - "&7Spawning &c%amount% in &c%rate% &7Seconds"

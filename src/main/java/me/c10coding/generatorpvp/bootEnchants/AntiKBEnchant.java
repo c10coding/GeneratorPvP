@@ -3,6 +3,7 @@ package me.c10coding.generatorpvp.bootEnchants;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.menus.SuperBootsMenu;
 import org.bukkit.Bukkit;
+import org.bukkit.EntityEffect;
 import org.bukkit.Particle;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
@@ -34,6 +35,7 @@ public class AntiKBEnchant extends SuperBootEnchant implements Listener {
                     if(0 < playerHealth - dmg){
                         playerHit.setHealth(playerHealth - dmg);
                         playerHit.getWorld().spawnParticle(enchantParticle, playerHit.getLocation(), 50);
+                        playerHit.playEffect(EntityEffect.HURT);
                     }else{
                         playerHit.setHealth(0);
                     }

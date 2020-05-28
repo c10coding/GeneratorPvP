@@ -1,5 +1,6 @@
 package me.c10coding.generatorpvp.bootEnchants;
 
+import me.c10coding.coreapi.chat.Chat;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.files.DefaultConfigBootsSectionManager;
 import me.c10coding.generatorpvp.files.DefaultConfigManager;
@@ -16,6 +17,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -60,7 +62,7 @@ public abstract class SuperBootEnchant extends Enchantment{
 		this.enchantParticle = p;
 		setName();
 	}
-	
+
 	public void setName() {
 		String name = "";
 		if(ek.toString().contains("_")){
@@ -90,12 +92,12 @@ public abstract class SuperBootEnchant extends Enchantment{
 	public boolean canEnchantItem(ItemStack item) {
 		return true;
 	}
-	
+
 	@Override
 	public String getName() {
 		return name;
 	}
-	
+
 	@Override
 	public boolean isTreasure() {
 		return false;
@@ -110,7 +112,7 @@ public abstract class SuperBootEnchant extends Enchantment{
 	public boolean conflictsWith(Enchantment other) {
 		return false;
 	}
-	
+
 	@Override
 	public int getStartLevel() {
 		return 1;
@@ -131,31 +133,41 @@ public abstract class SuperBootEnchant extends Enchantment{
 
 		Player playerSneaking = e.getPlayer();
 
-		if(!timer.isActive() && hasDuration() && hasEnchant(playerSneaking)){
+		if(!timer.isActive() && hasDuration() && hasEnchant(playerSneaking) && (playerSneaking.getGameMode().equals(GameMode.SURVIVAL) || playerSneaking.getGameMode().equals(GameMode.ADVENTURE))){
 			if(!playersThatAreSneaking.contains(playerSneaking.getUniqueId())){
 				playersThatAreSneaking.add(playerSneaking.getUniqueId());
+				playerSneaking.setLevel(4);
 				new BukkitRunnable() {
 					int seconds = 0;
 					@Override
 					public void run() {
 
+						int playerLevel = playerSneaking.getLevel();
 						if(playerSneaking.isSneaking()){
 
 							if(seconds < bootsActivationTime){
 								timer.incrementXPBar(playerSneaking);
 								seconds++;
+
+								if(playerLevel <= 4 && playerLevel != 0){
+									playerSneaking.setLevel(playerLevel - 1);
+								}
+
 							}
 
 						}else{
 							if(seconds == bootsActivationTime){
 
-								timer.setActive(true);
 								playerSneaking.setExp(1.0F);
-								timer.decreaseXPBar(playerSneaking);
+								playerSneaking.setLevel((int) Math.round(duration));
+								if(!superBoot.equals(SuperBootsMenu.SuperBoots.GLOWING)){
+									timer.setActive(true);
+									timer.decreaseXPBar(playerSneaking);
+								}
+								playerSneaking.getWorld().spawnParticle(Particle.TOTEM, playerSneaking.getLocation(), 50);
 
 								if(superBoot.equals(SuperBootsMenu.SuperBoots.SPEED)){
 									playerSneaking.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, (int) (duration * 20), dsm.getBootsProperty(configKey, DefaultConfigBootsSectionManager.SuperBootsProperty.LEVEL) - 1));
-									playerSneaking.getWorld().spawnParticle(enchantParticle, playerSneaking.getLocation(), 50);
 								}else if(superBoot.equals(SuperBootsMenu.SuperBoots.JUMP_BOOST)){
 									playerSneaking.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, (int) (duration * 20), dsm.getBootsProperty(configKey, DefaultConfigBootsSectionManager.SuperBootsProperty.LEVEL) - 1));
 								}else if(superBoot.equals(SuperBootsMenu.SuperBoots.BLINDNESS)){
@@ -169,26 +181,45 @@ public abstract class SuperBootEnchant extends Enchantment{
 									}
 								}else if(superBoot.equals(SuperBootsMenu.SuperBoots.LEVITATION)){
 									playerSneaking.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, (int) (duration * 20), dsm.getBootsProperty(configKey, DefaultConfigBootsSectionManager.SuperBootsProperty.LEVEL)));
-									playerSneaking.getWorld().spawnParticle(enchantParticle, playerSneaking.getLocation(), 50);
 								}else if(superBoot.equals(SuperBootsMenu.SuperBoots.INVISIBILITY)){
 									playerSneaking.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, (int) (duration * 20), dsm.getBootsProperty(configKey, DefaultConfigBootsSectionManager.SuperBootsProperty.LEVEL), false,false));
-									playerSneaking.getWorld().spawnParticle(enchantParticle, playerSneaking.getLocation(), 50);
+								}else if(superBoot.equals(SuperBootsMenu.SuperBoots.GLOWING)) {
+									int glowBlockRadius = dsm.getBootsProperty(configKey, DefaultConfigBootsSectionManager.SuperBootsProperty.GLOW_BLOCK_RANGE);
+									Location playerLoc = playerSneaking.getLocation();
+									Collection<Entity> entitiesNearby = playerLoc.getWorld().getNearbyEntities(playerLoc, glowBlockRadius, glowBlockRadius, glowBlockRadius);
+									List<Player> playersGlowing = new ArrayList<>();
+									Chat chatFactory = new Chat();
+									for (Entity e : entitiesNearby) {
+										if (e instanceof Player) {
+											Player playerNearby = (Player) e;
+											if(!playerNearby.isGlowing() && !playerSneaking.equals(playerNearby)){
+												chatFactory.sendPlayerMessage(" ", false, playerNearby, null);
+												chatFactory.sendPlayerMessage("&7You are now &eglowing!", false, playerNearby, null);
+												chatFactory.sendPlayerMessage(" ", false, playerNearby, null);
+												playerNearby.setGlowing(true);
+												playersGlowing.add(playerNearby);
+											}
+										}
+									}
+									chatFactory.sendPlayerMessage(" ", false, playerSneaking, null);
+									chatFactory.sendPlayerMessage("&7You have affected &e" + playersGlowing.size() + " &7players!", false, playerSneaking, null);
+									chatFactory.sendPlayerMessage(" ", false, playerSneaking, null);
+									playerSneaking.setMetadata("GlowingPlayers", new FixedMetadataValue(plugin, playersGlowing));
+									BootsTimer timer = new BootsTimer(plugin, duration, cooldown, superBoot, playersGlowing);
+									timer.setActive(true);
+									timer.decreaseXPBar(playerSneaking);
 								}
-
-								playersThatAreSneaking.remove(playerSneaking.getUniqueId());
-
 							}else{
 								playersThatAreSneaking.remove(playerSneaking.getUniqueId());
 								timer.resetXPBar(playerSneaking);
 							}
+							playersThatAreSneaking.remove(playerSneaking.getUniqueId());
 							this.cancel();
 						}
 					}
 				}.runTaskTimer(plugin, 0L, 20L);
 			}
 		}
-
-
 	}
 
 	protected boolean hasEnchant(Player p){

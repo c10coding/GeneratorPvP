@@ -32,12 +32,12 @@ public class GeneratorConfigManager extends ConfigManager {
         return config.getStringList("Generator Settings." + GPUtils.enumToConfigKey(genType) + ".Hologram.Lines");
     }
 
-    public double getSpawnRate(GeneratorTypes genType){
-        return config.getDouble("Generator Settings." + GPUtils.enumToConfigKey(genType) + ".SpawnRateInSeconds");
+    public int getSpawnRate(GeneratorTypes genType){
+        return config.getInt("Generator Settings." + GPUtils.enumToConfigKey(genType) + ".SpawnRateInSeconds");
     }
 
-    public double getAmountSpawned(GeneratorTypes genType){
-        return config.getDouble("Generator Settings." + GPUtils.enumToConfigKey(genType) + ".AmountSpawned");
+    public int getAmountSpawned(GeneratorTypes genType){
+        return config.getInt("Generator Settings." + GPUtils.enumToConfigKey(genType) + ".AmountSpawned");
     }
 
     public String getWorldName(){

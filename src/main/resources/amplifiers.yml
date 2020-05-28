@@ -34,11 +34,14 @@ Amplifier Activation Status:
     Active: false
     Person Who Activated:
     TimeLeft:
+    Level:
   Boosters:
     Active: false
     Person Who Activated:
     TimeLeft:
+    Level:
   Coin Multiplier:
     Active: false
     Person Who Activated:
     TimeLeft:
+    Level:

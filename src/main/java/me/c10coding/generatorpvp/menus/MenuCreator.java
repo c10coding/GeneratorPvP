@@ -5,18 +5,24 @@ import me.c10coding.coreapi.menus.Menu;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.files.DefaultConfigManager;
 import me.c10coding.generatorpvp.files.EquippedConfigManager;
+import me.c10coding.generatorpvp.managers.ScoreboardManager;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.SkullType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class MenuCreator extends Menu implements Listener {
 
@@ -27,6 +33,7 @@ public class MenuCreator extends Menu implements Listener {
     protected String prefix;
     protected Player p;
     private boolean hasGivables;
+    private ScoreboardManager sm;
 
     public MenuCreator(JavaPlugin plugin) {
         super(plugin, "Menu", 27);
@@ -35,7 +42,10 @@ public class MenuCreator extends Menu implements Listener {
         this.chatFactory = ((GeneratorPvP) plugin).getApi().getChatFactory();
         this.prefix = ((GeneratorPvP) plugin).getPrefix();
         this.ecm = new EquippedConfigManager(plugin, p.getUniqueId());
+        this.sm = new ScoreboardManager((GeneratorPvP) plugin);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        sm.setSB(p);
+        ecm.reloadConfig();
     }
 
     public MenuCreator(JavaPlugin plugin, String menuTitle, int numSlots, Player p) {
@@ -47,10 +57,43 @@ public class MenuCreator extends Menu implements Listener {
         this.p = p;
         this.ecm = new EquippedConfigManager(plugin, p.getUniqueId());
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        ecm.reloadConfig();
     }
 
     @Override
     public void initializeItems(Player player) { }
+
+    public void createMenu() {
+
+        List<Integer> menuSlots = cm.getSlots("MainMenu");
+
+        for(Integer i : menuSlots){
+
+            Map<String, Object> slotInfo = cm.getSlotInfo("MainMenu", i);
+            String displayName = (String) slotInfo.get("DisplayName");
+            Material mat = (Material) slotInfo.get("Material");
+            List<String> lore = (List<String>) slotInfo.get("Lore");
+            lore = applyPlaceholders(lore);
+
+            if(i == 16){
+                if(!ecm.isPurchased("EnderChest", "EnderChest")){
+                    int cost = cm.getEnderChestCost();
+                    lore.add(chatFactory.chat("&aCost: &6" + cost + " Coins"));
+                }
+            }
+
+            if(i == 13){
+                ItemStack playerHead = getHead(p);
+                ItemMeta meta = playerHead.getItemMeta();
+                meta.setLore(lore);
+                playerHead.setItemMeta(meta);
+                inv.setItem(13, playerHead);
+            }else{
+                inv.setItem(i, createGuiItem(mat, displayName, 1, lore));
+            }
+        }
+
+    }
 
     public void createMenu(String menuType) {
 
@@ -115,7 +158,7 @@ public class MenuCreator extends Menu implements Listener {
                     p.openInventory(enderChest);
                     return;
                 }else{
-                    newMenu = new ConfirmPurchaseMenu(plugin, p, Material.ENDER_CHEST, cm.getEnderChestCost(), "EnderChest", this, 1);
+                    newMenu = new ConfirmPurchaseMenu(plugin, p, Material.ENDER_CHEST, cm.getEnderChestCost(), "EnderChest", this, 1, "Ender Chest");
                 }
                 break;
             default:
@@ -141,5 +184,21 @@ public class MenuCreator extends Menu implements Listener {
 
     public boolean hasGivables() {
         return hasGivables;
+    }
+
+    private void getHead(){
+
+    }
+
+    private ItemStack getHead(Player player) {
+
+        ItemStack item = new ItemStack(Material.LEGACY_SKULL_ITEM, 1 , (short) SkullType.PLAYER.ordinal());
+        SkullMeta meta = (SkullMeta) item.getItemMeta();
+        meta.setOwner(player.getName());
+        meta.setDisplayName(chatFactory.chat("&7Statistics"));
+        item.setItemMeta(meta);
+
+        return item;
+
     }
 }

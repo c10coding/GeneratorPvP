@@ -1,10 +1,21 @@
 package me.c10coding.generatorpvp.utils;
 
 import me.c10coding.coreapi.chat.Chat;
+import net.minecraft.server.v1_15_R1.NBTTagCompound;
+import net.minecraft.server.v1_15_R1.NBTTagList;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -172,11 +183,38 @@ public class GPUtils {
             return ChatColor.BLACK;
         }else if(armorColor.equals(Color.fromBGR(197,179,88))){
             return ChatColor.GOLD;
-        }else if(armorColor.equals(Color.WHITE)){
+        }else if(armorColor.equals(Color.WHITE)) {
             return ChatColor.WHITE;
+        }else if(armorColor.equals(Color.PURPLE)){
+            return ChatColor.LIGHT_PURPLE;
         }else{
             return ChatColor.DARK_AQUA;
         }
+    }
+
+    public static ItemStack addGlow(ItemStack stack){
+        ItemMeta meta = stack.getItemMeta();
+        meta.addEnchant(Enchantment.WATER_WORKER, 70, true);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        stack.setItemMeta(meta);
+        return stack;
+    }
+
+    public static boolean isPlayerInSpawn(Player p){
+        Location playerLoc = p.getLocation();
+        int x = playerLoc.getBlockX();
+        int z = playerLoc.getBlockZ();
+
+        if(x >= -577 && x <= -547){
+            if(z >= -659 && z <= -629){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+
     }
 
 
