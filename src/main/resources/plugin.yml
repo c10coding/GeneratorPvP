@@ -2,6 +2,9 @@ name: GeneratorPvP
 version: ${project.version}
 main: me.c10coding.generatorpvp.GeneratorPvP
 api-version: 1.13
+depend:
+  - Vault
+  - PlaceholderAPI
 commands:
   menu:
     description: "Opens the generator pvp menu"
@@ -21,6 +24,26 @@ permissions:
       gp.teleport.mvp: true
       gp.teleport.ultra: true
       gp.teleport.special: true
+      gp.unlock.gray: true
+      gp.unlock.blue: true
+      gp.unlock.gold: true
+      gp.unlock.lightblue: true
+      gp.unlock.limegreen: true
+      gp.unlock.yellow: true
+      gp.unlock.antifall: true
+      gp.unlock.strength: true
+      gp.unlock.regen: true
+      gp.unlock.glowing: true
+      gp.unlock.speed: true
+      gp.unlock.jumpboost: true
+      gp.unlock.doublejump: true
+      gp.unlock.absorption: true
+      gp.unlock.blindness: true
+      gp.unlock.coin: true
+      gp.unlock.antikb: true
+      gp.unlock.stonks: true
+      gp.unlock.levitation: true
+      gp.unlock.invisibility: true
     default: op
   gp.use:
     description: Allows you to open the plugin menu

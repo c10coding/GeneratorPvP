@@ -415,9 +415,8 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
                     p.setLevel(0);
                 }else if(superBoot.equals(SuperBoots.ABSORPTION)) {
                     double maxHealthAdditive = bm.getBootsProperty(configKey, DefaultConfigBootsSectionManager.SuperBootsProperty.EXTRA_HEART_AMOUNT);
-                    AttributeInstance attribute = p.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-                    attribute.setBaseValue(19D + maxHealthAdditive);
-                    p.setHealth(29.5 + maxHealthAdditive);
+                    p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20 + (maxHealthAdditive * 2));
+                    p.setHealth(p.getMaxHealth());
                 }else if(superBoot.equals(SuperBoots.STONKS) || superBoot.equals(SuperBoots.ANTI_FALL) || superBoot.equals(SuperBoots.COIN)){
                     p.setLevel(0);
                 }
@@ -486,8 +485,8 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
     }
 
     private void removeExtraHealth(){
-        AttributeInstance attribute = p.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-        attribute.setBaseValue(9);
+        p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20);
+        p.setHealth(20);
     }
 
 }

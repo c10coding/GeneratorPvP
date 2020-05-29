@@ -14,6 +14,7 @@ import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -50,6 +51,7 @@ public class GeneralListener implements Listener {
 
         if(!scm.isInFile(p.getUniqueId())){
             scm.addPlayerToFile(p.getUniqueId());
+            scm.saveConfig();
         }
 
         if(p.getInventory().getBoots() != null){
@@ -89,77 +91,72 @@ public class GeneralListener implements Listener {
             StatsConfigManager scm = new StatsConfigManager(plugin);
             int coinsLostPerDeath = dcm.getCoinsLostPerDeath();
             int coinsGainedPerKill = dcm.getCoinsGainedPerKill();
+
+            ItemStack deadPlayerBoots = deadPlayer.getInventory().getBoots();
+            Player killer = deadPlayer.getKiller();
             scm.increaseDeaths(deadPlayer.getUniqueId());
             scm.saveConfig();
 
-            if(deadPlayer.getInventory().getBoots() != null){
-
-                ItemStack deadPlayerBoots = deadPlayer.getInventory().getBoots();
-                if(deadPlayer.getKiller() != null){
-
-                    Player killer = deadPlayer.getKiller();
-                    scm.increaseKills(killer.getUniqueId());
-                    scm.increaseDeaths(deadPlayer.getUniqueId());
-                    scm.saveConfig();
-
-                    if(!deadPlayerBoots.getItemMeta().hasEnchant(Enchantment.getByKey(new NamespacedKey(plugin, EnchantmentKeys.STONKS.toString())))){
-                        takeCoins(deadPlayer, econ, coinsLostPerDeath, killer);
-                    }else{
+            if(killer != null){
+                scm.increaseKills(killer.getUniqueId());
+                scm.saveConfig();
+                if(deadPlayer.getInventory().getBoots() != null){
+                    if(deadPlayerBoots.getItemMeta().hasEnchant(Enchantment.getByKey(new NamespacedKey(plugin, EnchantmentKeys.STONKS.toString())))){
                         chatFactory.sendPlayerMessage(" ", false, deadPlayer, null);
                         chatFactory.sendPlayerMessage("&e" + killer.getName() + "&c Killed &7you. No &6Coins &7lost", false, deadPlayer, plugin.getPrefix());
                         chatFactory.sendPlayerMessage(" ", false, deadPlayer, null);
-                    }
-
-                    int totalCoinsReward = coinsGainedPerKill;
-
-                    if(killer.getInventory().getBoots() != null){
-                        ItemStack killersBoots = killer.getInventory().getBoots();
-                        if(killersBoots.getItemMeta().hasEnchant(Enchantment.getByKey(new NamespacedKey(plugin, EnchantmentKeys.COIN.toString())))) {
-                            final int MIN_COINS = 1;
-                            final int MAX_COINS = 20;
-                            int randomCoinAmount = (int) (Math.random() * ((MAX_COINS - MIN_COINS) + 1)) + MIN_COINS;
-                            totalCoinsReward = totalCoinsReward + randomCoinAmount;
-
-                            chatFactory.sendPlayerMessage(" ", false, killer, null);
-                            chatFactory.sendPlayerMessage("&7You received &a" + randomCoinAmount + " &6Coins " + "&7from &eCoin Boots&7", false, killer, null);
-                            chatFactory.sendPlayerMessage(" ", false, killer, null);
-                        }
-                        AmplifiersConfigManager acm = new AmplifiersConfigManager(plugin);
-                        if(acm.isAmplifierActivated("Coin Multiplier")){
-                            int coinsAdditive = (int) (coinsGainedPerKill * acm.getCoinsMultiplier()) - 1;
-                            totalCoinsReward = totalCoinsReward + coinsAdditive;
-                            chatFactory.sendPlayerMessage(" ", false, killer, null);
-                            chatFactory.sendPlayerMessage("&a+" + coinsAdditive + " &6Coins &7from the &eAmplifier&7", false, killer, null);
-                            chatFactory.sendPlayerMessage(" ", false, killer, null);
-                        }
-                    }
-
-                    chatFactory.sendPlayerMessage(" ", false, killer, null);
-                    chatFactory.sendPlayerMessage("&7You &cKilled &e" + deadPlayer.getName() + "&7. &a+" + coinsGainedPerKill + " &6Coin", false, killer, null);
-                    chatFactory.sendPlayerMessage(" ", false, killer, null);
-                    econ.depositPlayer(killer, totalCoinsReward);
-                    killer.playSound(killer.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 5, 10);
-
-                    sm.setSB(killer);
-
-                    /*
-                    if(totalCoinsReward == 1){
-                        chatFactory.sendPlayerMessage("&7You &ckilled &e" + deadPlayer.getName() + "&7. &a+" + coinsGainedPerKill + " &6Coin", false, deadPlayer, null);
                     }else{
-                        chatFactory.sendPlayerMessage("&7You &ckilled &e" + deadPlayer.getName() + "&7. &a+" + coinsGainedPerKill + " &6Coins", false, deadPlayer, null);
-                    }*/
+                        takeCoins(deadPlayer, econ, coinsLostPerDeath, killer);
+                    }
                 }else{
-                    if(!deadPlayerBoots.getItemMeta().hasEnchant(Enchantment.getByKey(new NamespacedKey(plugin, EnchantmentKeys.STONKS.toString())))){
-                        takeCoins(deadPlayer, econ, coinsLostPerDeath);
+                    takeCoins(deadPlayer, econ, coinsLostPerDeath, killer);
+                }
+            }else{
+                if(deadPlayer.getInventory().getBoots() != null){
+                    if(deadPlayerBoots.getItemMeta().hasEnchant(Enchantment.getByKey(new NamespacedKey(plugin, EnchantmentKeys.STONKS.toString())))){
+                        chatFactory.sendPlayerMessage(" ", false, deadPlayer, null);
+                        chatFactory.sendPlayerMessage("No &6Coins &7lost", false, deadPlayer, plugin.getPrefix());
+                        chatFactory.sendPlayerMessage(" ", false, deadPlayer, null);
                     }else{
-                        chatFactory.sendPlayerMessage(" ", false, deadPlayer, null);
-                        chatFactory.sendPlayerMessage("&eNo &6Coins &7lost", false, deadPlayer, plugin.getPrefix());
-                        chatFactory.sendPlayerMessage(" ", false, deadPlayer, null);
+                        takeCoins(deadPlayer, econ, coinsLostPerDeath);
                     }
-                    scm.increaseDeaths(deadPlayer.getUniqueId());
+                }else{
+                    takeCoins(deadPlayer, econ, coinsLostPerDeath);
                 }
             }
+
+            int totalCoinsReward = coinsGainedPerKill;
+            if(killer != null){
+                if(killer.getInventory().getBoots() != null){
+                    ItemStack killersBoots = killer.getInventory().getBoots();
+                    if(killersBoots.getItemMeta().hasEnchant(Enchantment.getByKey(new NamespacedKey(plugin, EnchantmentKeys.COIN.toString())))) {
+                        final int MIN_COINS = 1;
+                        final int MAX_COINS = 20;
+                        int randomCoinAmount = (int) (Math.random() * ((MAX_COINS - MIN_COINS) + 1)) + MIN_COINS;
+                        totalCoinsReward = totalCoinsReward + randomCoinAmount;
+
+                        chatFactory.sendPlayerMessage(" ", false, killer, null);
+                        chatFactory.sendPlayerMessage("&7You received &a" + randomCoinAmount + " &6Coins " + "&7from &eCoin Boots&7", false, killer, null);
+                        chatFactory.sendPlayerMessage(" ", false, killer, null);
+                    }
+                    AmplifiersConfigManager acm = new AmplifiersConfigManager(plugin);
+                    if(acm.isAmplifierActivated("Coin Multiplier")){
+                        int coinsAdditive = (int) (coinsGainedPerKill * acm.getCoinsMultiplier()) - 1;
+                        totalCoinsReward = totalCoinsReward + coinsAdditive;
+                        chatFactory.sendPlayerMessage(" ", false, killer, null);
+                        chatFactory.sendPlayerMessage("&a+" + coinsAdditive + " &6Coins &7from the &eAmplifier&7", false, killer, null);
+                        chatFactory.sendPlayerMessage(" ", false, killer, null);
+                    }
+                }
+
+                chatFactory.sendPlayerMessage(" ", false, killer, null);
+                chatFactory.sendPlayerMessage("&7You &cKilled &e" + deadPlayer.getName() + "&7. &a+" + coinsGainedPerKill + " &6Coin", false, killer, null);
+                chatFactory.sendPlayerMessage(" ", false, killer, null);
+                econ.depositPlayer(killer, totalCoinsReward);
+                killer.playSound(killer.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 5, 10);
+            }
         }
+
         e.setDroppedExp(0);
     }
 
@@ -177,16 +174,16 @@ public class GeneralListener implements Listener {
 
         if(econ.getBalance(brokeBoi) > 0){
             econ.withdrawPlayer(brokeBoi, coinsLostPerDeath);
-            chatFactory.sendPlayerMessage(" ", false, killer, null);
+            chatFactory.sendPlayerMessage(" ", false, brokeBoi, null);
             chatFactory.sendPlayerMessage("&e" + killer.getName() + "&c Killed &7you. &4-" + coinsLostPerDeath + " &6Coin", false, brokeBoi, plugin.getPrefix());
         }else{
-            chatFactory.sendPlayerMessage(" ", false, killer, null);
+            chatFactory.sendPlayerMessage(" ", false, brokeBoi, null);
             chatFactory.sendPlayerMessage("&e" + killer.getName() + "&c Killed &7you", false, brokeBoi, plugin.getPrefix());
-            chatFactory.sendPlayerMessage(" ", false, killer, null);
-            chatFactory.sendPlayerMessage(" ", false, killer, null);
+            chatFactory.sendPlayerMessage(" ", false, brokeBoi, null);
+            chatFactory.sendPlayerMessage(" ", false, brokeBoi, null);
             chatFactory.sendPlayerMessage("&fGood news! You did not lose any &6Coins &fsince you have none", false, brokeBoi, null);
         }
-        chatFactory.sendPlayerMessage(" ", false, killer, null);
+        chatFactory.sendPlayerMessage(" ", false, brokeBoi, null);
 
     }
 

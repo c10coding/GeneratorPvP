@@ -44,8 +44,10 @@ public class MenuCreator extends Menu implements Listener {
         this.ecm = new EquippedConfigManager(plugin, p.getUniqueId());
         this.sm = new ScoreboardManager((GeneratorPvP) plugin);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        sm.setSB(p);
-        ecm.reloadConfig();
+        if(!ecm.isInFile()){
+            ecm.addPlayerToFile();
+            ecm.saveConfig();
+        }
     }
 
     public MenuCreator(JavaPlugin plugin, String menuTitle, int numSlots, Player p) {
@@ -57,7 +59,10 @@ public class MenuCreator extends Menu implements Listener {
         this.p = p;
         this.ecm = new EquippedConfigManager(plugin, p.getUniqueId());
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        ecm.reloadConfig();
+        if(!ecm.isInFile()){
+            ecm.addPlayerToFile();
+            ecm.saveConfig();
+        }
     }
 
     @Override

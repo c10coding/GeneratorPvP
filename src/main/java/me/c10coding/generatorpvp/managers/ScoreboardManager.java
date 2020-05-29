@@ -4,18 +4,11 @@ import me.c10coding.coreapi.chat.Chat;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.files.AmplifiersConfigManager;
 import me.c10coding.generatorpvp.files.StatsConfigManager;
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class ScoreboardManager implements Listener {
 
@@ -27,60 +20,107 @@ public class ScoreboardManager implements Listener {
         this.chatFactory = plugin.getApi().getChatFactory();
     }
 
-    public void setSB(Player p){
-        Player player = p;
-        org.bukkit.scoreboard.ScoreboardManager scoreboardManager = Bukkit.getServer().getScoreboardManager();
-        Scoreboard scoreboard = scoreboardManager.getNewScoreboard();
-        Objective obj = scoreboard.registerNewObjective("Stats", "dummy");
-        obj.setDisplaySlot(DisplaySlot.SIDEBAR);
-        obj.setDisplayName(chatFactory.chat("&b&lHEIGHTS"));
+    public void setSB(Player player){
+
         StatsConfigManager scm = new StatsConfigManager(plugin);
-
-        if(!scm.isInFile(player.getUniqueId())){
-            scm.addPlayerToFile(player.getUniqueId());
-        }
-
         AmplifiersConfigManager acm = new AmplifiersConfigManager(plugin);
 
-        Score name = obj.getScore(chatFactory.chat("&fName: &7" + player.getName()));
-        name.setScore(11);
-        String group = GeneratorPvP.getPerms().getPrimaryGroup(player);
-        Score rank = obj.getScore(chatFactory.chat("&fRank: " + group));
-        rank.setScore(10);
+        org.bukkit.scoreboard.ScoreboardManager scoreboardManager = plugin.getServer().getScoreboardManager();
+        Scoreboard scoreboard = scoreboardManager.getNewScoreboard();
+        Objective objective = scoreboard.registerNewObjective("Stats", "Dummy");
+        objective.setDisplayName(chatFactory.chat("&b&lHEIGHTS"));
 
-        Score empty9 = obj.getScore("    ");
-        empty9.setScore(9);
+        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-        Score kills = obj.getScore(chatFactory.chat("&fKills: &a" + scm.getKills(player.getUniqueId())));
-        kills.setScore(8);
-        Score deaths = obj.getScore(chatFactory.chat("&fDeaths: &c" + scm.getDeaths(player.getUniqueId())));
-        deaths.setScore(7);
+        Team playerName = scoreboard.registerNewTeam("PlayerName");
+        playerName.addEntry(chatFactory.chat("&fName: &7"));
+        playerName.setSuffix("");
+        playerName.setPrefix("");
+        objective.getScore(chatFactory.chat("&fName: &7")).setScore(11);
+        Team rank = scoreboard.registerNewTeam("Rank");
+        rank.addEntry(chatFactory.chat("&fRank: "));
+        rank.setSuffix("");
+        rank.setPrefix("");
+        objective.getScore(chatFactory.chat("&fRank: ")).setScore(10);
 
-        Score empty7 = obj.getScore("   ");
-        empty7.setScore(6);
+        Team empty9 = scoreboard.registerNewTeam("Empty9");
+        empty9.addEntry(" ");
+        empty9.setSuffix("");
+        empty9.setPrefix("");
+        objective.getScore(" ").setScore(9);
 
-        Score coins = obj.getScore(chatFactory.chat("&fCoins: &6" + (int)plugin.getEconomy().getBalance(player)));
-        coins.setScore(5);
+        Team kills = scoreboard.registerNewTeam("Kills");
+        kills.addEntry(chatFactory.chat("&fKills: &a"));
+        kills.setSuffix("");
+        kills.setPrefix("");
+        objective.getScore(chatFactory.chat("&fKills: &a")).setScore(8);
+        Team deaths = scoreboard.registerNewTeam("Deaths");
+        deaths.addEntry(chatFactory.chat("&fDeaths: &c"));
+        deaths.setSuffix("");
+        deaths.setPrefix("");
+        objective.getScore(chatFactory.chat("&fDeaths: &c")).setScore(7);
 
-        Score empty5 = obj.getScore("  ");
-        empty5.setScore(4);
+        Team empty6 = scoreboard.registerNewTeam("Empty6");
+        empty6.addEntry("  ");
+        empty6.setSuffix("");
+        empty6.setPrefix("");
+        objective.getScore("  ").setScore(6);
+
+        Team coins = scoreboard.registerNewTeam("Coins");
+        coins.addEntry(chatFactory.chat("&fCoins: &6"));
+        coins.setSuffix("");
+        coins.setPrefix("");
+        objective.getScore(chatFactory.chat("&fCoins: &6")).setScore(5);
+
+        Team empty4 = scoreboard.registerNewTeam("Empty4");
+        empty4.addEntry("    ");
+        empty4.setSuffix("");
+        empty4.setPrefix("");
+        objective.getScore("    ").setScore(4);
+
+        Team amplifier = scoreboard.registerNewTeam("Amplifier");
+        amplifier.addEntry(chatFactory.chat("&fAmplifier: "));
+        amplifier.setSuffix("");
+        amplifier.setPrefix("");
+        objective.getScore(chatFactory.chat("&fAmplifier: ")).setScore(3);
+
+        Team warnings = scoreboard.registerNewTeam("Warnings");
+        warnings.addEntry(chatFactory.chat("&fWarnings: &f0"));
+        warnings.setSuffix("");
+        warnings.setPrefix("");
+        objective.getScore(chatFactory.chat("&fWarnings: &f0")).setScore(2);
+
+        Team empty1 = scoreboard.registerNewTeam("Empty1");
+        empty1.addEntry("   ");
+        empty1.setSuffix("");
+        empty1.setPrefix("");
+        objective.getScore("   ").setScore(1);
+
+        Team footer = scoreboard.registerNewTeam("Footer");
+        footer.addEntry(chatFactory.chat("&E&LStore.HeightsMC.com"));
+        footer.setSuffix("");
+        footer.setPrefix("");
+        objective.getScore(chatFactory.chat("&E&LStore.HeightsMC.com")).setScore(0);
+
+        int playerBalance = (int) GeneratorPvP.getEconomy().getBalance(player);
+        coins.setSuffix(playerBalance + "");
+
+        String group = chatFactory.chat(PlaceholderAPI.setPlaceholders(player, "%uperms_rank%"));
+        playerName.setSuffix(player.getName());
+        rank.setSuffix(group);
+
+        int numKills = scm.getKills(player.getUniqueId());
+        int numDeaths = scm.getDeaths(player.getUniqueId());
+        kills.setSuffix(numKills+"");
+        deaths.setSuffix(numDeaths+"");
 
         String isActive = chatFactory.chat("&cInactive");
         if(acm.isAmplifierActivated("Boosters") || acm.isAmplifierActivated("Multipliers") || acm.isAmplifierActivated("Coin Multiplier")){
             isActive = "&aActive";
         }
-        Score amplifier = obj.getScore(chatFactory.chat("&fAmplifier: " + isActive));
-        amplifier.setScore(3);
-        Score warnings = obj.getScore(chatFactory.chat("&fWarnings: " + 0));
-        warnings.setScore(2);
-
-        Score empty2 = obj.getScore(" ");
-        empty2.setScore(1);
-
-        Score footer = obj.getScore(StringUtils.center(chatFactory.chat("&e&LStore.HeightsMC.com"), 2));
-        footer.setScore(0);
-
+        amplifier.setSuffix(chatFactory.chat(isActive));
         player.setScoreboard(scoreboard);
+
     }
 
 }

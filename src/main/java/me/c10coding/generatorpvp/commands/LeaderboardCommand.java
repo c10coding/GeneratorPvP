@@ -40,7 +40,7 @@ public class LeaderboardCommand implements CommandExecutor {
 
         Map<OfflinePlayer, Integer> balancesPerPlayer = new HashMap<>();
         for(OfflinePlayer op : uuids){
-            balancesPerPlayer.put(op, (int) GeneratorPvP.getEconomy().getBalance(op));
+            balancesPerPlayer.put(op, (int) Math.round(GeneratorPvP.getEconomy().getBalance(op)));
         }
 
         Map<OfflinePlayer,Integer> topTenPlayers =
@@ -51,10 +51,15 @@ public class LeaderboardCommand implements CommandExecutor {
                                 Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
 
+        chatFactory.sendPlayerMessage("&8====================", false, sender, null);
+        int numPlayer = 1;
         for(Map.Entry player : topTenPlayers.entrySet()){
-            Bukkit.broadcastMessage(player.getKey().toString());
+            String playerName = ((OfflinePlayer)player.getKey()).getName();
+            int balance = (int) player.getValue();
+            chatFactory.sendPlayerMessage("&e#" + numPlayer + " &6 " + playerName + "&7 » &6" + balance + " Coins", false, sender, null);
+            numPlayer++;
         }
-
+        chatFactory.sendPlayerMessage("&8====================", false, sender, null);
         return false;
     }
 }

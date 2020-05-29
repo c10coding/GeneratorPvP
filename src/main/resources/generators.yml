@@ -20,7 +20,7 @@ Generator Settings:
 
     Hologram:
       Lines:
-        - "&7Coal &fGenerator Inactive"
+        - "&7Coal &fGenerator &cInactive"
         - "&7Spawning &c%amount% in &c%rate% &7Seconds"
 
   CoalBlock:

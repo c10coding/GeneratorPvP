@@ -48,7 +48,6 @@ public final class GeneratorPvP extends JavaPlugin {
 
         this.getLogger().info("==================================================================");
         validateConfigs();
-        setupPermissions();
         registerEvents();
         initializeCommands();
         startAmplifierTimer();
@@ -114,13 +113,6 @@ public final class GeneratorPvP extends JavaPlugin {
         }
         econ = rsp.getProvider();
         return econ != null;
-    }
-
-    private boolean setupPermissions() {
-        this.getLogger().info("Hooking Permissions...");
-        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
-        perms = rsp.getProvider();
-        return perms != null;
     }
 
     private void registerEvents(){

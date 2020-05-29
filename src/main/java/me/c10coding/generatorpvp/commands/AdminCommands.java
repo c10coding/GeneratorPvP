@@ -4,6 +4,7 @@ import me.c10coding.coreapi.chat.Chat;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.files.AmplifiersConfigManager;
 import me.c10coding.generatorpvp.files.EquippedConfigManager;
+import me.c10coding.generatorpvp.utils.GPUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -27,6 +28,21 @@ public class AdminCommands implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+
+        if(args[0].equalsIgnoreCase("help") && args.length == 1){
+            if(sender instanceof Player){
+                GPUtils.sendCenteredMessage((Player)sender, "&e==============HELP==============");
+                chatFactory.sendPlayerMessage("&6/menu &f- Brings up the main menu for GeneratorPvP", false, sender, null);
+                chatFactory.sendPlayerMessage("&6/gp give coins <playername> <amount> &f- Gives the desired player a certain amount of coins.", false, sender, null);
+                chatFactory.sendPlayerMessage("&6/gp give amp <player name> <booster | coinmult | mult> <level> <amount> &f- Gives the desired player a certain amount of an amplifier", false, sender, null);
+                chatFactory.sendPlayerMessage("&6/lb &f- Brings up the leaderboard.", false, sender, null);
+                chatFactory.sendPlayerMessage("&6/gp set coins &f- <playername> <amount>.", false, sender, null);
+                GPUtils.sendCenteredMessage((Player)sender, "&e================================");
+            }else{
+                chatFactory.sendPlayerMessage("Only players can use this command!", false, sender, null);
+            }
+        }
+
         if(sender.isOp()){
             if(args.length > 0){
                 //gp give amp <player name> <type> <level> <amount>
@@ -139,21 +155,57 @@ public class AdminCommands implements CommandExecutor {
 
                     if(Bukkit.getPlayer(args[2]) != null){
                         GeneratorPvP.getEconomy().depositPlayer(Bukkit.getPlayer(args[2]), amount);
+
                         chatFactory.sendPlayerMessage(" ", false, sender, null);
                         chatFactory.sendPlayerMessage("&aYou have received &6" + amount  + " &6Coins&a.", false, Bukkit.getPlayer(args[2]), null);
+                        chatFactory.sendPlayerMessage(" ", false, Bukkit.getPlayer(args[2]), null);
+
                         chatFactory.sendPlayerMessage(" ", false, sender, null);
                         chatFactory.sendPlayerMessage("&aYou have given &e" + args[2] + "&6 " + amount + " Coins&a.", false, sender, null);
                     }else{
                         chatFactory.sendPlayerMessage(" ", false, sender, null);
                         chatFactory.sendPlayerMessage("&cThis is either not a valid player or the player isn't online!", false, sender, null);
+                    }
+                    chatFactory.sendPlayerMessage(" ", false, sender, null);
+
+
+                }else if(args[0].equalsIgnoreCase("set") && args[1].equalsIgnoreCase("coins") && args.length == 4){
+
+                    int amount;
+
+                    try{
+                        amount = Integer.parseInt(args[3]);
+                    }catch(IllegalArgumentException e){
                         chatFactory.sendPlayerMessage(" ", false, sender, null);
+                        chatFactory.sendPlayerMessage("&cThis is not a valid number!", false, sender, null);
+                        chatFactory.sendPlayerMessage(" ", false, sender, null);
+                        return false;
                     }
 
+                    if(Bukkit.getPlayer(args[2]) != null){
+                        double playerCurrentAmount = GeneratorPvP.getEconomy().getBalance(Bukkit.getPlayer(args[2]));
+                        GeneratorPvP.getEconomy().withdrawPlayer(Bukkit.getPlayer(args[2]), playerCurrentAmount);
+                        GeneratorPvP.getEconomy().depositPlayer(Bukkit.getPlayer(args[2]), amount);
 
+                        chatFactory.sendPlayerMessage(" ", false, Bukkit.getPlayer(args[2]), null);
+                        chatFactory.sendPlayerMessage("&aYour balance was set to &6" + amount  + " &6Coins&a.", false, Bukkit.getPlayer(args[2]), null);
+                        chatFactory.sendPlayerMessage(" ", false, Bukkit.getPlayer(args[2]), null);
+
+                        chatFactory.sendPlayerMessage(" ", false, sender, null);
+                        chatFactory.sendPlayerMessage("&aYou set &e" + args[2] + "'s balance to &6" + amount + " Coins&a.", false, sender, null);
+                    }else{
+                        chatFactory.sendPlayerMessage(" ", false, sender, null);
+                        chatFactory.sendPlayerMessage("&cThis is either not a valid player or the player isn't online!", false, sender, null);
+                    }
+                    chatFactory.sendPlayerMessage(" ", false, sender, null);
+                }else if(args[0].equalsIgnoreCase("reload") && args.length == 1){
+                    plugin.reloadConfig();
+                    chatFactory.sendPlayerMessage(" ", false, sender, null);
+                    chatFactory.sendPlayerMessage("The config has been reloaded!", false, sender, null);
+                    chatFactory.sendPlayerMessage(" ", false, sender, null);
                 }
             }
         }
-
         return false;
     }
 

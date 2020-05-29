@@ -100,6 +100,8 @@ public class EquippedConfigManager extends ConfigManager {
         String newAmplifierName = GPUtils.firstLowerRestUpper(amplifierName);
         if(newAmplifierName.equalsIgnoreCase("Booster")){
             newAmplifierName = "Boosters";
+        }else if(amplifierName.equalsIgnoreCase("mult")){
+            newAmplifierName = "Multipliers";
         }
         int currentAmount = getAmplifierAmount(newAmplifierName, levelAmplifier);
         int newAmount = currentAmount + amount;
@@ -118,7 +120,7 @@ public class EquippedConfigManager extends ConfigManager {
     }
 
     public boolean isInFile(){
-        return config.getString("Chat." + u.toString() + ".IsPurchased.Gray") == null;
+        return config.getString("Chat." + u.toString() + ".IsPurchased.Gray") != null;
     }
 
     private void setChatCategory(){
