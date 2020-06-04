@@ -133,7 +133,7 @@ public abstract class SuperBootEnchant extends Enchantment{
 
 		Player playerSneaking = e.getPlayer();
 
-		if(!timer.isActive() && hasDuration() && hasEnchant(playerSneaking) && (playerSneaking.getGameMode().equals(GameMode.SURVIVAL) || playerSneaking.getGameMode().equals(GameMode.ADVENTURE))){
+		if(!timer.isActive() && hasDuration() && hasEnchant(playerSneaking) && (playerSneaking.getGameMode().equals(GameMode.SURVIVAL) || playerSneaking.getGameMode().equals(GameMode.ADVENTURE)) && !playerSneaking.hasMetadata("GlowingPlayers")){
 			if(!playersThatAreSneaking.contains(playerSneaking.getUniqueId())){
 				playersThatAreSneaking.add(playerSneaking.getUniqueId());
 				playerSneaking.setLevel(4);
@@ -158,6 +158,8 @@ public abstract class SuperBootEnchant extends Enchantment{
 						}else{
 							if(seconds == bootsActivationTime){
 
+								Chat chatFactory = new Chat();
+
 								playerSneaking.setExp(1.0F);
 								playerSneaking.setLevel((int) Math.round(duration));
 								if(!superBoot.equals(SuperBootsMenu.SuperBoots.GLOWING)){
@@ -173,12 +175,19 @@ public abstract class SuperBootEnchant extends Enchantment{
 								}else if(superBoot.equals(SuperBootsMenu.SuperBoots.BLINDNESS)){
 									double blockRadius = dsm.getBootsProperty(configKey, DefaultConfigBootsSectionManager.SuperBootsProperty.BLINDNESS_BLOCK_RANGE);
 									Collection<Entity> entitiesNearby = playerSneaking.getNearbyEntities(blockRadius, blockRadius, blockRadius);
+									List<Player> playersAffected = new ArrayList<>();
 									for(Entity e : entitiesNearby){
 										if(e instanceof Player){
 											Player nearby = (Player) e;
-											nearby.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int) (duration * 20), dsm.getBootsProperty(configKey, DefaultConfigBootsSectionManager.SuperBootsProperty.LEVEL)));
+											if(!GPUtils.isPlayerInSpawn(nearby)){
+												nearby.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int) (duration * 20), dsm.getBootsProperty(configKey, DefaultConfigBootsSectionManager.SuperBootsProperty.LEVEL)));
+												playersAffected.add(nearby);
+											}
 										}
 									}
+									chatFactory.sendPlayerMessage(" ", false, playerSneaking, null);
+									chatFactory.sendPlayerMessage("&7You have affected &e" + playersAffected.size() + " &7players!",false, playerSneaking, null);
+									chatFactory.sendPlayerMessage(" ", false, playerSneaking, null);
 								}else if(superBoot.equals(SuperBootsMenu.SuperBoots.LEVITATION)){
 									playerSneaking.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, (int) (duration * 20), dsm.getBootsProperty(configKey, DefaultConfigBootsSectionManager.SuperBootsProperty.LEVEL)));
 								}else if(superBoot.equals(SuperBootsMenu.SuperBoots.INVISIBILITY)){
@@ -188,11 +197,10 @@ public abstract class SuperBootEnchant extends Enchantment{
 									Location playerLoc = playerSneaking.getLocation();
 									Collection<Entity> entitiesNearby = playerLoc.getWorld().getNearbyEntities(playerLoc, glowBlockRadius, glowBlockRadius, glowBlockRadius);
 									List<Player> playersGlowing = new ArrayList<>();
-									Chat chatFactory = new Chat();
 									for (Entity e : entitiesNearby) {
 										if (e instanceof Player) {
 											Player playerNearby = (Player) e;
-											if(!playerNearby.isGlowing() && !playerSneaking.equals(playerNearby)){
+											if(!playerNearby.isGlowing() && !playerSneaking.equals(playerNearby) && !GPUtils.isPlayerInSpawn(playerNearby)){
 												chatFactory.sendPlayerMessage(" ", false, playerNearby, null);
 												chatFactory.sendPlayerMessage("&7You are now &eglowing!", false, playerNearby, null);
 												chatFactory.sendPlayerMessage(" ", false, playerNearby, null);

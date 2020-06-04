@@ -44,6 +44,8 @@ public final class GeneratorPvP extends JavaPlugin {
     @Override
     public void onEnable() {
 
+        disableHolograms();
+
         this.logger = this.getLogger();
 
         this.getLogger().info("==================================================================");
@@ -81,7 +83,6 @@ public final class GeneratorPvP extends JavaPlugin {
     public void onDisable() {
         updatePlayerXP();
         enchantmentRegister.unRegisterEnchantments();
-        disableHolograms();
     }
 
     public CoreAPI getApi(){
@@ -191,10 +192,10 @@ public final class GeneratorPvP extends JavaPlugin {
 
     }
 
-    private void disableHolograms(){
+    public void disableHolograms(){
 
         File hologramFile = new File(this.getDataFolder(), "holograms.yml");
-
+        this.getLogger().info("Removing holograms...");
         if(hologramFile.exists()){
             HologramHelper hh = new HologramHelper(this);
 

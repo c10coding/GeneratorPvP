@@ -89,17 +89,17 @@ public class WarpsMenu extends MenuCreator implements Listener {
 
         switch(slotClicked){
             case 9:
-                chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
-                chatFactory.sendPlayerMessage("&cTeleporting &fyou in &c" + tpDelay + " &fseconds.&4 Do Not Move!", false, playerClicked, prefix);
-                chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
+                chatFactory.sendPlayerMessage(" ", false, playerClicked, prefix);
+                chatFactory.sendPlayerMessage("&cTeleporting &fyou in &c" + tpDelay + "&f seconds.&4 Do Not Move!", false, playerClicked, prefix);
+                chatFactory.sendPlayerMessage(" ", false, playerClicked, prefix);
                 enterTPProcess(new Location(playerClicked.getWorld(), -563, 60, -645), false);
                 p.closeInventory();
                 break;
             case 11:
                 if(playerClicked.hasPermission("gp.teleport.vip")){
-                    chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
-                    chatFactory.sendPlayerMessage("&cTeleporting &fyou in &c" + tpDelay + " &fseconds.&4 Do Not Move!", false, playerClicked, prefix);
-                    chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
+                    chatFactory.sendPlayerMessage(" ", false, playerClicked, prefix);
+                    chatFactory.sendPlayerMessage("&cTeleporting &fyou in &c" + tpDelay + "&f seconds.&4 Do Not Move!", false, playerClicked, prefix);
+                    chatFactory.sendPlayerMessage(" ", false, playerClicked, prefix);
                     enterTPProcess(new Location(playerClicked.getWorld(), -563, 85, -645), false);
                 }else{
                     chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
@@ -110,9 +110,9 @@ public class WarpsMenu extends MenuCreator implements Listener {
                 break;
             case 13:
                 if(playerClicked.hasPermission("gp.teleport.mvp")){
-                    chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
-                    chatFactory.sendPlayerMessage("&cTeleporting &fyou in &c" + tpDelay + " &fseconds.&4 Do Not Move!", false, playerClicked, prefix);
-                    chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
+                    chatFactory.sendPlayerMessage(" ", false, playerClicked, prefix);
+                    chatFactory.sendPlayerMessage("&cTeleporting &fyou in &c" + tpDelay + "&f seconds.&4 Do Not Move!", false, playerClicked, prefix);
+                    chatFactory.sendPlayerMessage(" ", false, playerClicked, prefix);
                     enterTPProcess(new Location(playerClicked.getWorld(), -563, 107, -645), false);
                 }else{
                     chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
@@ -124,7 +124,7 @@ public class WarpsMenu extends MenuCreator implements Listener {
             case 15:
                 if(playerClicked.hasPermission("gp.teleport.ultra")){
                     chatFactory.sendPlayerMessage(" ", false, playerClicked, prefix);
-                    chatFactory.sendPlayerMessage("&cTeleporting &fyou in &c5 &fseconds.&4 Do Not Move!", false, playerClicked, prefix);
+                    chatFactory.sendPlayerMessage("&cTeleporting &fyou in &c" + tpDelay + "&f seconds.&4 Do Not Move!", false, playerClicked, prefix);
                     chatFactory.sendPlayerMessage(" ", false, playerClicked, prefix);
                     enterTPProcess(new Location(playerClicked.getWorld(), -563, 140, -645), false);
                 }else{
@@ -137,31 +137,29 @@ public class WarpsMenu extends MenuCreator implements Listener {
             case 17:
                 int coins = (int) GeneratorPvP.getEconomy().getBalance(playerClicked);
                 int cost = (int) cm.getTPCost("SpecialTP");
-                if(playerClicked.hasPermission("gp.teleport.special")){
-                    if(!ecm.isPurchased("Special", "Warps")){
-                        if(coins >= cost){
-                            chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
-                            chatFactory.sendPlayerMessage("&You just purchased the &eSpecial Warp &7for " + cost + " &6Coins", false, p, prefix);
-                            chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
-                            GeneratorPvP.getEconomy().withdrawPlayer(playerClicked, cm.getTPCost("SpecialTP"));
-                            enterTPProcess(new Location(playerClicked.getWorld(), -563, 160, -645), true);
-                        }else{
-                            //&fYou are missing &6[AMOUNT] Coins&f to purchase [ITEM NAME AND COLOUR]&f. You can purchase more coins from &eStore.HeightsMC.com
-                            int amountMissing = cost - coins;
-                            chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
-                            chatFactory.sendPlayerMessage("&7You are missing &6" + amountMissing + " Coins&f " + " to purchase the Special Warp. You can purchase more coins from &eStore.HeightsMC.com", false, playerClicked, prefix);
-                            chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
-                        }
-                        p.closeInventory();
-                        break;
-                    }else{
+                if(!ecm.isPurchased("Special", "Warps")){
+                    if(coins >= cost){
+                        chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
+                        chatFactory.sendPlayerMessage("&7You just purchased the &eSpecial Warp &7for " + cost + " &6Coins", false, p, prefix);
+                        chatFactory.sendPlayerMessage(" ", false, playerClicked, prefix);
+                        chatFactory.sendPlayerMessage("&cTeleporting &fyou in &c" + tpDelay + "&f seconds.&4 Do Not Move!", false, playerClicked, prefix);
+                        chatFactory.sendPlayerMessage(" ", false, playerClicked, prefix);
+                        GeneratorPvP.getEconomy().withdrawPlayer(playerClicked, cm.getTPCost("SpecialTP"));
                         enterTPProcess(new Location(playerClicked.getWorld(), -563, 160, -645), true);
-                        p.closeInventory();
+                    }else{
+                        //&fYou are missing &6[AMOUNT] Coins&f to purchase [ITEM NAME AND COLOUR]&f. You can purchase more coins from &eStore.HeightsMC.com
+                        int amountMissing = cost - coins;
+                        chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
+                        chatFactory.sendPlayerMessage("&7You are missing &6" + amountMissing + " Coins&f " + " to purchase the Special Warp. You can purchase more coins from &eStore.HeightsMC.com", false, playerClicked, prefix);
+                        chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
                     }
+                    p.closeInventory();
+                    break;
                 }else{
-                    chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
-                    chatFactory.sendPlayerMessage("You don't have permission to do that!", false, playerClicked, prefix);
-                    chatFactory.sendPlayerMessage(" ", false, playerClicked, null);
+                    chatFactory.sendPlayerMessage(" ", false, playerClicked, prefix);
+                    chatFactory.sendPlayerMessage("&cTeleporting &fyou in &c" + tpDelay + "&f seconds.&4 Do Not Move!", false, playerClicked, prefix);
+                    chatFactory.sendPlayerMessage(" ", false, playerClicked, prefix);
+                    enterTPProcess(new Location(playerClicked.getWorld(), -563, 160, -645), true);
                     p.closeInventory();
                 }
                 break;

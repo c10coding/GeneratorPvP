@@ -16,35 +16,11 @@ commands:
     description: "Opens the leaderboard for GenPvP"
     aliases:
       - lb
+
 permissions:
-  gp.*:
-    description: Gives access to all GeneratorPvP commands and what-not
-    children:
-      gp.teleport.vip: true
-      gp.teleport.mvp: true
-      gp.teleport.ultra: true
-      gp.teleport.special: true
-      gp.unlock.gray: true
-      gp.unlock.blue: true
-      gp.unlock.gold: true
-      gp.unlock.lightblue: true
-      gp.unlock.limegreen: true
-      gp.unlock.yellow: true
-      gp.unlock.antifall: true
-      gp.unlock.strength: true
-      gp.unlock.regen: true
-      gp.unlock.glowing: true
-      gp.unlock.speed: true
-      gp.unlock.jumpboost: true
-      gp.unlock.doublejump: true
-      gp.unlock.absorption: true
-      gp.unlock.blindness: true
-      gp.unlock.coin: true
-      gp.unlock.antikb: true
-      gp.unlock.stonks: true
-      gp.unlock.levitation: true
-      gp.unlock.invisibility: true
-    default: op
+  gp.purchase.antifall:
+    description: "Permissions to purchase the antifall boots"
+    default: true
   gp.use:
     description: Allows you to open the plugin menu
     default: true
@@ -55,21 +31,26 @@ permissions:
   gp.teleport.ultra:
     default: op
   gp.teleport.special:
+    description: "Allows you to use the special warp"
     default: true
-  #Whether a player can purchase the color or not
   gp.purchase.gray:
+    description: "Allows you to purchase the gray chat color"
     default: true
   gp.purchase.limegreen:
+    description: "Allows you to purchase the lime green chat color"
     default: true
   gp.purchase.yellow:
+    description: "Allows you to purchase the yellow chat color"
     default: true
   gp.purchase.blue:
+    description: "Allows you to purchase the blue chat color"
     default: op
   gp.purchase.gold:
+    description: "Allows you to purchase the gold chat color"
     default: op
   gp.purchase.lightpurple:
+    description: "Allows you to purchase the light purple chat color"
     default: op
-  #If they have this permission, they already have the chat color purchased
   gp.unlock.gray:
     default: op
   gp.unlock.blue:
@@ -82,9 +63,8 @@ permissions:
     default: op
   gp.unlock.yellow:
     default: op
-  #BOOTS
-  gp.purchase.antifall:
-    default: true
+
+
   gp.purchase.strength:
     default: op
   gp.purchase.regen:
@@ -114,32 +94,32 @@ permissions:
 
   gp.unlock.antifall:
     default: op
-    gp.unlock.strength:
-      default: op
-    gp.unlock.regen:
-      default: op
-    gp.unlock.glowing:
-      default: op
-    gp.unlock.speed:
-      default: op
-    gp.unlock.jumpboost:
-      default: op
-    gp.unlock.doublejump:
-      default: op
-    gp.unlock.absorption:
-      default: op
-    gp.unlock.blindness:
-      default: op
-    gp.unlock.coin:
-      default: op
-    gp.unlock.antikb:
-      default: op
-    gp.unlock.stonks:
-      default: op
-    gp.unlock.levitation:
-      default: op
-    gp.unlock.invisibility:
-      default: op
+  gp.unlock.strength:
+    default: op
+  gp.unlock.regen:
+    default: op
+  gp.unlock.glowing:
+    default: op
+  gp.unlock.speed:
+    default: op
+  gp.unlock.jumpboost:
+    default: op
+  gp.unlock.doublejump:
+    default: op
+  gp.unlock.absorption:
+    default: op
+  gp.unlock.blindness:
+    default: op
+  gp.unlock.coin:
+    default: op
+  gp.unlock.antikb:
+    default: op
+  gp.unlock.stonks:
+    default: op
+  gp.unlock.levitation:
+    default: op
+  gp.unlock.invisibility:
+    default: op
 
 
 

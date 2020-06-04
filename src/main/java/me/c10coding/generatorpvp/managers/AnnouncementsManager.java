@@ -24,7 +24,11 @@ public class AnnouncementsManager {
 
     public void announceAmplifierActivated(String playerName, String amplifierName, double durationAmplifier){
 
-        Bukkit.broadcastMessage(chatFactory.chat("&e" + playerName + " &7has activated a &e" + amplifierName + " &7for &e" + durationAmplifier + "&7 hours!"));
+        //Was Bukkit.broadcast before but the server blocks this Bukkit.broadcast calls.
+        for(Player p : Bukkit.getOnlinePlayers()){
+            chatFactory.sendPlayerMessage(chatFactory.chat("&e" + playerName + " &7has activated a &e" + amplifierName + " &7for &e" + durationAmplifier + "&7 hours!"), false, p, null);
+        }
+
         TextComponent clickablePart = new TextComponent(chatFactory.chat("&eClick Here"));
         TextComponent message = new TextComponent(chatFactory.chat("&7 to thank them and get &6" + getThankRewardAmount() + " coins!"));
 

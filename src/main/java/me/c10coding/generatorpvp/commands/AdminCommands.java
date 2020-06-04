@@ -203,6 +203,11 @@ public class AdminCommands implements CommandExecutor {
                     chatFactory.sendPlayerMessage(" ", false, sender, null);
                     chatFactory.sendPlayerMessage("The config has been reloaded!", false, sender, null);
                     chatFactory.sendPlayerMessage(" ", false, sender, null);
+                }else if(args[0].equalsIgnoreCase("clearholo") && args.length == 1){
+                    chatFactory.sendPlayerMessage(" ", false, sender, null);
+                    chatFactory.sendPlayerMessage("Disabling holograms...", false, sender, null);
+                    chatFactory.sendPlayerMessage(" ", false, sender, null);
+                    plugin.disableHolograms();
                 }
             }
         }

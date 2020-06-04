@@ -26,7 +26,7 @@ public class ConfirmPurchaseMenu extends MenuCreator {
     private int cost;
     private MenuCreator prevMenu;
     private int amount;
-    final String ORE_PURCHASE_LORE = "&c[!] &rUse this item to trade &c[!]";
+    final String ORE_PURCHASE_LORE = "&c[&4!&c] &rUse this item to trade &c[&4!&c]";
     private EquippedConfigManager ecm;
     private ScoreboardManager sm;
 

@@ -4,10 +4,7 @@ import me.c10coding.coreapi.chat.Chat;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.files.DefaultConfigManager;
 import me.c10coding.generatorpvp.utils.GPUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.block.data.type.Snow;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftSnowball;
@@ -67,34 +64,36 @@ public class WeaponsListener implements Listener {
         ItemStack item = e.getItem();
         Action action = e.getAction();
         Player p = e.getPlayer();
-        if(!GPUtils.isPlayerInSpawn(e.getPlayer())){
-            if(action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)){
-                if(item != null){
-                    if(item.getType().equals(Material.SNOWBALL) || item.getType().equals(Material.SLIME_BALL) || item.getType().equals(Material.TNT) || item.getType().equals(Material.FIRE_CHARGE) || item.getType().equals(Material.EGG)){
+
+        if(action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)){
+            if (item != null) {
+                if (item.getType().equals(Material.SNOWBALL) || item.getType().equals(Material.SLIME_BALL) || item.getType().equals(Material.TNT) || item.getType().equals(Material.FIRE_CHARGE) || item.getType().equals(Material.EGG)) {
+                    if(!GPUtils.isPlayerInSpawn(e.getPlayer())) {
                         String displayName = chatFactory.removeChatColor(item.getItemMeta().getDisplayName());
-                        if(displayName.equalsIgnoreCase("Position Swap")){
-                            CraftLivingEntity player = (CraftLivingEntity) e.getPlayer();
+                        if (displayName.equalsIgnoreCase("Position Swap")) {
+                            CraftLivingEntity player = (CraftLivingEntity) p;
                             Snowball projectile = player.launchProjectile(Snowball.class);
                             projectile.setMetadata("CustomSlimeBall", new FixedMetadataValue(plugin, true));
-                            ((CraftSnowball) projectile).getHandle().setItem(CraftItemStack.asNMSCopy(new ItemStack(Material.SLIME_BALL)));
-                        }else if(displayName.equalsIgnoreCase("Knockback")){
+                            ((CraftSnowball) projectile).getHandle().setItem(CraftItemStack.asNMSCopy(new ItemStack(Material.CARROT)));
+                        } else if (displayName.equalsIgnoreCase("Knockback")) {
                             e.setCancelled(true);
                             Snowball sb = p.launchProjectile(Snowball.class);
                             sb.setMetadata("CustomSnowBall", new FixedMetadataValue(plugin, true));
-                        }else if(displayName.equalsIgnoreCase("TNT")){
+                        } else if (displayName.equalsIgnoreCase("TNT")) {
                             e.setCancelled(true);
                             Player player = e.getPlayer();
                             TNTPrimed tnt = (TNTPrimed) player.getLocation().getWorld().spawnEntity(player.getLocation(), EntityType.PRIMED_TNT);
                             double tntExplosionTime = dcm.getTNTExplosionTime() * 20;
                             tnt.setFuseTicks((int) tntExplosionTime);
-                        }else if(displayName.equalsIgnoreCase("Fireball")){
+                        } else if (displayName.equalsIgnoreCase("Fireball")) {
                             e.setCancelled(true);
                             Fireball fb = p.launchProjectile(Fireball.class);
                             Vector v = p.getLocation().getDirection();
                             double multiplier = dcm.getFireChargeVelocityMultiplier();
                             fb.setVelocity(v.multiply(multiplier));
                             fb.setMetadata("CustomFireBall", new FixedMetadataValue(plugin, true));
-                        }else if(displayName.equalsIgnoreCase("Instant Kill")){
+                            fb.getLocation().getWorld().playSound(fb.getLocation(), Sound.ITEM_FIRECHARGE_USE, 6, 10);
+                        } else if (displayName.equalsIgnoreCase("Instant Kill")) {
                             e.setCancelled(true);
                             Egg egg = p.launchProjectile(Egg.class);
                             Vector v = p.getLocation().getDirection();
@@ -106,22 +105,18 @@ public class WeaponsListener implements Listener {
                     }
                 }
             }
-        }else{
-            e.setCancelled(true);
         }
-
     }
 
     @EventHandler
     public void onTNTPlace(BlockPlaceEvent e){
-        if(!GPUtils.isPlayerInSpawn(e.getPlayer())){
-            if(e.getBlock().getType().equals(Material.TNT)){
-                e.setCancelled(true);
+        if(e.getBlock().getType().equals(Material.TNT)){
+            if (GPUtils.isPlayerInSpawn(e.getPlayer())) {
+                chatFactory.sendPlayerMessage(" ", false, e.getPlayer(), null);
+                chatFactory.sendPlayerMessage("You can't do that here!", false, e.getPlayer(), null);
+                chatFactory.sendPlayerMessage(" ", false, e.getPlayer(), null);
             }
-        }else{
-            chatFactory.sendPlayerMessage(" ", false, e.getPlayer(), null);
-            chatFactory.sendPlayerMessage("You can't do that here!", false, e.getPlayer(), null);
-            chatFactory.sendPlayerMessage(" ", false, e.getPlayer(), null);
+            e.setCancelled(true);
         }
     }
 
@@ -137,6 +132,7 @@ public class WeaponsListener implements Listener {
             if(fb.hasMetadata("CustomFireBall")){
                 e.setCancelled(true);
                 fb.removeMetadata("CustomFireBall", plugin);
+                fb.getLocation().getWorld().playSound(fb.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 5, 10);
             }
         }
     }

@@ -1,5 +1,7 @@
 package me.c10coding.generatorpvp.runnables;
 
+import me.TechsCode.UltraPunishments.UltraPunishments;
+import me.TechsCode.UltraPunishments.types.IndexedPlayer;
 import me.c10coding.coreapi.chat.Chat;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.files.AmplifiersConfigManager;
@@ -40,6 +42,7 @@ public class ScoreboardUpdater extends BukkitRunnable {
             Team rank = scoreboard.getTeam("Rank");
             Team kills = scoreboard.getTeam("Kills");
             Team deaths = scoreboard.getTeam("Deaths");
+            Team warnings = scoreboard.getTeam("Warnings");
             Team coins = scoreboard.getTeam("Coins");
             Team amplifier = scoreboard.getTeam("Amplifier");
 
@@ -61,6 +64,11 @@ public class ScoreboardUpdater extends BukkitRunnable {
                 isActive = "&aActive";
             }
             amplifier.setSuffix(chatFactory.chat(isActive));
+
+            UltraPunishments up = (UltraPunishments) UltraPunishments.getAPI();
+            IndexedPlayer ip = up.getPlayerIndexes().get(p.getUniqueId());
+            int numWarnings = up.getWarningStorage().getWarnings().target(ip).count();
+            warnings.setSuffix(chatFactory.chat("&c" + numWarnings+""));
 
             p.setScoreboard(scoreboard);
         }

@@ -166,7 +166,7 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
             if(isPurchaseAble){
                 lore.add(chatFactory.chat("&cNot Purchased"));
             }else{
-                lore.add(chatFactory.chat("&f[&bBuy&eCraft &7Only&f]"));
+                lore.add(chatFactory.chat("&bYou can purchase these boots from &eStore.HeightsMC.com"));
             }
         }
 
@@ -248,6 +248,11 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
 
         int slotClicked = e.getSlot();
 
+        if(!GPUtils.isPlayerInSpawn((Player)e.getWhoClicked())){
+            chatFactory.sendPlayerMessage("You can only do this in &espawn!", false, p, prefix);
+            return;
+        }
+
         SuperBoots superBoot;
         switch(slotClicked){
             case 0:
@@ -272,6 +277,11 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
 
                     p.setLevel(0);
                     p.setExp(0);
+
+                    if(p.hasMetadata("GlowingPlayers")){
+                        p.removeMetadata("GlowingPlayers", plugin);
+                    }
+
                 }
                 return;
             case 2:
@@ -354,7 +364,7 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
 
             if(!superBoot.isPurchasable && !p.hasPermission(unlockPermission)){
                 chatFactory.sendPlayerMessage(" ", false, p, null);
-                chatFactory.sendPlayerMessage("This is not purchase-able! You must buy a rank to unlock this", false, p, prefix);
+                chatFactory.sendPlayerMessage("&bYou can only purchase these boots from &eStore&f.&eHeightsMC&f.&ecom", false, p, prefix);
                 chatFactory.sendPlayerMessage(" ", false, p, null);
                 p.closeInventory();
             }
@@ -370,6 +380,11 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
                         removePotions();
                         removeFlight();
                         removeExtraHealth();
+
+                        if(p.hasMetadata("GlowingPlayers")){
+                            p.removeMetadata("GlowingPlayers", plugin);
+                        }
+
                     }else{
                         return;
                     }

@@ -19,6 +19,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class GeneralListener implements Listener {
@@ -44,7 +45,7 @@ public class GeneralListener implements Listener {
         ScoreboardManager sm = new ScoreboardManager(plugin);
         StatsConfigManager scm = new StatsConfigManager(plugin);
 
-        if(ecm.isInFile()){
+        if(!ecm.isInFile()){
             ecm.addPlayerToFile();
             ecm.saveConfig();
         }
@@ -80,6 +81,13 @@ public class GeneralListener implements Listener {
             e.setMessage(chatFactory.chat(colorCode + msg));
         }
 
+    }
+
+    @EventHandler
+    public void onPlayerLeave(PlayerQuitEvent e){
+        if(e.getPlayer().isGlowing()){
+            e.getPlayer().setGlowing(false);
+        }
     }
 
     @EventHandler
@@ -191,7 +199,7 @@ public class GeneralListener implements Listener {
         if(econ.getBalance(brokeBoi) > 0){
             econ.withdrawPlayer(brokeBoi, coinsLostPerDeath);
             chatFactory.sendPlayerMessage(" ", false, brokeBoi, null);
-            chatFactory.sendPlayerMessage("Nobody even touched you, but you're still going to lose coins. Sorry! &4-" + coinsLostPerDeath + " &6Coin", false, brokeBoi, plugin.getPrefix());
+            chatFactory.sendPlayerMessage("&fYou Died! &4-" + coinsLostPerDeath + "&6 Coin&f.", false, brokeBoi, plugin.getPrefix());
         }else{
             chatFactory.sendPlayerMessage(" ", false, brokeBoi, null);
             chatFactory.sendPlayerMessage("&fGood news! You did not lose any &6Coins &fsince you have none", false, brokeBoi, null);

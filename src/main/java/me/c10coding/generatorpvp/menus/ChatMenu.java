@@ -36,7 +36,7 @@ public class ChatMenu extends MenuCreator{
         GREEN("LimeGreen", Material.LIME_CONCRETE, "gp.purchase.limegreen","gp.unlock.limegreen", true, "&a", "Lime Green Chat Color"),
         YELLOW("Yellow", Material.YELLOW_CONCRETE, "gp.purchase.yellow","gp.unlock.yellow", true, "&e", "Yellow Chat Color"),
         BLUE("Blue", Material.LIGHT_BLUE_CONCRETE, "gp.purchase.blue","gp.unlock.blue", false, "&b", "Blue Chat Color"),
-        GOLD("Gold", Material.ORANGE_CONCRETE, "gp.purchase.orange","gp.unlock.orange", false, "&6", "Gold Chat Color"),
+        GOLD("Gold", Material.ORANGE_CONCRETE, "gp.purchase.gold","gp.unlock.gold", false, "&6", "Gold Chat Color"),
         PURPLE("Purple", Material.MAGENTA_CONCRETE, "gp.purchase.lightpurple","gp.unlock.lightpurple", false, "&d", "Light Purple Chat Color");
 
         private Material mat;
@@ -85,7 +85,7 @@ public class ChatMenu extends MenuCreator{
             if(ecm.isEquipped(colors[x].configKey, "Chat")){
                 setSlotToEquipped(numSlot);
             }else{
-                if(ecm.isPurchased(colors[x].configKey, "Chat")){
+                if(ecm.isPurchased(colors[x].configKey, "Chat") || p.hasPermission(colors[x].unlockPermission)){
                     if(colors[x].isPurchasable || colors[x].equals(ChatColors.GRAY)){
                         lore.add(chatFactory.chat("&aPurchased"));
                     }else{

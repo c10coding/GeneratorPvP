@@ -99,18 +99,6 @@ public class Generator {
             hologramHelper.addLine(hologramConfigName, chatFactory.chat(hologramLines.get(lineNum)));
         }
 
-        /*
-        hologramHelper.setAsAnimatable(hologramConfigName, 2);
-        hologramHelper.setAnimationStatus(hologramConfigName, 2, true);
-
-        List<String> animationLines = new ArrayList<>();
-        int maxNum = spawnRate;
-        for(int x = maxNum; x >= 0; x--){
-            animationLines.add("&7Spawning &c" + amountSpawned + " in &c" + x + "&7 Seconds");
-        }
-
-        hologramHelper.setAnimationLines(hologramConfigName, animationLines, 2);*/
-
     }
 
 

@@ -6,7 +6,7 @@
 
     <groupId>GeneratorPvP</groupId>
     <artifactId>GeneratorPvP</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.4-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>GeneratorPvP</name>
@@ -91,8 +91,8 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>spigot-1.15.2</groupId>
-            <artifactId>spigot-1.15.2</artifactId>
+            <groupId>Spigot_v1.15</groupId>
+            <artifactId>Spigot_v1.15</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>
@@ -101,6 +101,15 @@
             <version>2.9.2</version>
             <scope>provided</scope>
         </dependency>
-
+        <dependency>
+            <groupId>UltraPunishments</groupId>
+            <artifactId>UltraPunishments</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>UltraPerms</groupId>
+            <artifactId>UltraPerms</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 </project>

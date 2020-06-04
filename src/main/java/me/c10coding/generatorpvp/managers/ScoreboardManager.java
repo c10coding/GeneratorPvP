@@ -85,10 +85,10 @@ public class ScoreboardManager implements Listener {
         objective.getScore(chatFactory.chat("&fAmplifier: ")).setScore(3);
 
         Team warnings = scoreboard.registerNewTeam("Warnings");
-        warnings.addEntry(chatFactory.chat("&fWarnings: &f0"));
+        warnings.addEntry(chatFactory.chat("&fWarnings: "));
         warnings.setSuffix("");
         warnings.setPrefix("");
-        objective.getScore(chatFactory.chat("&fWarnings: &f0")).setScore(2);
+        objective.getScore(chatFactory.chat("&fWarnings: ")).setScore(2);
 
         Team empty1 = scoreboard.registerNewTeam("Empty1");
         empty1.addEntry("   ");

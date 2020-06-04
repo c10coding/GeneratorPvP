@@ -1,6 +1,13 @@
 package me.c10coding.generatorpvp.bootEnchants;
 
 
+import me.TechsCode.UltraPermissions.StorageController;
+import me.TechsCode.UltraPermissions.UltraPermissions;
+import me.TechsCode.UltraPermissions.UltraPermissionsAPI;
+import me.TechsCode.UltraPermissions.storage.collection.PermissionCollection;
+import me.TechsCode.UltraPermissions.storage.objects.Holder;
+import me.TechsCode.UltraPermissions.storage.objects.Permission;
+import me.TechsCode.UltraPermissions.storage.objects.User;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.menus.SuperBootsMenu;
 import org.bukkit.Bukkit;
@@ -10,13 +17,17 @@ import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 
+import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.util.Vector;
 
+import java.util.Collection;
+import java.util.List;
 
 
 public class DoubleJumpEnchant extends SuperBootEnchant implements Listener {
@@ -26,14 +37,21 @@ public class DoubleJumpEnchant extends SuperBootEnchant implements Listener {
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerDoubleJump(PlayerToggleFlightEvent e){
         Player p = e.getPlayer();
 
+
         if(p.getGameMode() != GameMode.CREATIVE && hasEnchant(p)){
             e.setCancelled(true);
-            Block b = p.getWorld().getBlockAt(p.getLocation().subtract(0,2,0));
-            if(!b.getType().equals(Material.AIR) && !timer.isActive()){
+
+            Block b = p.getWorld().getBlockAt(p.getLocation().subtract(0,1,0));
+            if(b.getType().equals(Material.AIR) && !timer.isActive()){
+
+                UltraPermissionsAPI upAPI = UltraPermissions.getAPI();
+                User user = upAPI.getUsers().uuid(p.getUniqueId());
+                user.newPermission("nocheatplus.checks.*").create().setPositive(true);
+
                 p.setExp(0);
                 p.setLevel((int) cooldown);
                 timer.setActive(true);
@@ -41,6 +59,7 @@ public class DoubleJumpEnchant extends SuperBootEnchant implements Listener {
                 Vector v = p.getLocation().getDirection().multiply(1).setY(1);
                 p.setVelocity(v);
                 p.setAllowFlight(false);
+
             }
         }
     }
