@@ -4,15 +4,23 @@ import me.c10coding.coreapi.chat.Chat;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.files.AmplifiersConfigManager;
 import me.c10coding.generatorpvp.files.EquippedConfigManager;
+import me.c10coding.generatorpvp.files.StatsConfigManager;
+import me.c10coding.generatorpvp.managers.Generator;
 import me.c10coding.generatorpvp.utils.GPUtils;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class AdminCommands implements CommandExecutor {
 
@@ -36,7 +44,11 @@ public class AdminCommands implements CommandExecutor {
                 chatFactory.sendPlayerMessage("&6/gp give coins <playername> <amount> &f- Gives the desired player a certain amount of coins.", false, sender, null);
                 chatFactory.sendPlayerMessage("&6/gp give amp <player name> <booster | coinmult | mult> <level> <amount> &f- Gives the desired player a certain amount of an amplifier", false, sender, null);
                 chatFactory.sendPlayerMessage("&6/lb &f- Brings up the leaderboard.", false, sender, null);
-                chatFactory.sendPlayerMessage("&6/gp set coins &f- <playername> <amount>.", false, sender, null);
+                chatFactory.sendPlayerMessage("&6/gp set coins <playername> <amount>.", false, sender, null);
+                chatFactory.sendPlayerMessage("&6/gp stats reset <playername> <kills | deaths>", false, sender, null);
+                chatFactory.sendPlayerMessage("&6/gp stats reset &f- Resets all player stats", false, sender, null);
+                chatFactory.sendPlayerMessage("&6/gp reset &f- Resets things like Boots, Warps, Chat colors, etc", false, sender, null);
+                chatFactory.sendPlayerMessage("&6/gp reset <playername> &f- Same thing as above except it does it to a specific player", false, sender, null);
                 GPUtils.sendCenteredMessage((Player)sender, "&e================================");
             }else{
                 chatFactory.sendPlayerMessage("Only players can use this command!", false, sender, null);
@@ -208,6 +220,52 @@ public class AdminCommands implements CommandExecutor {
                     chatFactory.sendPlayerMessage("Disabling holograms...", false, sender, null);
                     chatFactory.sendPlayerMessage(" ", false, sender, null);
                     plugin.disableHolograms();
+                }else if(args[0].equalsIgnoreCase("reset")){
+
+                    if(args.length == 1){
+                        sendResetConfirmation(sender, null);
+                    }else if(args.length == 2){
+                        String playerName = args[1];
+                        if(Bukkit.getOfflinePlayer(playerName) != null){
+                            if(Bukkit.getOfflinePlayer(playerName).getUniqueId() != null){
+                                sendResetConfirmation(sender, Bukkit.getOfflinePlayer(playerName));
+                            }else{
+                                chatFactory.sendPlayerMessage(" ", false, sender, null);
+                                chatFactory.sendPlayerMessage("There was trouble getting this player's UUID", true, sender, prefix);
+                            }
+                        }else{
+                            chatFactory.sendPlayerMessage(" ", false, sender, null);
+                            chatFactory.sendPlayerMessage("This player does not exist!", true, sender, prefix);
+                        }
+                        chatFactory.sendPlayerMessage(" ", false, sender, null);
+                    }
+                }else if(args[0].equalsIgnoreCase("stats") && args[1].equalsIgnoreCase("reset")){
+
+                    StatsConfigManager scm = new StatsConfigManager(plugin);
+                    if(args.length == 3 || args.length == 4){
+                        String playerName = args[2];
+                        if(Bukkit.getOfflinePlayer(playerName) != null){
+                            OfflinePlayer op = Bukkit.getOfflinePlayer(playerName);
+                            if(args.length == 3){
+                                sendStatConfirmation(sender, op, null);
+                            }else{
+                                String stat = args[3];
+                                if(stat.equalsIgnoreCase("kills") || stat.equalsIgnoreCase("deaths")){
+                                    sendStatConfirmation(sender, op, stat);
+                                }else{
+                                    chatFactory.sendPlayerMessage(" ", false, sender, null);
+                                    chatFactory.sendPlayerMessage("That is not a valid statistic to reset. It must be either kills or deaths!", false, sender, null);
+                                    chatFactory.sendPlayerMessage(" ", false, sender, null);
+                                }
+                            }
+                        }else{
+                            chatFactory.sendPlayerMessage(" ", false, sender, null);
+                            chatFactory.sendPlayerMessage("This player does not exist!", true, sender, prefix);
+                            chatFactory.sendPlayerMessage(" ", false, sender, null);
+                        }
+                    }else if(args.length == 2){
+                        sendStatConfirmation(sender, null, null);
+                    }
                 }
             }
         }
@@ -243,6 +301,44 @@ public class AdminCommands implements CommandExecutor {
         chatFactory.sendPlayerMessage("&e" + clicker.getName() + " &7thanked you. You have received &e" + rewardAmount + " &6Coins", false, activator, prefix);
         chatFactory.sendPlayerMessage(" ", false, activator, null);
         plugin.getEconomy().depositPlayer(activator, rewardAmount);
+    }
+
+    private void sendStatConfirmation(CommandSender sender, OfflinePlayer p, String statToReset){
+
+        TextComponent msg = new TextComponent("\nClick confirm if you wish to proceed with this command... \n");
+        TextComponent yes = new TextComponent("Confirm \n");
+
+        yes.setColor(ChatColor.GREEN);
+
+        if(p == null){
+            yes.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gpconfirm stats reset"));
+        }else{
+            if(statToReset == null){
+                yes.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gpconfirm stats reset " + p.getUniqueId()));
+            }else{
+                yes.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gpconfirm stats reset " + p.getUniqueId() + " " + statToReset));
+            }
+        }
+
+        msg.addExtra(yes);
+        sender.spigot().sendMessage(msg);
+    }
+
+    private void sendResetConfirmation(CommandSender sender, OfflinePlayer p){
+        TextComponent msg = new TextComponent("\nClick confirm if you wish to proceed with this command... \n");
+        TextComponent yes = new TextComponent("Confirm \n");
+
+        yes.setColor(ChatColor.GREEN);
+
+        if(p == null){
+            yes.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gpconfirm reset"));
+        }else{
+            yes.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gpconfirm reset " + p.getUniqueId()));
+        }
+
+        msg.addExtra(yes);
+        sender.spigot().sendMessage(msg);
+
     }
 
 }

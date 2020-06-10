@@ -56,10 +56,7 @@ public class GeneralListener implements Listener {
         }
 
         if(p.getInventory().getBoots() != null){
-            ItemStack boots = p.getInventory().getBoots();
-            if(boots.getItemMeta().hasEnchant(Enchantment.getByKey(new NamespacedKey(plugin, SuperBootsMenu.SuperBoots.DOUBLE_JUMP.toString())))){
-                p.setAllowFlight(true);
-            }
+            p.getInventory().setBoots(null);
         }
 
         sm.setSB(p);

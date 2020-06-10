@@ -18,6 +18,11 @@ public class EquippedConfigManager extends ConfigManager {
         this.acm = new AmplifiersConfigManager(plugin);
     }
 
+    public EquippedConfigManager(JavaPlugin plugin){
+        super(plugin, "equipped.yml");
+        this.acm = new AmplifiersConfigManager(plugin);
+    }
+
     public void setEquipped(String key, String category){
         if(hasSomethingEquipped(category)){
             String equippedKey = getThingEquipped(category);
@@ -53,6 +58,24 @@ public class EquippedConfigManager extends ConfigManager {
         setBootsCategory();
         setEnderChestCategory();
         setWarpsCategory();
+    }
+
+    public void resetAPlayersData(UUID u){
+        config.set("Chat." + u.toString(), null);
+        config.set("Amplifiers." + u.toString(), null);
+        config.set("SuperBoots." + u.toString(), null);
+        config.set("EnderChest." + u.toString(), null);
+        config.set("Warps." + u.toString(), null);
+        saveConfig();
+    }
+
+    public void resetAllData(){
+        config.set("Chat", null);
+        config.set("Amplifiers", null);
+        config.set("SuperBoots", null);
+        config.set("EnderChest", null);
+        config.set("Warps", null);
+        saveConfig();
     }
 
     public Map<Object, Object> mapIsEquipped(String category){

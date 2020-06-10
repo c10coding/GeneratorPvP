@@ -16,6 +16,10 @@ commands:
     description: "Opens the leaderboard for GenPvP"
     aliases:
       - lb
+  genpvpconfirm:
+    description: "For all the commands that have to be confirmed"
+    aliases:
+      - gpconfirm
 
 permissions:
   gp.purchase.antifall:

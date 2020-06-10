@@ -1,6 +1,8 @@
 package me.c10coding.generatorpvp.files;
 
 import me.c10coding.coreapi.files.ConfigManager;
+import me.c10coding.generatorpvp.utils.GPUtils;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
@@ -16,6 +18,11 @@ public class StatsConfigManager extends ConfigManager {
         saveConfig();
     }
 
+    public enum Stats{
+        KILLS,
+        DEATHS
+    }
+
     public boolean isInFile(UUID u){
         return config.getString(u.toString()) != null;
     }
@@ -23,6 +30,18 @@ public class StatsConfigManager extends ConfigManager {
     public void increaseKills(UUID u){
         int kills = getKills(u);
         config.set(u.toString() + ".Kills", kills + 1);
+    }
+
+    public void resetStat(UUID u, Stats stat){
+        String configKey = GPUtils.enumToConfigKey(stat);
+        config.set(u.toString() + "." + configKey, null);
+    }
+
+    public void resetAllStats(){
+        ConfigurationSection section = config.getConfigurationSection("");
+        for(String uuid : section.getKeys(false)){
+            config.set(uuid, null);
+        }
     }
 
     public int getKills(UUID u){

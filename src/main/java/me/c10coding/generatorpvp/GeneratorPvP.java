@@ -3,6 +3,7 @@ package me.c10coding.generatorpvp;
 import me.c10coding.coreapi.CoreAPI;
 import me.c10coding.coreapi.holograms.HologramHelper;
 import me.c10coding.generatorpvp.commands.AdminCommands;
+import me.c10coding.generatorpvp.commands.ConfirmedCommands;
 import me.c10coding.generatorpvp.commands.LeaderboardCommand;
 import me.c10coding.generatorpvp.commands.MenuCommand;
 import me.c10coding.generatorpvp.files.GeneratorConfigManager;
@@ -129,6 +130,7 @@ public final class GeneratorPvP extends JavaPlugin {
         this.getServer().getPluginCommand("menu").setExecutor(new MenuCommand(this));
         this.getServer().getPluginCommand("genpvp").setExecutor(new AdminCommands(this));
         this.getServer().getPluginCommand("leaderboard").setExecutor(new LeaderboardCommand(this));
+        this.getServer().getPluginCommand("genpvpconfirm").setExecutor(new ConfirmedCommands(this));
     }
 
     private void registerEnchants(){

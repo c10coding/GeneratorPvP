@@ -9,11 +9,18 @@ import me.c10coding.generatorpvp.files.StatsConfigManager;
 import me.c10coding.generatorpvp.managers.ScoreboardManager;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.UUID;
 
 public class ScoreboardUpdater extends BukkitRunnable {
 
