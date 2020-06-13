@@ -41,43 +41,54 @@ public class ScoreboardUpdater extends BukkitRunnable {
     public void run() {
         for(Player p : Bukkit.getOnlinePlayers()){
 
-            acm.reloadConfig();
-            scm.reloadConfig();
-            Scoreboard scoreboard = p.getScoreboard();
+            // Heights has a weird glitch that has players show as online that aren't really online which is why there is a null check for player and the team playername
+            if(p != null){
+                acm.reloadConfig();
+                scm.reloadConfig();
+                Scoreboard scoreboard = p.getScoreboard();
 
-            Team playerName = scoreboard.getTeam("PlayerName");
-            Team rank = scoreboard.getTeam("Rank");
-            Team kills = scoreboard.getTeam("Kills");
-            Team deaths = scoreboard.getTeam("Deaths");
-            Team warnings = scoreboard.getTeam("Warnings");
-            Team coins = scoreboard.getTeam("Coins");
-            Team amplifier = scoreboard.getTeam("Amplifier");
+                Team playerName = scoreboard.getTeam("PlayerName");
 
-            playerName.setSuffix(chatFactory.chat(p.getName()));
+                if(playerName == null){
+                    continue;
+                }
 
-            int playerBalance = (int) GeneratorPvP.getEconomy().getBalance(p);
-            coins.setSuffix(playerBalance + "");
+                Team rank = scoreboard.getTeam("Rank");
+                Team kills = scoreboard.getTeam("Kills");
+                Team deaths = scoreboard.getTeam("Deaths");
+                Team warnings = scoreboard.getTeam("Warnings");
+                Team coins = scoreboard.getTeam("Coins");
+                Team amplifier = scoreboard.getTeam("Amplifier");
 
-            String group = chatFactory.chat(PlaceholderAPI.setPlaceholders(p, "%uperms_rank%"));
-            rank.setSuffix(group);
+                playerName.setSuffix(chatFactory.chat(p.getName()));
 
-            int numKills = scm.getKills(p.getUniqueId());
-            int numDeaths = scm.getDeaths(p.getUniqueId());
-            kills.setSuffix(numKills+"");
-            deaths.setSuffix(numDeaths+"");
+                int playerBalance = (int) GeneratorPvP.getEconomy().getBalance(p);
+                coins.setSuffix(playerBalance + "");
 
-            String isActive = chatFactory.chat("&cInactive");
-            if(acm.isAmplifierActivated("Boosters") || acm.isAmplifierActivated("Multipliers") || acm.isAmplifierActivated("Coin Multiplier")){
-                isActive = "&aActive";
+                String group = chatFactory.chat(PlaceholderAPI.setPlaceholders(p, "%uperms_rank%"));
+                rank.setSuffix(group);
+
+                int numKills = scm.getKills(p.getUniqueId());
+                int numDeaths = scm.getDeaths(p.getUniqueId());
+                kills.setSuffix(numKills+"");
+                deaths.setSuffix(numDeaths+"");
+
+                String isActive = chatFactory.chat("&cInactive");
+
+                if(acm.isAmplifierActivated("Boosters") || acm.isAmplifierActivated("Multipliers") || acm.isAmplifierActivated("Coin Multiplier")){
+                    isActive = "&aActive";
+                }
+
+                amplifier.setSuffix(chatFactory.chat(isActive));
+
+                UltraPunishments up = (UltraPunishments) UltraPunishments.getAPI();
+                IndexedPlayer ip = up.getPlayerIndexes().get(p.getUniqueId());
+                int numWarnings = up.getWarningStorage().getWarnings().target(ip).count();
+                warnings.setSuffix(chatFactory.chat("&c" + numWarnings+""));
+
+                p.setScoreboard(scoreboard);
             }
-            amplifier.setSuffix(chatFactory.chat(isActive));
 
-            UltraPunishments up = (UltraPunishments) UltraPunishments.getAPI();
-            IndexedPlayer ip = up.getPlayerIndexes().get(p.getUniqueId());
-            int numWarnings = up.getWarningStorage().getWarnings().target(ip).count();
-            warnings.setSuffix(chatFactory.chat("&c" + numWarnings+""));
-
-            p.setScoreboard(scoreboard);
         }
     }
 }

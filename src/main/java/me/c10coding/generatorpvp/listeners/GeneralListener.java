@@ -44,6 +44,11 @@ public class GeneralListener implements Listener {
         EquippedConfigManager ecm = new EquippedConfigManager(plugin, p.getUniqueId());
         ScoreboardManager sm = new ScoreboardManager(plugin);
         StatsConfigManager scm = new StatsConfigManager(plugin);
+        ItemSaverConfigManager iscm = new ItemSaverConfigManager(plugin);
+
+        if(iscm.hasItemsSaved(p.getUniqueId())){
+            iscm.giveItems(p);
+        }
 
         if(!ecm.isInFile()){
             ecm.addPlayerToFile();

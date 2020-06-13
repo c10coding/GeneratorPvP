@@ -4,6 +4,7 @@ import me.c10coding.coreapi.chat.Chat;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.files.AmplifiersConfigManager;
 import me.c10coding.generatorpvp.files.EquippedConfigManager;
+import me.c10coding.generatorpvp.files.ItemSaverConfigManager;
 import me.c10coding.generatorpvp.files.StatsConfigManager;
 import me.c10coding.generatorpvp.managers.Generator;
 import me.c10coding.generatorpvp.utils.GPUtils;
@@ -11,16 +12,18 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.UUID;
 
 public class AdminCommands implements CommandExecutor {
 
@@ -45,6 +48,7 @@ public class AdminCommands implements CommandExecutor {
                 chatFactory.sendPlayerMessage("&6/gp give amp <player name> <booster | coinmult | mult> <level> <amount> &f- Gives the desired player a certain amount of an amplifier", false, sender, null);
                 chatFactory.sendPlayerMessage("&6/lb &f- Brings up the leaderboard.", false, sender, null);
                 chatFactory.sendPlayerMessage("&6/gp set coins <playername> <amount>.", false, sender, null);
+                chatFactory.sendPlayerMessage("&6/gp set weapon <playername> <knockback | positionswap | tnt | fireball | instakill> <amount>.", false, sender, null);
                 chatFactory.sendPlayerMessage("&6/gp stats reset <playername> <kills | deaths>", false, sender, null);
                 chatFactory.sendPlayerMessage("&6/gp stats reset &f- Resets all player stats", false, sender, null);
                 chatFactory.sendPlayerMessage("&6/gp reset &f- Resets things like Boots, Warps, Chat colors, etc", false, sender, null);
@@ -266,6 +270,66 @@ public class AdminCommands implements CommandExecutor {
                     }else if(args.length == 2){
                         sendStatConfirmation(sender, null, null);
                     }
+                }else if(args[0].equalsIgnoreCase("give") && args[1].equalsIgnoreCase("weapon") && args.length == 5){
+                    String weaponName = args[3];
+                    String playerName = args[2];
+                    int amount;
+
+                    try{
+                        amount = Integer.parseInt(args[4]);
+                    }catch(IllegalArgumentException e){
+                        chatFactory.sendPlayerMessage(" ", false, sender, null);
+                        chatFactory.sendPlayerMessage("The amount given must be a number!", false, sender, null);
+                        chatFactory.sendPlayerMessage(" ", false, sender, null);
+                        return false;
+                    }
+
+                    List<OfflinePlayer> serverOfflinePlayers = Arrays.asList(Bukkit.getOfflinePlayers());
+                    OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
+
+                    if(!serverOfflinePlayers.contains(offlinePlayer)){
+                        chatFactory.sendPlayerMessage(" ", false, sender, null);
+                        chatFactory.sendPlayerMessage("This is not a valid player! Could not give the player the weapon...", false, sender, null);
+                        chatFactory.sendPlayerMessage(" ", false, sender, null);
+                    }else{
+                        if(weaponName.equalsIgnoreCase("Knockback") || weaponName.equalsIgnoreCase("PositionSwap") || weaponName.equalsIgnoreCase("TNT") || weaponName.equalsIgnoreCase("Fireball") || weaponName.equalsIgnoreCase("InstaKill")){
+                            ItemStack item = getWeapon(weaponName, amount);
+                            if(offlinePlayer.isOnline()){
+                                Player onlinePlayer = offlinePlayer.getPlayer();
+                                Map<Integer, ItemStack> map = onlinePlayer.getInventory().addItem(item);
+
+                                if(!map.isEmpty()){
+                                    chatFactory.sendPlayerMessage(" ", false, sender, null);
+                                    chatFactory.sendPlayerMessage("Could not give you that weapon! Your inventory is full", false, onlinePlayer, null);
+                                    chatFactory.sendPlayerMessage(" ", false, sender, null);
+                                    return false;
+                                }
+
+                                if(weaponName.equalsIgnoreCase("PositionSwap")){
+                                    weaponName = "Position Swap";
+                                }else if(weaponName.equalsIgnoreCase("tnt")){
+                                    weaponName = "TNT";
+                                }
+
+                                chatFactory.sendPlayerMessage(" ", false, sender, null);
+                                chatFactory.sendPlayerMessage("You have given " + amount + " " + weaponName + " to&e " + onlinePlayer.getName(), false, sender, null);
+
+                                chatFactory.sendPlayerMessage(" ", false, onlinePlayer, null);
+                                chatFactory.sendPlayerMessage("You have been given " + amount + " " + weaponName + "!", false, onlinePlayer, null);
+                                chatFactory.sendPlayerMessage(" ", false, onlinePlayer, null);
+
+                            }else{
+                                ItemSaverConfigManager iscm = new ItemSaverConfigManager(plugin);
+                                iscm.saveItem(item, offlinePlayer.getUniqueId());
+                                chatFactory.sendPlayerMessage(" ", false, sender, null);
+                                chatFactory.sendPlayerMessage("The player is offline. Their item has been saved in a configuration file for later...", false, sender, null);
+                            }
+                        }else{
+                            chatFactory.sendPlayerMessage(" ", false, sender, null);
+                            chatFactory.sendPlayerMessage("This is not a valid weapon to give! Valid weapons are &eKnockback, PositionSwap, TNT, InstaKill, and Fireball", false, sender, null);
+                        }
+                        chatFactory.sendPlayerMessage(" ", false, sender, null);
+                    }
                 }
             }
         }
@@ -339,6 +403,45 @@ public class AdminCommands implements CommandExecutor {
         msg.addExtra(yes);
         sender.spigot().sendMessage(msg);
 
+    }
+
+    private ItemStack getWeapon(String weaponName, int amount){
+        Material mat;
+        String displayName;
+        List<String> lore = new ArrayList<>();
+        if(weaponName.equalsIgnoreCase("Knockback")){
+            mat = Material.SNOWBALL;
+            displayName = chatFactory.chat("&fKnockback");
+            lore.add("&eDeals a little knockback upon hit");
+        }else if(weaponName.equalsIgnoreCase("PositionSwap")){
+            mat = Material.SLIME_BALL;
+            displayName = chatFactory.chat("&aPosition Swap");
+            lore.add("&eSwaps position with whoever gets hit with it");
+        }else if(weaponName.equalsIgnoreCase("TNT")){
+            mat = Material.TNT;
+            displayName = chatFactory.chat("&cTNT");
+            lore.add("&eYou better move out of the way after you place this stuff...");
+        }else if(weaponName.equalsIgnoreCase("Fireball")){
+            mat = Material.FIRE_CHARGE;
+            displayName = chatFactory.chat("&4Fireball");
+            lore.add("&eOnce again, you're a human Ghast!");
+        }else if(weaponName.equalsIgnoreCase("InstaKill")){
+            mat = Material.EGG;
+            displayName = chatFactory.chat("&eInstant Kill");
+            lore.add("&ePretty much instantly kills whoever you throw this at.");
+        }else{
+            mat = null;
+            displayName = null;
+        }
+
+        ItemStack item = new ItemStack(mat, amount);
+        ItemMeta meta = item.getItemMeta();
+        lore = GPUtils.colorLore(lore);
+        meta.setLore(lore);
+        meta.setDisplayName(displayName);
+        item.setItemMeta(meta);
+
+        return item;
     }
 
 }

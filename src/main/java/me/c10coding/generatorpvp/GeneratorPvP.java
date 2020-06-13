@@ -91,7 +91,7 @@ public final class GeneratorPvP extends JavaPlugin {
     }
 
     public void validateConfigs(){
-        File[] files = {new File(this.getDataFolder(), "config.yml"), new File(this.getDataFolder(), "equipped.yml"), new File(this.getDataFolder(), "amplifiers.yml"), new File(this.getDataFolder(), "generators.yml"), new File(this.getDataFolder(), "animations.yml"), new File(this.getDataFolder(), "holograms.yml")};
+        File[] files = {new File(this.getDataFolder(), "config.yml"), new File(this.getDataFolder(), "equipped.yml"), new File(this.getDataFolder(), "amplifiers.yml"), new File(this.getDataFolder(), "generators.yml"), new File(this.getDataFolder(), "animations.yml"), new File(this.getDataFolder(), "holograms.yml"), new File(this.getDataFolder(), "itemsaver.yml")};
         for(File f : files){
             if(!f.exists()){
                 this.saveResource(f.getName(),false);

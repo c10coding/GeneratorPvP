@@ -6,7 +6,7 @@
 
     <groupId>GeneratorPvP</groupId>
     <artifactId>GeneratorPvP</artifactId>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.1.4-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>GeneratorPvP</name>
