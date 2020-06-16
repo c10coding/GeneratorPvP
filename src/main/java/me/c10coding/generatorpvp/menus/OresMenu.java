@@ -19,15 +19,15 @@ public class OresMenu extends MenuCreator implements Listener {
     }
 
     public void createMenu(){
-        inv.setItem(9, createGuiItem(Material.EMERALD_BLOCK, chatFactory.chat("&aEmerald Block"), new ArrayList<>()));
-        inv.setItem(10, createGuiItem(Material.EMERALD, chatFactory.chat("&aEmerald"), new ArrayList<>()));
-        inv.setItem(11, createGuiItem(Material.DIAMOND_BLOCK, chatFactory.chat("&bDiamond Block"), new ArrayList<>()));
-        inv.setItem(12, createGuiItem(Material.DIAMOND, chatFactory.chat("&bDiamond"), new ArrayList<>()));
-        inv.setItem(13, createGuiItem(Material.GOLD_BLOCK, chatFactory.chat("&eGold Block"), new ArrayList<>()));
-        inv.setItem(14, createGuiItem(Material.GOLD_INGOT, chatFactory.chat("&eGold"), new ArrayList<>()));
-        inv.setItem(15, createGuiItem(Material.IRON_BLOCK, chatFactory.chat("&fIron Block"), new ArrayList<>()));
-        inv.setItem(16, createGuiItem(Material.IRON_INGOT, chatFactory.chat("&fIron"), new ArrayList<>()));
-        inv.setItem(17, createGuiItem(Material.COAL_BLOCK, chatFactory.chat("&8Coal Block"), new ArrayList<>()));
+        inv.setItem(9, createGuiItem(Material.EMERALD_BLOCK, chatFactory.colorString("&aEmerald Block"), new ArrayList<>()));
+        inv.setItem(10, createGuiItem(Material.EMERALD, chatFactory.colorString("&aEmerald"), new ArrayList<>()));
+        inv.setItem(11, createGuiItem(Material.DIAMOND_BLOCK, chatFactory.colorString("&bDiamond Block"), new ArrayList<>()));
+        inv.setItem(12, createGuiItem(Material.DIAMOND, chatFactory.colorString("&bDiamond"), new ArrayList<>()));
+        inv.setItem(13, createGuiItem(Material.GOLD_BLOCK, chatFactory.colorString("&eGold Block"), new ArrayList<>()));
+        inv.setItem(14, createGuiItem(Material.GOLD_INGOT, chatFactory.colorString("&eGold"), new ArrayList<>()));
+        inv.setItem(15, createGuiItem(Material.IRON_BLOCK, chatFactory.colorString("&fIron Block"), new ArrayList<>()));
+        inv.setItem(16, createGuiItem(Material.IRON_INGOT, chatFactory.colorString("&fIron"), new ArrayList<>()));
+        inv.setItem(17, createGuiItem(Material.COAL_BLOCK, chatFactory.colorString("&8Coal Block"), new ArrayList<>()));
         fillMenu();
     }
 

@@ -1,14 +1,8 @@
 package me.c10coding.generatorpvp.menus;
 
-import javafx.concurrent.Task;
 import me.c10coding.generatorpvp.GeneratorPvP;
-import me.c10coding.generatorpvp.listeners.TeleportListener;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,7 +14,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class WarpsMenu extends MenuCreator implements Listener {
@@ -184,7 +177,7 @@ public class WarpsMenu extends MenuCreator implements Listener {
                     removeMetadata();
                     this.cancel();
                 }else{
-                    p.sendTitle("Teleporting you...", chatFactory.chat("&d&l") + (int)counter + "...", 5, 20, 5);
+                    p.sendTitle("Teleporting you...", chatFactory.colorString("&d&l") + (int)counter + "...", 5, 20, 5);
                 }
                 counter--;
             }

@@ -1,6 +1,6 @@
 package me.c10coding.generatorpvp.commands;
 
-import me.c10coding.coreapi.chat.Chat;
+import me.c10coding.coreapi.chat.ChatFactory;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class LeaderboardCommand implements CommandExecutor {
 
-    private Chat chatFactory;
+    private ChatFactory chatFactory;
 
     public LeaderboardCommand(GeneratorPvP plugin){
         this.chatFactory = plugin.getApi().getChatFactory();

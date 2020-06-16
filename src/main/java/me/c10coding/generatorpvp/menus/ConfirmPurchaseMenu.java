@@ -47,14 +47,14 @@ public class ConfirmPurchaseMenu extends MenuCreator {
     public void createMenu(){
         int playerBalance = (int) econ.getBalance(p);
         List<String> lore = new ArrayList<>();
-        lore.add(chatFactory.chat("&aCost: &6" + cost + " Coins"));
+        lore.add(chatFactory.colorString("&aCost: &6" + cost + " Coins"));
         if(prevMenu instanceof SuperBootsMenu){
             ItemStack boots = createEnchantedBoot();
             inv.setItem(13, boots);
         }else{
-            inv.setItem(13, createGuiItem(matPurchasing, chatFactory.chat(itemName), amount, lore));
+            inv.setItem(13, createGuiItem(matPurchasing, chatFactory.colorString(itemName), amount, lore));
         }
-        inv.setItem(22, createGuiItem(Material.SUNFLOWER, chatFactory.chat("&7Coins: &c" + playerBalance), new ArrayList<>()));
+        inv.setItem(22, createGuiItem(Material.SUNFLOWER, chatFactory.colorString("&7Coins: &c" + playerBalance), new ArrayList<>()));
         fillMenu();
     }
 
@@ -63,7 +63,7 @@ public class ConfirmPurchaseMenu extends MenuCreator {
         ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
         LeatherArmorMeta lam = (LeatherArmorMeta) boots.getItemMeta();
         lam.setColor(bootType.getColorOfArmor());
-        lam.setDisplayName(chatFactory.chat("&e" + bootType.getConfigKey() + "&7 Boots"));
+        lam.setDisplayName(chatFactory.colorString("&e" + bootType.getConfigKey() + "&7 Boots"));
         boots.setItemMeta(lam);
         return boots;
     }
@@ -107,9 +107,9 @@ public class ConfirmPurchaseMenu extends MenuCreator {
         ItemMeta itemMeta = glassPane.getItemMeta();
         itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         if(fillerMat.equals(Material.GREEN_STAINED_GLASS_PANE)){
-            itemMeta.setDisplayName(chatFactory.chat("&aPurchase"));
+            itemMeta.setDisplayName(chatFactory.colorString("&aPurchase"));
         }else if(fillerMat.equals(Material.RED_STAINED_GLASS_PANE)){
-            itemMeta.setDisplayName(chatFactory.chat("&cCancel"));
+            itemMeta.setDisplayName(chatFactory.colorString("&cCancel"));
         }else{
             itemMeta.setDisplayName(" ");
         }
@@ -152,7 +152,7 @@ public class ConfirmPurchaseMenu extends MenuCreator {
             econ.withdrawPlayer(p, cost);
             p.closeInventory();
             chatFactory.sendPlayerMessage(" ", false, p, null);
-            chatFactory.sendPlayerMessage(chatFactory.chat("&fYou just &apurchased " + itemName + " &ffor &6" + cost + " coins"), false, p, prefix);
+            chatFactory.sendPlayerMessage(chatFactory.colorString("&fYou just &apurchased " + itemName + " &ffor &6" + cost + " coins"), false, p, prefix);
             chatFactory.sendPlayerMessage(" ", false, p, null);
 
             if(prevMenu instanceof ChatMenu) {
@@ -185,8 +185,8 @@ public class ConfirmPurchaseMenu extends MenuCreator {
                 if(oreType.getMat().equals(matPurchasing)){
                     ItemMeta itemMeta = item.getItemMeta();
                     List<String> lore = new ArrayList<>();
-                    lore.add(chatFactory.chat(ORE_PURCHASE_LORE));
-                    itemMeta.setDisplayName(chatFactory.chat(oreType.getColorCode() + oreType.getName()));
+                    lore.add(chatFactory.colorString(ORE_PURCHASE_LORE));
+                    itemMeta.setDisplayName(chatFactory.colorString(oreType.getColorCode() + oreType.getName()));
                     itemMeta.setLore(lore);
                     item.setItemMeta(itemMeta);
                 }
@@ -196,19 +196,19 @@ public class ConfirmPurchaseMenu extends MenuCreator {
             String displayName;
             List<String> lore = new ArrayList<>();
             if(matPurchasing.equals(Material.SNOWBALL)){
-                displayName = chatFactory.chat("&fKnockback");
+                displayName = chatFactory.colorString("&fKnockback");
                 lore.add("&eDeals a little knockback upon hit");
             }else if(matPurchasing.equals(Material.SLIME_BALL)){
-                displayName = chatFactory.chat("&aPosition Swap");
+                displayName = chatFactory.colorString("&aPosition Swap");
                 lore.add("&eSwaps position with whoever gets hit with it");
             }else if(matPurchasing.equals(Material.TNT)){
-                displayName = chatFactory.chat("&cTNT");
+                displayName = chatFactory.colorString("&cTNT");
                 lore.add("&eYou better move out of the way after you place this stuff...");
             }else if(matPurchasing.equals(Material.FIRE_CHARGE)){
-                displayName = chatFactory.chat("&4Fireball");
+                displayName = chatFactory.colorString("&4Fireball");
                 lore.add("&eOnce again, you're a human Ghast!");
             }else if(matPurchasing.equals(Material.EGG)){
-                displayName = chatFactory.chat("&eInstant Kill");
+                displayName = chatFactory.colorString("&eInstant Kill");
                 lore.add("&ePretty much instantly kills whoever you throw this at.");
             }else{
                 displayName = "";

@@ -5,6 +5,7 @@ api-version: 1.13
 depend:
   - Vault
   - PlaceholderAPI
+  - CoreAPI
 commands:
   menu:
     description: "Opens the generator pvp menu"

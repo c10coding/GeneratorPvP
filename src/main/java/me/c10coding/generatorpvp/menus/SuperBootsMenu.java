@@ -153,20 +153,20 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
         }
 
         lore = replaceRestOfPlaceholders(lore, superBoot.configKey);
-        bootMeta.setDisplayName(chatFactory.chat(colorCode + displayName));
+        bootMeta.setDisplayName(chatFactory.colorString(colorCode + displayName));
 
         if(isPurchased || p.hasPermission(superBoot.unlockPermission)){
             if(isEquipped){
                 boots = addEmptyEnchantment(bootMeta, boots);
-                lore.add(chatFactory.chat("&aEquipped"));
+                lore.add(chatFactory.colorString("&aEquipped"));
             }else{
-                lore.add(chatFactory.chat("&aPurchased"));
+                lore.add(chatFactory.colorString("&aPurchased"));
             }
         }else{
             if(isPurchaseAble){
-                lore.add(chatFactory.chat("&cNot Purchased"));
+                lore.add(chatFactory.colorString("&cNot Purchased"));
             }else{
-                lore.add(chatFactory.chat("&bYou can purchase these boots from &eStore.HeightsMC.com"));
+                lore.add(chatFactory.colorString("&bYou can purchase these boots from &eStore.HeightsMC.com"));
             }
         }
 
@@ -181,7 +181,7 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
     private List<String> replaceCostPlaceholder(List<String> lore, int cost){
         for(int x = 0; x < lore.size(); x++){
             if(lore.get(x).contains("%cost%")){
-                lore.set(x, chatFactory.chat(lore.get(x).replace("%cost%", "&c" + cost)));
+                lore.set(x, chatFactory.colorString(lore.get(x).replace("%cost%", "&c" + cost)));
             }
         }
         return lore;
@@ -409,7 +409,7 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
                 Color colorOfArmor = superBoot.colorOfArmor;
                 ChatColor chatColor = GPUtils.matchArmorColorWithChatColor(colorOfArmor);
 
-                bootsMeta.setDisplayName(chatFactory.chat(chatColor + superBoot.configKey));
+                bootsMeta.setDisplayName(chatFactory.colorString(chatColor + superBoot.configKey));
                 bootsMeta.setColor(colorOfArmor);
                 bootsMeta.addEnchant(Enchantment.getByKey(new NamespacedKey(plugin, superBoot.enchantmentKey.toString())), 1, false);
                 bootsMeta.addEnchant(Enchantment.BINDING_CURSE, 1, false);

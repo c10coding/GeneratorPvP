@@ -1,13 +1,10 @@
 package me.c10coding.generatorpvp.utils;
 
-import me.c10coding.coreapi.chat.Chat;
-import net.minecraft.server.v1_15_R1.NBTTagCompound;
-import net.minecraft.server.v1_15_R1.NBTTagList;
+import me.c10coding.coreapi.chat.ChatFactory;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -15,13 +12,12 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GPUtils {
 
-    static Chat chat = new Chat();
+    static ChatFactory chat = new ChatFactory();
 
     public static String matToName(Material mat){
         String enumName = mat.name();
@@ -151,13 +147,13 @@ public class GPUtils {
         int hours = seconds / 3600;
         int minutes = (seconds % 3600) / 60;
         int correctSeconds = seconds % 60;
-        return chat.chat("&c" + hours + " &7Hours &c" + minutes + " &7Minutes &c" + correctSeconds + " &7Seconds");
+        return chat.colorString("&c" + hours + " &7Hours &c" + minutes + " &7Minutes &c" + correctSeconds + " &7Seconds");
     }
 
     public static List<String> colorLore(List<String> lore){
         List<String> newLore = new ArrayList<>();
         for(String s : lore){
-            newLore.add(chat.chat(s));
+            newLore.add(chat.colorString(s));
         }
         return newLore;
     }

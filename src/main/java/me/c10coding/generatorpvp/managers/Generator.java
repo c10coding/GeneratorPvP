@@ -1,16 +1,13 @@
 package me.c10coding.generatorpvp.managers;
 
-import me.c10coding.coreapi.chat.Chat;
+import me.c10coding.coreapi.chat.ChatFactory;
 import me.c10coding.coreapi.holograms.HologramHelper;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.GeneratorTypes;
 import me.c10coding.generatorpvp.files.AmplifiersConfigManager;
 import me.c10coding.generatorpvp.files.GeneratorConfigManager;
 import me.c10coding.generatorpvp.utils.GPUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -30,7 +27,7 @@ public class Generator {
     private int amountSpawned;
     private int spawnRate;
     private List<String> hologramLines;
-    private Chat chatFactory;
+    private ChatFactory chatFactory;
     private int numGen;
     private List<Integer> runnableIds = new ArrayList<>();
     private int runnableID = 0;
@@ -85,7 +82,7 @@ public class Generator {
             hologramLines.set(x, replacePlaceholders(hologramLines.get(x)));
         }
 
-        String firstLine = chatFactory.chat(hologramLines.get(0));
+        String firstLine = chatFactory.colorString(hologramLines.get(0));
 
         //try{
         hologramHelper.createHologram(genLoc, firstLine, hologramConfigName);
@@ -96,7 +93,7 @@ public class Generator {
         }*/
 
         for(int lineNum = 1; lineNum < hologramLines.size(); lineNum++){
-            hologramHelper.addLine(hologramConfigName, chatFactory.chat(hologramLines.get(lineNum)));
+            hologramHelper.addLine(hologramConfigName, chatFactory.colorString(hologramLines.get(lineNum)));
         }
 
     }
@@ -122,9 +119,9 @@ public class Generator {
                 itemSpawned = new ItemStack(genType.getMaterial(), amountSpawned);
 
                 ItemMeta itemMeta = itemSpawned.getItemMeta();
-                itemMeta.setDisplayName(chatFactory.chat(genType.getColorCode() + genType.getDisplayName()));
+                itemMeta.setDisplayName(chatFactory.colorString(genType.getColorCode() + genType.getDisplayName()));
                 List<String> lore = new ArrayList<>();
-                lore.add(chatFactory.chat("&c[&4!&c] &rUse this item to trade &c[&4!&c]"));
+                lore.add(chatFactory.colorString("&c[&4!&c] &rUse this item to trade &c[&4!&c]"));
                 itemMeta.setLore(lore);
                 itemSpawned.setItemMeta(itemMeta);
 
@@ -149,7 +146,7 @@ public class Generator {
                 }
 
                 HologramHelper hologramHelper = new HologramHelper(plugin);
-                String newLine = chatFactory.chat("&7Spawning &c" + amountSpawned + " in &c" + counter + "&7 Seconds");
+                String newLine = chatFactory.colorString("&7Spawning &c" + amountSpawned + " in &c" + counter + "&7 Seconds");
                 hologramHelper.editLine(hologramConfigName, newLine, 2);
                 counter--;
 
@@ -172,11 +169,11 @@ public class Generator {
 
                 Collection<Entity> entitiesNearby = genLoc.getWorld().getNearbyEntities(genLoc, 5, 5, 5);
                 String newLine;
-                String currentLine = chatFactory.chat(hologramHelper.getLine(hologramConfigName, 1));
+                String currentLine = chatFactory.colorString(hologramHelper.getLine(hologramConfigName, 1));
                 if(hasPlayer(entitiesNearby)){
-                    newLine = chatFactory.chat(genType.getColorCode() + genType.getDisplayName() + " &fGenerator " + "&aActive");
+                    newLine = chatFactory.colorString(genType.getColorCode() + genType.getDisplayName() + " &fGenerator " + "&aActive");
                 }else{
-                    newLine = chatFactory.chat(genType.getColorCode() + genType.getDisplayName() + " &fGenerator " + "&cInactive");
+                    newLine = chatFactory.colorString(genType.getColorCode() + genType.getDisplayName() + " &fGenerator " + "&cInactive");
                 }
 
                 if(!chatFactory.removeChatColor(currentLine).equalsIgnoreCase(chatFactory.removeChatColor(newLine))){

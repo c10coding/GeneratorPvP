@@ -87,19 +87,19 @@ public class ChatMenu extends MenuCreator{
             }else{
                 if(ecm.isPurchased(colors[x].configKey, "Chat") || p.hasPermission(colors[x].unlockPermission)){
                     if(colors[x].isPurchasable || colors[x].equals(ChatColors.GRAY)){
-                        lore.add(chatFactory.chat("&aPurchased"));
+                        lore.add(chatFactory.colorString("&aPurchased"));
                     }else{
-                        lore.add(chatFactory.chat("&aUnlocked"));
+                        lore.add(chatFactory.colorString("&aUnlocked"));
                     }
                 }else{
                     if(colors[x].isPurchasable){
-                        lore.add(chatFactory.chat("&cNot Purchased"));
-                        lore.add(chatFactory.chat("&aCost: &6" + (int)cm.getChatCost(colors[x].configKey) + " Coins"));
+                        lore.add(chatFactory.colorString("&cNot Purchased"));
+                        lore.add(chatFactory.colorString("&aCost: &6" + (int)cm.getChatCost(colors[x].configKey) + " Coins"));
                     }else{
-                        lore.add(chatFactory.chat("&cLocked"));
+                        lore.add(chatFactory.colorString("&cLocked"));
                     }
                 }
-                inv.setItem(numSlot, createGuiItem(mat, chatFactory.chat(displayName), 1, lore));
+                inv.setItem(numSlot, createGuiItem(mat, chatFactory.colorString(displayName), 1, lore));
             }
         }
     }
@@ -127,37 +127,37 @@ public class ChatMenu extends MenuCreator{
                 chatColor = ChatColors.GRAY;
                 wantedKey = ChatColors.GRAY.configKey;
                 mat = getSlotMaterial(10);
-                msg = chatFactory.chat("&fYour chat colour is now &7Grey");
+                msg = chatFactory.colorString("&fYour chat colour is now &7Grey");
                 break;
             case 11:
                 chatColor = ChatColors.GREEN;
                 wantedKey = ChatColors.GREEN.configKey;
                 mat = getSlotMaterial(11);
-                msg = chatFactory.chat("&fYour chat colour is now &aLime Green");
+                msg = chatFactory.colorString("&fYour chat colour is now &aLime Green");
                 break;
             case 12:
                 chatColor = ChatColors.YELLOW;
                 wantedKey = ChatColors.YELLOW.configKey;
                 mat = getSlotMaterial(12);
-                msg = chatFactory.chat("&fYour chat colour is now &eYellow");
+                msg = chatFactory.colorString("&fYour chat colour is now &eYellow");
                 break;
             case 14:
                 chatColor = ChatColors.BLUE;
                 wantedKey = ChatColors.BLUE.configKey;
                 mat = getSlotMaterial(14);
-                msg = chatFactory.chat("&fYour chat colour is now &bAqua");
+                msg = chatFactory.colorString("&fYour chat colour is now &bAqua");
                 break;
             case 15:
                 chatColor = ChatColors.GOLD;
                 wantedKey = ChatColors.GOLD.configKey;
                 mat = getSlotMaterial(15);
-                msg = chatFactory.chat("&fYour chat colour is now &6Gold");
+                msg = chatFactory.colorString("&fYour chat colour is now &6Gold");
                 break;
             case 16:
                 chatColor = ChatColors.PURPLE;
                 wantedKey = ChatColors.PURPLE.configKey;
                 mat = getSlotMaterial(16);
-                msg = chatFactory.chat("&fYour chat colour is now &dLight Purple");
+                msg = chatFactory.colorString("&fYour chat colour is now &dLight Purple");
                 break;
             default:
                 return;
@@ -171,7 +171,7 @@ public class ChatMenu extends MenuCreator{
             if(playerBalance >= cost) {
 
                 if(p.hasPermission(chatColor.purchasePermission)){
-                    ConfirmPurchaseMenu cpm = new ConfirmPurchaseMenu(plugin, p, mat, cost, wantedKey,this, 1, chatFactory.chat(chatColor.purchasedMenuName));
+                    ConfirmPurchaseMenu cpm = new ConfirmPurchaseMenu(plugin, p, mat, cost, wantedKey,this, 1, chatFactory.colorString(chatColor.purchasedMenuName));
                     p.closeInventory();
                     cpm.openInventory(p);
                 }else{
@@ -263,8 +263,8 @@ public class ChatMenu extends MenuCreator{
         String equippedDisplayname = (String) slotInfo.get("DisplayName");
         Material equippedMat = (Material) slotInfo.get("Material");
         List<String> equippedLore = (List<String>) slotInfo.get("Lore");
-        equippedLore.add(chatFactory.chat("&aPurchased"));
-        inv.setItem(slotEquipped, createGuiItem(equippedMat, chatFactory.chat(equippedDisplayname), equippedLore));
+        equippedLore.add(chatFactory.colorString("&aPurchased"));
+        inv.setItem(slotEquipped, createGuiItem(equippedMat, chatFactory.colorString(equippedDisplayname), equippedLore));
     }
 
     public void setSlotToEquipped(int slotClicked){
@@ -276,8 +276,8 @@ public class ChatMenu extends MenuCreator{
         ItemStack colorEquipped = new ItemStack(material, 1);
         colorEquipped = GPUtils.addGlow(colorEquipped);
         ItemMeta meta = colorEquipped.getItemMeta();
-        equippedLore.add(chatFactory.chat("&aEquipped"));
-        meta.setDisplayName(chatFactory.chat(equippedDisplayname));
+        equippedLore.add(chatFactory.colorString("&aEquipped"));
+        meta.setDisplayName(chatFactory.colorString(equippedDisplayname));
         meta.setLore(equippedLore);
         colorEquipped.setItemMeta(meta);
 

@@ -1,20 +1,17 @@
 package me.c10coding.generatorpvp.listeners;
 
-import me.c10coding.coreapi.chat.Chat;
+import me.c10coding.coreapi.chat.ChatFactory;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.bootEnchants.EnchantmentKeys;
 import me.c10coding.generatorpvp.files.*;
 import me.c10coding.generatorpvp.managers.ScoreboardManager;
 import me.c10coding.generatorpvp.menus.ChatMenu;
-import me.c10coding.generatorpvp.menus.SuperBootsMenu;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -27,7 +24,7 @@ public class GeneralListener implements Listener {
     private GeneratorPvP plugin;
     private DefaultConfigManager dcm;
     private DefaultConfigBootsSectionManager bm;
-    private Chat chatFactory;
+    private ChatFactory chatFactory;
     private ScoreboardManager sm;
 
     public GeneralListener(GeneratorPvP plugin){
@@ -73,14 +70,14 @@ public class GeneralListener implements Listener {
     public void onPlayerChat(AsyncPlayerChatEvent e){
         Player messenger = e.getPlayer();
         EquippedConfigManager ecm = new EquippedConfigManager(plugin, messenger.getUniqueId());
-        Chat chatFactory = plugin.getApi().getChatFactory();
+        ChatFactory chatFactory = plugin.getApi().getChatFactory();
 
         if(ecm.hasSomethingEquipped("Chat")){
             String configKey = ecm.getThingEquipped("Chat");
             ChatMenu.ChatColors chatColor = getEquippedChatColor(configKey);
             String colorCode = chatColor.getColorCode();
             String msg = e.getMessage();
-            e.setMessage(chatFactory.chat(colorCode + msg));
+            e.setMessage(chatFactory.colorString(colorCode + msg));
         }
 
     }

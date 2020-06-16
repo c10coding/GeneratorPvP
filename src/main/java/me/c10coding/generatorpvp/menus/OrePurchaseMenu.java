@@ -74,7 +74,7 @@ public class OrePurchaseMenu extends MenuCreator implements Listener {
         for(Integer i : menuSlots){
 
             Map<String, Object> slotInfo = cm.getSlotInfo("OrePurchaseMenu", i);
-            String displayName = chatFactory.chat("&f" + (String) slotInfo.get("DisplayName"));
+            String displayName = chatFactory.colorString("&f" + slotInfo.get("DisplayName"));
             Material mat = oreType.mat;
             List<String> lore = (List<String>) slotInfo.get("Lore");
 

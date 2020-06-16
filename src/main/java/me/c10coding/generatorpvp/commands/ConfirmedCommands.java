@@ -1,6 +1,6 @@
 package me.c10coding.generatorpvp.commands;
 
-import me.c10coding.coreapi.chat.Chat;
+import me.c10coding.coreapi.chat.ChatFactory;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.files.EquippedConfigManager;
 import me.c10coding.generatorpvp.files.StatsConfigManager;
@@ -15,7 +15,7 @@ import java.util.UUID;
 public class ConfirmedCommands implements CommandExecutor {
 
     private GeneratorPvP plugin;
-    private Chat chatFactory;
+    private ChatFactory chatFactory;
     private String prefix;
 
     public ConfirmedCommands(GeneratorPvP plugin){

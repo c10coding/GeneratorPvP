@@ -1,10 +1,8 @@
 package me.c10coding.generatorpvp.commands;
 
-import me.c10coding.coreapi.chat.Chat;
+import me.c10coding.coreapi.chat.ChatFactory;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.menus.MenuCreator;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,7 +11,7 @@ import org.bukkit.entity.Player;
 public class MenuCommand implements CommandExecutor {
 
     private GeneratorPvP plugin;
-    private Chat chatFactory;
+    private ChatFactory chatFactory;
 
     public MenuCommand(GeneratorPvP plugin){
         this.plugin = plugin;

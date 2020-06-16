@@ -1,6 +1,7 @@
 package me.c10coding.generatorpvp;
 
 import me.TechsCode.UltraPermissions.hooks.pluginHooks.VaultHook;
+import me.c10coding.coreapi.APIHook;
 import me.c10coding.coreapi.CoreAPI;
 import me.c10coding.coreapi.holograms.HologramHelper;
 import me.c10coding.generatorpvp.commands.AdminCommands;
@@ -34,7 +35,7 @@ import java.util.logging.Logger;
     Plugin for: Minhas
  */
 
-public final class GeneratorPvP extends JavaPlugin {
+public final class GeneratorPvP extends APIHook {
 
     private CoreAPI api;
     private static Economy econ = null;
@@ -46,16 +47,16 @@ public final class GeneratorPvP extends JavaPlugin {
     @Override
     public void onEnable() {
 
-        if(getServer().getPluginManager().getPlugin("CoreAPI") == null){
-            getServer().getPluginManager().disablePlugin(this);
-        }
-        api = (CoreAPI) getServer().getPluginManager().getPlugin("CoreAPI");
-
-        disableHolograms();
-
         this.logger = this.getLogger();
 
-        this.getLogger().info("==================================================================");
+        logger.info("==================================================================");
+        if(hookAPI(this) != null){
+            this.api = (CoreAPI) getServer().getPluginManager().getPlugin("CoreAPI");
+            logger.info("API Hooked!");
+        }
+        this.enchantmentRegister = new EnchantmentRegister(this);
+
+        disableHolograms();
         validateConfigs();
         registerEvents();
         initializeCommands();
@@ -64,7 +65,7 @@ public final class GeneratorPvP extends JavaPlugin {
         new ScoreboardUpdater(this).runTaskTimer(this, 0L, 20L);
 
         if (!setupEconomy() ) {
-            this.getLogger().severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
+            logger.severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
             getServer().getPluginManager().disablePlugin(this);
         }
 
@@ -73,23 +74,25 @@ public final class GeneratorPvP extends JavaPlugin {
         if(gcm.getWorldName() != null){
             startGenerators();
         }else{
-            this.getLogger().info("===========================================");
-            this.getLogger().info("=====================================================");
-            this.getLogger().info("This is probably your first time running this plugin!");
-            this.getLogger().info("Make sure that the GenPvPWorld field in the generatorRunnableIDs.yml file is set!");
-            this.getLogger().info("After that, reload the plugin :)");
-            this.getLogger().info("===========================================");
-            this.getLogger().info("=====================================================");
+            logger.info("===========================================");
+            logger.info("=====================================================");
+            logger.info("This is probably your first time running this plugin!");
+            logger.info("Make sure that the GenPvPWorld field in the generatorRunnableIDs.yml file is set!");
+            logger.info("After that, reload the plugin :)");
+            logger.info("===========================================");
+            logger.info("=====================================================");
         }
 
-        this.getLogger().info("==================================================================");
+        logger.info("==================================================================");
 
     }
 
     @Override
     public void onDisable() {
         updatePlayerXP();
-        enchantmentRegister.unRegisterEnchantments();
+        if(enchantmentRegister != null){
+            enchantmentRegister.unRegisterEnchantments();
+        }
     }
 
     public CoreAPI getApi(){
@@ -103,7 +106,7 @@ public final class GeneratorPvP extends JavaPlugin {
                 this.saveResource(f.getName(),false);
             }
         }
-        this.getLogger().info("The config files have been validated!");
+        logger.info("The config files have been validated!");
     }
 
     public String getPrefix(){
@@ -141,7 +144,6 @@ public final class GeneratorPvP extends JavaPlugin {
 
     private void registerEnchants(){
         getLogger().info("Registering enchantments...");
-        this.enchantmentRegister = new EnchantmentRegister(this);
         enchantmentRegister.registerEnchantments();
     }
 
@@ -203,7 +205,7 @@ public final class GeneratorPvP extends JavaPlugin {
     public void disableHolograms(){
 
         File hologramFile = new File(this.getDataFolder(), "holograms.yml");
-        this.getLogger().info("Removing holograms...");
+        logger.info("Removing holograms...");
         if(hologramFile.exists()){
             HologramHelper hh = new HologramHelper(this);
 
@@ -224,7 +226,7 @@ public final class GeneratorPvP extends JavaPlugin {
     }
 
     public void restartGenerators(){
-        this.getLogger().info("Restarting generators!");
+        logger.info("Restarting generators!");
         stopGeneratorRunnables();
         disableHolograms();
         startGenerators();

@@ -51,7 +51,7 @@ public class BoostersMenu extends AmplifiersMenu{
                 levelAmplifier = 3;
             }
 
-            lore.add(chatFactory.chat("&cAmount: &7" + em.getAmplifierAmount(amplifierName, levelAmplifier)));
+            lore.add(chatFactory.colorString("&cAmount: &7" + em.getAmplifierAmount(amplifierName, levelAmplifier)));
             displayName = replacePlaceholders(displayName);
 
             for(int x = 0; x < lore.size(); x++){

@@ -1,6 +1,6 @@
 package me.c10coding.generatorpvp.files;
 
-import me.c10coding.coreapi.chat.Chat;
+import me.c10coding.coreapi.chat.ChatFactory;
 import me.c10coding.coreapi.files.ConfigManager;
 import me.c10coding.generatorpvp.utils.GPUtils;
 import org.bukkit.Material;
@@ -10,7 +10,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class ItemSaverConfigManager extends ConfigManager {
 
@@ -45,19 +48,19 @@ public class ItemSaverConfigManager extends ConfigManager {
     public void giveItems(Player player){
 
         UUID u = player.getUniqueId();
-        Chat chatFactory = new Chat();
+        ChatFactory chatFactory = new ChatFactory();
         ConfigurationSection playerItemsIDs = config.getConfigurationSection("Items." + u.toString());
 
         for(String uuid : playerItemsIDs.getKeys(false)){
 
-            String displayName = chatFactory.chat(config.getString("Items." + u.toString() + "." + uuid + ".DisplayName"));
+            String displayName = chatFactory.colorString(config.getString("Items." + u.toString() + "." + uuid + ".DisplayName"));
             List<String> lore = config.getStringList("Items." + u.toString() + "." + uuid + ".Lore");
             int amount = config.getInt("Items." + u.toString() + "." + uuid + ".Amount");
             String materialString = config.getString("Items." + u.toString() + "." + uuid + ".Material");
             Material material = Material.valueOf(materialString);
 
             if(material.equals(Material.SNOWBALL)){
-                displayName = chatFactory.chat("&fKnockback");
+                displayName = chatFactory.colorString("&fKnockback");
             }
 
             ItemStack itemToAdd = new ItemStack(material, amount);

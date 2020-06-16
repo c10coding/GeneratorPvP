@@ -1,6 +1,6 @@
 package me.c10coding.generatorpvp.listeners;
 
-import me.c10coding.coreapi.chat.Chat;
+import me.c10coding.coreapi.chat.ChatFactory;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.files.DefaultConfigManager;
 import me.c10coding.generatorpvp.files.EquippedConfigManager;
@@ -9,13 +9,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.plugin.messaging.ChannelNameTooLongException;
 
 public class TeleportListener implements Listener {
 
     private GeneratorPvP plugin;
     private DefaultConfigManager dcm;
-    private Chat chatFactory = new Chat();
+    private ChatFactory chatFactory = new ChatFactory();
 
     public TeleportListener(GeneratorPvP plugin){
         this.plugin = plugin;

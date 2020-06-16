@@ -1,24 +1,20 @@
 package me.c10coding.generatorpvp.bootEnchants;
 
-import me.c10coding.coreapi.chat.Chat;
+import me.c10coding.coreapi.chat.ChatFactory;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.files.DefaultConfigBootsSectionManager;
 import me.c10coding.generatorpvp.files.DefaultConfigManager;
 import me.c10coding.generatorpvp.menus.SuperBootsMenu;
 import me.c10coding.generatorpvp.utils.GPUtils;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -158,7 +154,7 @@ public abstract class SuperBootEnchant extends Enchantment{
 						}else{
 							if(seconds == bootsActivationTime){
 
-								Chat chatFactory = new Chat();
+								ChatFactory chatFactory = new ChatFactory();
 
 								playerSneaking.setExp(1.0F);
 								playerSneaking.setLevel((int) Math.round(duration));

@@ -3,8 +3,6 @@ package me.c10coding.generatorpvp.menus;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.IncompleteLocation;
 import me.c10coding.generatorpvp.utils.GPUtils;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -41,7 +39,7 @@ public class TeleportationsMenu extends MenuCreator{
             if (meta.getLore() == null) {
                 lore = new ArrayList<>();
             }
-            lore.add(chatFactory.chat("&aCost: &6" + cost + " Coins"));
+            lore.add(chatFactory.colorString("&aCost: &6" + cost + " Coins"));
             meta.setLore(lore);
             item.setItemMeta(meta);
             inv.setItem(numSlot, item);
@@ -123,7 +121,7 @@ public class TeleportationsMenu extends MenuCreator{
 
                     econ.withdrawPlayer(p, cost);
                     chatFactory.sendPlayerMessage(" ", false, p, null);
-                    chatFactory.sendPlayerMessage(chatFactory.chat("&fYou just &apurchased the " + GPUtils.enumToName(t) + " Warp &ffor &6" + (int)cost + " coins"), false, p, prefix);
+                    chatFactory.sendPlayerMessage(chatFactory.colorString("&fYou just &apurchased the " + GPUtils.enumToName(t) + " Warp &ffor &6" + (int)cost + " coins"), false, p, prefix);
                     chatFactory.sendPlayerMessage(" ", false, p, null);
                     chatFactory.sendPlayerMessage(" ", false, p, null);
                     chatFactory.sendPlayerMessage("&cTeleporting &fyou in &c" + tpDelay + " &fseconds.&4 Do Not Move!", false, p, prefix);
@@ -160,7 +158,7 @@ public class TeleportationsMenu extends MenuCreator{
                         removeMetadata();
                         this.cancel();
                     }else{
-                        p.sendTitle("Teleporting you...", chatFactory.chat("&d&l") + (int)counter + "...", 5, 20, 5);
+                        p.sendTitle("Teleporting you...", chatFactory.colorString("&d&l") + (int)counter + "...", 5, 20, 5);
                     }
                     counter--;
                 }else{

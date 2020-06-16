@@ -1,12 +1,11 @@
 package me.c10coding.generatorpvp.commands;
 
-import me.c10coding.coreapi.chat.Chat;
+import me.c10coding.coreapi.chat.ChatFactory;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.files.AmplifiersConfigManager;
 import me.c10coding.generatorpvp.files.EquippedConfigManager;
 import me.c10coding.generatorpvp.files.ItemSaverConfigManager;
 import me.c10coding.generatorpvp.files.StatsConfigManager;
-import me.c10coding.generatorpvp.managers.Generator;
 import me.c10coding.generatorpvp.utils.GPUtils;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -21,14 +20,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class AdminCommands implements CommandExecutor {
 
     private GeneratorPvP plugin;
-    private Chat chatFactory;
+    private ChatFactory chatFactory;
     private String prefix;
 
     public AdminCommands(GeneratorPvP plugin){
@@ -417,23 +417,23 @@ public class AdminCommands implements CommandExecutor {
         List<String> lore = new ArrayList<>();
         if(weaponName.equalsIgnoreCase("Knockback")){
             mat = Material.SNOWBALL;
-            displayName = chatFactory.chat("&fKnockback");
+            displayName = chatFactory.colorString("&fKnockback");
             lore.add("&eDeals a little knockback upon hit");
         }else if(weaponName.equalsIgnoreCase("PositionSwap")){
             mat = Material.SLIME_BALL;
-            displayName = chatFactory.chat("&aPosition Swap");
+            displayName = chatFactory.colorString("&aPosition Swap");
             lore.add("&eSwaps position with whoever gets hit with it");
         }else if(weaponName.equalsIgnoreCase("TNT")){
             mat = Material.TNT;
-            displayName = chatFactory.chat("&cTNT");
+            displayName = chatFactory.colorString("&cTNT");
             lore.add("&eYou better move out of the way after you place this stuff...");
         }else if(weaponName.equalsIgnoreCase("Fireball")){
             mat = Material.FIRE_CHARGE;
-            displayName = chatFactory.chat("&4Fireball");
+            displayName = chatFactory.colorString("&4Fireball");
             lore.add("&eOnce again, you're a human Ghast!");
         }else if(weaponName.equalsIgnoreCase("InstaKill")){
             mat = Material.EGG;
-            displayName = chatFactory.chat("&eInstant Kill");
+            displayName = chatFactory.colorString("&eInstant Kill");
             lore.add("&ePretty much instantly kills whoever you throw this at.");
         }else{
             mat = null;

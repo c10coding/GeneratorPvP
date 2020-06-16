@@ -104,9 +104,9 @@ public class AmplifiersMenu extends MenuCreator {
 
             if(isActive){
                 amplifierInfo.put(numSlot, amplifierName);
-                lore.add(chatFactory.chat("&aActive"));
+                lore.add(chatFactory.colorString("&aActive"));
             }else{
-                lore.add(chatFactory.chat("&cInactive"));
+                lore.add(chatFactory.colorString("&cInactive"));
             }
 
             for(int x = 0; x < lore.size(); x++){
@@ -135,8 +135,8 @@ public class AmplifiersMenu extends MenuCreator {
                     List<String> lore = (List<String>) slotInfo.get("Lore");
                     int secondsLeft = am.getAmplifierSecondsLeft(amplifierName);
 
-                    lore.add(chatFactory.chat("&7Activated by &c" + playerThatActivatedAmp));
-                    lore.add(chatFactory.chat(GPUtils.secondsToSerializedTime(secondsLeft)));
+                    lore.add(chatFactory.colorString("&7Activated by &c" + playerThatActivatedAmp));
+                    lore.add(chatFactory.colorString(GPUtils.secondsToSerializedTime(secondsLeft)));
 
                     for(int x = 0; x < lore.size(); x++){
                         lore.set(x, replacePlaceholders(lore.get(x)));

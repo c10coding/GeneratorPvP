@@ -2,31 +2,23 @@ package me.c10coding.generatorpvp.runnables;
 
 import me.TechsCode.UltraPunishments.UltraPunishments;
 import me.TechsCode.UltraPunishments.types.IndexedPlayer;
-import me.c10coding.coreapi.chat.Chat;
+import me.c10coding.coreapi.chat.ChatFactory;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.files.AmplifiersConfigManager;
 import me.c10coding.generatorpvp.files.StatsConfigManager;
 import me.c10coding.generatorpvp.managers.ScoreboardManager;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-
-import java.io.File;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.UUID;
 
 public class ScoreboardUpdater extends BukkitRunnable {
 
     private GeneratorPvP plugin;
     private ScoreboardManager sm;
-    private Chat chatFactory = new Chat();
+    private ChatFactory chatFactory = new ChatFactory();
     private StatsConfigManager scm;
     private AmplifiersConfigManager acm;
 
@@ -60,12 +52,12 @@ public class ScoreboardUpdater extends BukkitRunnable {
                 Team coins = scoreboard.getTeam("Coins");
                 Team amplifier = scoreboard.getTeam("Amplifier");
 
-                playerName.setSuffix(chatFactory.chat(p.getName()));
+                playerName.setSuffix(chatFactory.colorString(p.getName()));
 
                 int playerBalance = (int) GeneratorPvP.getEconomy().getBalance(p);
                 coins.setSuffix(playerBalance + "");
 
-                String group = chatFactory.chat(PlaceholderAPI.setPlaceholders(p, "%uperms_rank%"));
+                String group = chatFactory.colorString(PlaceholderAPI.setPlaceholders(p, "%uperms_rank%"));
                 rank.setSuffix(group);
 
                 int numKills = scm.getKills(p.getUniqueId());
@@ -73,18 +65,18 @@ public class ScoreboardUpdater extends BukkitRunnable {
                 kills.setSuffix(numKills+"");
                 deaths.setSuffix(numDeaths+"");
 
-                String isActive = chatFactory.chat("&cInactive");
+                String isActive = chatFactory.colorString("&cInactive");
 
                 if(acm.isAmplifierActivated("Boosters") || acm.isAmplifierActivated("Multipliers") || acm.isAmplifierActivated("Coin Multiplier")){
                     isActive = "&aActive";
                 }
 
-                amplifier.setSuffix(chatFactory.chat(isActive));
+                amplifier.setSuffix(chatFactory.colorString(isActive));
 
                 UltraPunishments up = (UltraPunishments) UltraPunishments.getAPI();
                 IndexedPlayer ip = up.getPlayerIndexes().get(p.getUniqueId());
                 int numWarnings = up.getWarningStorage().getWarnings().target(ip).count();
-                warnings.setSuffix(chatFactory.chat("&c" + numWarnings+""));
+                warnings.setSuffix(chatFactory.colorString("&c" + numWarnings+""));
 
                 p.setScoreboard(scoreboard);
             }

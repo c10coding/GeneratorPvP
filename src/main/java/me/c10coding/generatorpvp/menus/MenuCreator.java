@@ -1,13 +1,12 @@
 package me.c10coding.generatorpvp.menus;
 
-import me.c10coding.coreapi.chat.Chat;
+import me.c10coding.coreapi.chat.ChatFactory;
 import me.c10coding.coreapi.menus.Menu;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.files.DefaultConfigManager;
 import me.c10coding.generatorpvp.files.EquippedConfigManager;
 import me.c10coding.generatorpvp.managers.ScoreboardManager;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
 import org.bukkit.entity.Player;
@@ -22,13 +21,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public class MenuCreator extends Menu implements Listener {
 
     protected me.c10coding.generatorpvp.files.DefaultConfigManager cm;
     protected EquippedConfigManager ecm;
-    protected Chat chatFactory;
+    protected ChatFactory chatFactory;
     protected Economy econ = GeneratorPvP.getEconomy();
     protected String prefix;
     protected Player p;
@@ -83,7 +81,7 @@ public class MenuCreator extends Menu implements Listener {
             if(i == 16){
                 if(!ecm.isPurchased("EnderChest", "EnderChest")){
                     int cost = cm.getEnderChestCost();
-                    lore.add(chatFactory.chat("&aCost: &6" + cost + " Coins"));
+                    lore.add(chatFactory.colorString("&aCost: &6" + cost + " Coins"));
                 }
             }
 
@@ -200,7 +198,7 @@ public class MenuCreator extends Menu implements Listener {
         ItemStack item = new ItemStack(Material.LEGACY_SKULL_ITEM, 1 , (short) SkullType.PLAYER.ordinal());
         SkullMeta meta = (SkullMeta) item.getItemMeta();
         meta.setOwner(player.getName());
-        meta.setDisplayName(chatFactory.chat("&7Statistics"));
+        meta.setDisplayName(chatFactory.colorString("&7Statistics"));
         item.setItemMeta(meta);
 
         return item;

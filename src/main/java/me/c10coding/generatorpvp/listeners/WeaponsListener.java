@@ -1,11 +1,13 @@
 package me.c10coding.generatorpvp.listeners;
 
-import me.c10coding.coreapi.chat.Chat;
+import me.c10coding.coreapi.chat.ChatFactory;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.files.DefaultConfigManager;
 import me.c10coding.generatorpvp.utils.GPUtils;
-import org.bukkit.*;
-import org.bukkit.block.data.type.Snow;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftSnowball;
 import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
@@ -16,8 +18,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -31,7 +31,7 @@ public class WeaponsListener implements Listener {
 
     private GeneratorPvP plugin;
     private DefaultConfigManager dcm;
-    private Chat chatFactory;
+    private ChatFactory chatFactory;
     private List<Player> threwASnowball = new ArrayList<>();
 
     public WeaponsListener(GeneratorPvP plugin){

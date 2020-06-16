@@ -46,7 +46,7 @@ public class WeaponsMenu extends MenuCreator implements Listener {
             Material mat = (Material) slotInfo.get("Material");
             List<String> lore = (List<String>) slotInfo.get("Lore");
             int cost = (int) cm.getWeaponsCost(configKey);
-            lore.add(chatFactory.chat("&aCost: &6" + cost + " Coins"));
+            lore.add(chatFactory.colorString("&aCost: &6" + cost + " Coins"));
             lore = applyPlaceholders(lore);
 
             inv.setItem(i, createGuiItem(mat, displayName, 1, lore));

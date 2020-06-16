@@ -1,17 +1,15 @@
 package me.c10coding.generatorpvp.files;
 
-import me.c10coding.coreapi.chat.Chat;
+import me.c10coding.coreapi.chat.ChatFactory;
 import me.c10coding.generatorpvp.GeneratorPvP;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 
 public class DefaultConfigManager extends me.c10coding.coreapi.files.ConfigManager {
 
-    private Chat chatFactory;
+    private ChatFactory chatFactory;
 
     public DefaultConfigManager(JavaPlugin plugin) {
         super(plugin, "config.yml");
@@ -27,13 +25,13 @@ public class DefaultConfigManager extends me.c10coding.coreapi.files.ConfigManag
 
         for(String s : lore){
             int indexOfString = lore.indexOf(s);
-            lore.set(indexOfString, chatFactory.chat(s));
+            lore.set(indexOfString, chatFactory.colorString(s));
         }
 
         slotInfo.put("Lore", lore);
         slotInfo.put("slotNum", slotNum);
         slotInfo.put("Material", blockMat);
-        slotInfo.put("DisplayName", chatFactory.chat(blockDisplayName));
+        slotInfo.put("DisplayName", chatFactory.colorString(blockDisplayName));
         return slotInfo;
     }
 
