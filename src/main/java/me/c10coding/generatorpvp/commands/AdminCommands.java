@@ -40,27 +40,28 @@ public class AdminCommands implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-        if(args[0].equalsIgnoreCase("help") && args.length == 1){
-            if(sender instanceof Player){
-                GPUtils.sendCenteredMessage((Player)sender, "&e==============HELP==============");
-                chatFactory.sendPlayerMessage("&6/menu &f- Brings up the main menu for GeneratorPvP", false, sender, null);
-                chatFactory.sendPlayerMessage("&6/gp give coins <playername> <amount> &f- Gives the desired player a certain amount of coins.", false, sender, null);
-                chatFactory.sendPlayerMessage("&6/gp give amp <player name> <booster | coinmult | mult> <level> <amount> &f- Gives the desired player a certain amount of an amplifier", false, sender, null);
-                chatFactory.sendPlayerMessage("&6/lb &f- Brings up the leaderboard.", false, sender, null);
-                chatFactory.sendPlayerMessage("&6/gp set coins <playername> <amount>.", false, sender, null);
-                chatFactory.sendPlayerMessage("&6/gp set weapon <playername> <knockback | positionswap | tnt | fireball | instakill> <amount>.", false, sender, null);
-                chatFactory.sendPlayerMessage("&6/gp stats reset <playername> <kills | deaths>", false, sender, null);
-                chatFactory.sendPlayerMessage("&6/gp stats reset &f- Resets all player stats", false, sender, null);
-                chatFactory.sendPlayerMessage("&6/gp reset &f- Resets things like Boots, Warps, Chat colors, etc", false, sender, null);
-                chatFactory.sendPlayerMessage("&6/gp reset <playername> &f- Same thing as above except it does it to a specific player", false, sender, null);
-                GPUtils.sendCenteredMessage((Player)sender, "&e================================");
-            }else{
-                chatFactory.sendPlayerMessage("Only players can use this command!", false, sender, null);
-            }
-        }
+        if(args.length > 0){
 
-        if(sender.isOp()){
-            if(args.length > 0){
+            if(sender.hasPermission("gp.help") && args[0].equalsIgnoreCase("help") && args.length == 1){
+                if(sender instanceof Player){
+                    GPUtils.sendCenteredMessage((Player)sender, "&e==============HELP==============");
+                    chatFactory.sendPlayerMessage("&6/menu &f- Brings up the main menu for GeneratorPvP", false, sender, null);
+                    chatFactory.sendPlayerMessage("&6/gp give coins <playername> <amount> &f- Gives the desired player a certain amount of coins.", false, sender, null);
+                    chatFactory.sendPlayerMessage("&6/gp give amp <playername> <booster | coinmult | mult> <level> <amount> &f- Gives the desired player a certain amount of an amplifier", false, sender, null);
+                    chatFactory.sendPlayerMessage("&6/gp give weapon <playername> <knockback | positionswap | tnt | fireball | instakill> <amount>", false, sender, null);
+                    chatFactory.sendPlayerMessage("&6/lb &f- Brings up the leaderboard.", false, sender, null);
+                    chatFactory.sendPlayerMessage("&6/gp set coins <playername> <amount>.", false, sender, null);
+                    chatFactory.sendPlayerMessage("&6/gp stats reset <playername> <kills | deaths>", false, sender, null);
+                    chatFactory.sendPlayerMessage("&6/gp stats reset &f- Resets all player stats", false, sender, null);
+                    chatFactory.sendPlayerMessage("&6/gp reset &f- Resets things like Boots, Warps, Chat colors, etc", false, sender, null);
+                    chatFactory.sendPlayerMessage("&6/gp reset <playername> &f- Same thing as above except it does it to a specific player", false, sender, null);
+                    GPUtils.sendCenteredMessage((Player)sender, "&e================================");
+                }else{
+                    chatFactory.sendPlayerMessage("Only players can use this command!", false, sender, null);
+                }
+            }
+
+            if(sender.isOp()){
                 //gp give amp <player name> <type> <level> <amount>
 
                 if(args[0].equalsIgnoreCase("give") && args[1].equals("amp") && args.length == 6){
@@ -71,9 +72,9 @@ public class AdminCommands implements CommandExecutor {
                     List<String> possibleAmplifierTypes = getPossibleAmplifiers();
                     int levelAmplifier;
 
-                /*
-                    I know this is bad practice, but I'm lazy
-                 */
+                    /*
+                        I know this is bad practice, but I'm lazy
+                     */
                     try{
                         amount = Integer.parseInt(args[5]);
                     }catch(IllegalArgumentException e){
@@ -127,7 +128,7 @@ public class AdminCommands implements CommandExecutor {
                         String amplifierName = args[4];
 
                         if(amplifierName.equalsIgnoreCase("Coin_Multiplier")){
-                            amplifierName = amplifierName.replace("_", "");
+                            amplifierName = amplifierName.replace("_", " ");
                         }
 
                         Player activator = null;
@@ -332,7 +333,12 @@ public class AdminCommands implements CommandExecutor {
                     }
                 }
             }
+        }else{
+            chatFactory.sendPlayerMessage(" ", false, sender, null);
+            chatFactory.sendPlayerMessage("Do /gp help to see all of this plugin's commands!", false, sender, null);
+            chatFactory.sendPlayerMessage(" ", false, sender, null);
         }
+
         return false;
     }
 

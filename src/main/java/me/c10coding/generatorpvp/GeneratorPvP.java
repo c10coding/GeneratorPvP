@@ -1,5 +1,6 @@
 package me.c10coding.generatorpvp;
 
+import me.TechsCode.UltraPermissions.hooks.pluginHooks.VaultHook;
 import me.c10coding.coreapi.CoreAPI;
 import me.c10coding.coreapi.holograms.HologramHelper;
 import me.c10coding.generatorpvp.commands.AdminCommands;
@@ -35,7 +36,7 @@ import java.util.logging.Logger;
 
 public final class GeneratorPvP extends JavaPlugin {
 
-    private CoreAPI api = new CoreAPI();
+    private CoreAPI api;
     private static Economy econ = null;
     private static Permission perms = null;
     private Logger logger;
@@ -44,6 +45,11 @@ public final class GeneratorPvP extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
+        if(getServer().getPluginManager().getPlugin("CoreAPI") == null){
+            getServer().getPluginManager().disablePlugin(this);
+        }
+        api = (CoreAPI) getServer().getPluginManager().getPlugin("CoreAPI");
 
         disableHolograms();
 

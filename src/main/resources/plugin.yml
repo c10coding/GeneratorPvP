@@ -22,6 +22,10 @@ commands:
       - gpconfirm
 
 permissions:
+
+  gp.help:
+    default: op
+
   gp.purchase.antifall:
     description: "Permissions to purchase the antifall boots"
     default: true

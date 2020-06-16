@@ -11,15 +11,12 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class LeaderboardCommand implements CommandExecutor {
 
-    private GeneratorPvP plugin;
     private Chat chatFactory;
 
     public LeaderboardCommand(GeneratorPvP plugin){
-        this.plugin = plugin;
         this.chatFactory = plugin.getApi().getChatFactory();
     }
 

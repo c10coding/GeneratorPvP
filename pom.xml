@@ -6,7 +6,7 @@
 
     <groupId>GeneratorPvP</groupId>
     <artifactId>GeneratorPvP</artifactId>
-    <version>1.1.4-SNAPSHOT</version>
+    <version>1.1.5-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>GeneratorPvP</name>
@@ -82,8 +82,8 @@
         <dependency>
             <groupId>CoreAPI</groupId>
             <artifactId>CoreAPI</artifactId>
-            <version>1.3.4-SNAPSHOT</version>
-            <scope>compile</scope>
+            <version>2.0.0-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.MilkBowl</groupId>
