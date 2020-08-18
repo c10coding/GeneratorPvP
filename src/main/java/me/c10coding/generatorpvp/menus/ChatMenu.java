@@ -1,22 +1,18 @@
 package me.c10coding.generatorpvp.menus;
 
-import me.c10coding.generatorpvp.EmptyEnchant;
 import me.c10coding.generatorpvp.files.EquippedConfigManager;
 import me.c10coding.generatorpvp.utils.GPUtils;
-import net.minecraft.server.v1_15_R1.NBTTagCompound;
-import net.minecraft.server.v1_15_R1.NBTTagInt;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 public class ChatMenu extends MenuCreator{
 
