@@ -19,7 +19,7 @@ public class ScoreboardManager implements Listener {
 
     public ScoreboardManager(GeneratorPvP plugin){
         this.plugin = plugin;
-        this.chatFactory = plugin.getApi().getChatFactory();
+        this.chatFactory = plugin.getAPI().getChatFactory();
     }
 
     public void setSB(Player player){

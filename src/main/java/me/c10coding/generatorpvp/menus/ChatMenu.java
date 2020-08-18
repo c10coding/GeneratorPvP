@@ -1,5 +1,6 @@
 package me.c10coding.generatorpvp.menus;
 
+import me.c10coding.coreapi.APIHook;
 import me.c10coding.generatorpvp.files.EquippedConfigManager;
 import me.c10coding.generatorpvp.utils.GPUtils;
 import org.bukkit.Material;
@@ -19,7 +20,7 @@ public class ChatMenu extends MenuCreator{
     private EquippedConfigManager ecm;
 
     public ChatMenu(JavaPlugin plugin, Player p) {
-        super(plugin, "Chat", 27, p);
+        super((APIHook) plugin, "Chat", 27, p);
         this.ecm = new EquippedConfigManager(plugin, p.getUniqueId());
         createMenu();
         fillMenu();
@@ -28,19 +29,17 @@ public class ChatMenu extends MenuCreator{
 
     public enum ChatColors{
 
-        GRAY("Gray", Material.GRAY_CONCRETE, "gp.purchase.gray","gp.unlock.gray", false, "&7", "Gray Chat Color"),
-        GREEN("LimeGreen", Material.LIME_CONCRETE, "gp.purchase.limegreen","gp.unlock.limegreen", true, "&a", "Lime Green Chat Color"),
-        YELLOW("Yellow", Material.YELLOW_CONCRETE, "gp.purchase.yellow","gp.unlock.yellow", true, "&e", "Yellow Chat Color"),
-        BLUE("Blue", Material.LIGHT_BLUE_CONCRETE, "gp.purchase.blue","gp.unlock.blue", false, "&b", "Blue Chat Color"),
-        GOLD("Gold", Material.ORANGE_CONCRETE, "gp.purchase.gold","gp.unlock.gold", false, "&6", "Gold Chat Color"),
-        PURPLE("Purple", Material.MAGENTA_CONCRETE, "gp.purchase.lightpurple","gp.unlock.lightpurple", false, "&d", "Light Purple Chat Color");
+        GRAY("Gray","gp.purchase.gray","gp.unlock.gray", false, "&7", "Gray Chat Color"),
+        GREEN("LimeGreen","gp.purchase.limegreen","gp.unlock.limegreen", true, "&a", "Lime Green Chat Color"),
+        YELLOW("Yellow","gp.purchase.yellow","gp.unlock.yellow", true, "&e", "Yellow Chat Color"),
+        BLUE("Blue","gp.purchase.blue","gp.unlock.blue", false, "&b", "Blue Chat Color"),
+        GOLD("Gold","gp.purchase.gold","gp.unlock.gold", false, "&6", "Gold Chat Color"),
+        PURPLE("Purple","gp.purchase.lightpurple","gp.unlock.lightpurple", false, "&d", "Light Purple Chat Color");
 
-        private Material mat;
         private String unlockPermission, purchasePermission, configKey, colorCode, purchasedMenuName;
         private boolean isPurchasable;
-        ChatColors(String configKey, Material mat, String purchasePermission, String unlockPermission, boolean isPurchasable, String colorCode, /*The name that gets displayed on ConfirmPUrchaseMenu*/String purchasedMenuName){
+        ChatColors(String configKey, String purchasePermission, String unlockPermission, boolean isPurchasable, String colorCode, /*The name that gets displayed on ConfirmPUrchaseMenu*/String purchasedMenuName){
             this.configKey = configKey;
-            this.mat = mat;
             this.unlockPermission = unlockPermission;
             this.purchasePermission = purchasePermission;
             this.isPurchasable = isPurchasable;
@@ -54,10 +53,6 @@ public class ChatMenu extends MenuCreator{
 
         public String getConfigKey(){
             return configKey;
-        }
-
-        public String getPurchasedMenuName(){
-            return purchasedMenuName;
         }
 
     }

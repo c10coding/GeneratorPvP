@@ -2,6 +2,7 @@ package me.c10coding.generatorpvp;
 
 import me.TechsCode.UltraPermissions.hooks.pluginHooks.VaultHook;
 import me.c10coding.coreapi.APIHook;
+import me.c10coding.coreapi.BetterJavaPlugin;
 import me.c10coding.coreapi.CoreAPI;
 import me.c10coding.coreapi.holograms.HologramHelper;
 import me.c10coding.generatorpvp.commands.AdminCommands;
@@ -35,9 +36,8 @@ import java.util.logging.Logger;
     Plugin for: Minhas
  */
 
-public final class GeneratorPvP extends APIHook {
+public final class GeneratorPvP extends BetterJavaPlugin {
 
-    private CoreAPI api;
     private static Economy econ = null;
     private static Permission perms = null;
     private Logger logger;
@@ -47,13 +47,11 @@ public final class GeneratorPvP extends APIHook {
     @Override
     public void onEnable() {
 
+        hookAPI(this);
         this.logger = this.getLogger();
 
         logger.info("==================================================================");
-        if(hookAPI(this) != null){
-            this.api = (CoreAPI) getServer().getPluginManager().getPlugin("CoreAPI");
-            logger.info("API Hooked!");
-        }
+
         this.enchantmentRegister = new EnchantmentRegister(this);
 
         disableHolograms();
@@ -93,10 +91,6 @@ public final class GeneratorPvP extends APIHook {
         if(enchantmentRegister != null){
             enchantmentRegister.unRegisterEnchantments();
         }
-    }
-
-    public CoreAPI getApi(){
-        return api;
     }
 
     public void validateConfigs(){

@@ -1,5 +1,7 @@
 package me.c10coding.generatorpvp.menus;
 
+import me.c10coding.coreapi.APIHook;
+import me.c10coding.coreapi.BetterJavaPlugin;
 import me.c10coding.coreapi.chat.ChatFactory;
 import me.c10coding.coreapi.menus.Menu;
 import me.c10coding.generatorpvp.GeneratorPvP;
@@ -17,7 +19,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 import java.util.Map;
@@ -30,17 +31,15 @@ public class MenuCreator extends Menu implements Listener {
     protected Economy econ = GeneratorPvP.getEconomy();
     protected String prefix;
     protected Player p;
-    private boolean hasGivables;
-    private ScoreboardManager sm;
+    protected boolean hasGivables;
 
-    public MenuCreator(JavaPlugin plugin) {
+    public MenuCreator(APIHook plugin) {
         super(plugin, "Menu", 27);
         fillerMat = Material.RED_STAINED_GLASS_PANE;
         this.cm = new DefaultConfigManager(plugin);
-        this.chatFactory = ((GeneratorPvP) plugin).getApi().getChatFactory();
+        this.chatFactory = plugin.getAPI().getChatFactory();
         this.prefix = ((GeneratorPvP) plugin).getPrefix();
         this.ecm = new EquippedConfigManager(plugin, p.getUniqueId());
-        this.sm = new ScoreboardManager((GeneratorPvP) plugin);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         if(!ecm.isInFile()){
             ecm.addPlayerToFile();
@@ -48,11 +47,11 @@ public class MenuCreator extends Menu implements Listener {
         }
     }
 
-    public MenuCreator(JavaPlugin plugin, String menuTitle, int numSlots, Player p) {
+    public MenuCreator(APIHook plugin, String menuTitle, int numSlots, Player p) {
         super(plugin, menuTitle, numSlots);
         fillerMat = Material.RED_STAINED_GLASS_PANE;
         this.cm = new DefaultConfigManager(plugin);
-        this.chatFactory = ((GeneratorPvP) plugin).getApi().getChatFactory();
+        this.chatFactory = plugin.getAPI().getChatFactory();
         this.prefix = ((GeneratorPvP) plugin).getPrefix();
         this.p = p;
         this.ecm = new EquippedConfigManager(plugin, p.getUniqueId());
@@ -136,8 +135,8 @@ public class MenuCreator extends Menu implements Listener {
         if(clickedItem == null || clickedItem.getType().equals(Material.AIR)) return;
 
         int slotClicked = e.getSlot();
-        Menu newMenu = null;
 
+        Menu newMenu;
         switch(slotClicked){
             case 10:
                 newMenu = new ShopMenu(plugin, p);
@@ -183,14 +182,6 @@ public class MenuCreator extends Menu implements Listener {
 
     public void setHasGivables(boolean b) {
         this.hasGivables = b;
-    }
-
-    public boolean hasGivables() {
-        return hasGivables;
-    }
-
-    private void getHead(){
-
     }
 
     private ItemStack getHead(Player player) {

@@ -1,6 +1,6 @@
 package me.c10coding.generatorpvp.files;
 
-import me.c10coding.coreapi.files.ConfigManager;
+import me.c10coding.coreapi.files.Config;
 import me.c10coding.generatorpvp.GeneratorTypes;
 import me.c10coding.generatorpvp.utils.GPUtils;
 import org.bukkit.Bukkit;
@@ -10,7 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 
-public class GeneratorConfigManager extends ConfigManager {
+public class GeneratorConfigManager extends Config {
 
     public GeneratorConfigManager(JavaPlugin plugin) {
         super(plugin, "generators.yml");

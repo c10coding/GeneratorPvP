@@ -1,10 +1,10 @@
 package me.c10coding.generatorpvp.files;
 
-import me.c10coding.coreapi.files.ConfigManager;
+import me.c10coding.coreapi.files.Config;
 import me.c10coding.generatorpvp.utils.GPUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class DefaultConfigBootsSectionManager extends ConfigManager {
+public class DefaultConfigBootsSectionManager extends Config {
 
     public DefaultConfigBootsSectionManager(JavaPlugin plugin) {
         super(plugin, "config.yml");

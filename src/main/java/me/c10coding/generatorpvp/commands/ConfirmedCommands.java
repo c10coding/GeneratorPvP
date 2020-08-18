@@ -20,7 +20,7 @@ public class ConfirmedCommands implements CommandExecutor {
 
     public ConfirmedCommands(GeneratorPvP plugin){
         this.plugin = plugin;
-        this.chatFactory = plugin.getApi().getChatFactory();
+        this.chatFactory = plugin.getAPI().getChatFactory();
         this.prefix = plugin.getPrefix();
     }
 

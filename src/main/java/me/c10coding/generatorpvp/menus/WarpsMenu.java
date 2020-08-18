@@ -1,5 +1,6 @@
 package me.c10coding.generatorpvp.menus;
 
+import me.c10coding.coreapi.APIHook;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -9,7 +10,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class WarpsMenu extends MenuCreator implements Listener {
 
-    public WarpsMenu(JavaPlugin plugin, Player p) {
+    public WarpsMenu(APIHook plugin, Player p) {
         super(plugin, "Warps", 27, p);
         createMenu("WarpMenu");
         adjustSpecial();

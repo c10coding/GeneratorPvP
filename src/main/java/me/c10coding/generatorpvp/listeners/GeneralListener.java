@@ -31,7 +31,7 @@ public class GeneralListener implements Listener {
         this.plugin = plugin;
         this.dcm = new DefaultConfigManager(plugin);
         this.bm = new DefaultConfigBootsSectionManager(plugin);
-        this.chatFactory = plugin.getApi().getChatFactory();
+        this.chatFactory = plugin.getAPI().getChatFactory();
         this.sm = new ScoreboardManager(plugin);
     }
 
@@ -68,9 +68,10 @@ public class GeneralListener implements Listener {
 
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent e){
+
         Player messenger = e.getPlayer();
         EquippedConfigManager ecm = new EquippedConfigManager(plugin, messenger.getUniqueId());
-        ChatFactory chatFactory = plugin.getApi().getChatFactory();
+        ChatFactory chatFactory = plugin.getAPI().getChatFactory();
 
         if(ecm.hasSomethingEquipped("Chat")){
             String configKey = ecm.getThingEquipped("Chat");

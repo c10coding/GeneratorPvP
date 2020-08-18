@@ -1,13 +1,14 @@
 package me.c10coding.generatorpvp.menus;
 
-import me.c10coding.generatorpvp.bootEnchants.AntiFallEnchant;
+import me.c10coding.coreapi.APIHook;
 import me.c10coding.generatorpvp.bootEnchants.EnchantmentKeys;
-import me.c10coding.generatorpvp.bootEnchants.SuperBootEnchant;
 import me.c10coding.generatorpvp.files.DefaultConfigBootsSectionManager;
 import me.c10coding.generatorpvp.utils.GPUtils;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,11 +18,9 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -30,7 +29,7 @@ public class SuperBootsMenu extends MenuCreator implements Listener {
 
     private DefaultConfigBootsSectionManager bm;
 
-    public SuperBootsMenu(JavaPlugin plugin, Player p) {
+    public SuperBootsMenu(APIHook plugin, Player p) {
         super(plugin, "Super Boots", 27, p);
         this.bm = new DefaultConfigBootsSectionManager(plugin);
         fillerMat = Material.RED_STAINED_GLASS_PANE;

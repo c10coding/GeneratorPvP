@@ -1,11 +1,10 @@
 package me.c10coding.generatorpvp.menus;
 
+import me.c10coding.coreapi.APIHook;
 import me.c10coding.generatorpvp.GeneratorPvP;
-import me.c10coding.generatorpvp.files.DefaultConfigManager;
 import me.c10coding.generatorpvp.files.EquippedConfigManager;
 import me.c10coding.generatorpvp.managers.ScoreboardManager;
 import me.c10coding.generatorpvp.utils.GPUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -31,7 +30,7 @@ public class ConfirmPurchaseMenu extends MenuCreator {
     private ScoreboardManager sm;
 
     public ConfirmPurchaseMenu(JavaPlugin plugin, Player p, Material mat, double cost, String configKey, MenuCreator prevMenu, int amount, String itemName) {
-        super(plugin, "Purchasing: " + itemName, 27, p);
+        super((APIHook) plugin, "Purchasing: " + itemName, 27, p);
         this.matPurchasing = mat;
         this.configKey = configKey;
         this.cost = (int) cost;
@@ -145,7 +144,7 @@ public class ConfirmPurchaseMenu extends MenuCreator {
 
         if(clickedItem.getType().equals(Material.GREEN_STAINED_GLASS_PANE)){
 
-            if(prevMenu.hasGivables()){
+            if(prevMenu.hasGivables){
                 giveItems();
             }
 

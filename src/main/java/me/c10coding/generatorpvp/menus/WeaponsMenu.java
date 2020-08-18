@@ -1,6 +1,6 @@
 package me.c10coding.generatorpvp.menus;
 
-import me.c10coding.generatorpvp.utils.GPUtils;
+import me.c10coding.coreapi.APIHook;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,7 +15,7 @@ import java.util.Map;
 public class WeaponsMenu extends MenuCreator implements Listener {
 
     public WeaponsMenu(JavaPlugin plugin, Player p) {
-        super(plugin, "Weapons", 27, p);
+        super((APIHook) plugin, "Weapons", 27, p);
         createMenu();
         fillMenu();
         setHasGivables(true);

@@ -1,19 +1,20 @@
 package me.c10coding.generatorpvp.files;
 
 import me.c10coding.coreapi.chat.ChatFactory;
+import me.c10coding.coreapi.files.Config;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 
-public class DefaultConfigManager extends me.c10coding.coreapi.files.ConfigManager {
+public class DefaultConfigManager extends Config {
 
     private ChatFactory chatFactory;
 
     public DefaultConfigManager(JavaPlugin plugin) {
         super(plugin, "config.yml");
-        this.chatFactory = ((GeneratorPvP) plugin).getApi().getChatFactory();
+        this.chatFactory = ((GeneratorPvP) plugin).getAPI().getChatFactory();
     }
 
     public Map<String, Object> getSlotInfo(String menuType, int slotNum){

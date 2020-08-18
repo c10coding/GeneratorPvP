@@ -1,7 +1,7 @@
 package me.c10coding.generatorpvp.files;
 
 import me.c10coding.coreapi.chat.ChatFactory;
-import me.c10coding.coreapi.files.ConfigManager;
+import me.c10coding.coreapi.files.Config;
 import me.c10coding.generatorpvp.utils.GPUtils;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class ItemSaverConfigManager extends ConfigManager {
+public class ItemSaverConfigManager extends Config {
 
     public ItemSaverConfigManager(JavaPlugin plugin) {
         super(plugin, "itemsaver.yml");

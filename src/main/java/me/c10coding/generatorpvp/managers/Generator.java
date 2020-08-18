@@ -42,7 +42,7 @@ public class Generator {
         this.amountSpawned = gcm.getAmountSpawned(genType);
         this.spawnRate = gcm.getSpawnRate(genType);
         this.hologramLines = gcm.getHologramLines(genType);
-        this.chatFactory = plugin.getApi().getChatFactory();
+        this.chatFactory = plugin.getAPI().getChatFactory();
         this.numGen = numGen;
         this.hologramConfigName = GPUtils.enumToConfigKey(genType) + numGen;
 

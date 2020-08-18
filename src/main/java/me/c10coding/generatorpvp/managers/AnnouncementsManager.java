@@ -17,7 +17,7 @@ public class AnnouncementsManager {
     public AnnouncementsManager(GeneratorPvP plugin){
         this.plugin = plugin;
         this.announcerPrefix = plugin.getConfig().getString("AnnouncerPrefix");
-        this.chatFactory = plugin.getApi().getChatFactory();
+        this.chatFactory = plugin.getAPI().getChatFactory();
     }
 
     public void announceAmplifierActivated(String playerName, String amplifierName, double durationAmplifier){

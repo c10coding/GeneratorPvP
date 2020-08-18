@@ -1,5 +1,7 @@
 package me.c10coding.generatorpvp.menus;
 
+import me.c10coding.coreapi.APIHook;
+import me.c10coding.coreapi.BetterJavaPlugin;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -8,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ShopMenu extends MenuCreator {
-    public ShopMenu(JavaPlugin plugin, Player p) {
+    public ShopMenu(APIHook plugin, Player p) {
         super(plugin, "Shop", 27, p);
         createMenu("ShopMenu");
         fillMenu();

@@ -17,7 +17,7 @@ public class LeaderboardCommand implements CommandExecutor {
     private ChatFactory chatFactory;
 
     public LeaderboardCommand(GeneratorPvP plugin){
-        this.chatFactory = plugin.getApi().getChatFactory();
+        this.chatFactory = plugin.getAPI().getChatFactory();
     }
 
     @Override

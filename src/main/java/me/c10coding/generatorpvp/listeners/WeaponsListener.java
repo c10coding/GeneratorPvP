@@ -33,7 +33,7 @@ public class WeaponsListener implements Listener {
     public WeaponsListener(GeneratorPvP plugin){
         this.plugin = plugin;
         this.dcm = new DefaultConfigManager(plugin);
-        this.chatFactory = plugin.getApi().getChatFactory();
+        this.chatFactory = plugin.getAPI().getChatFactory();
     }
 
     @EventHandler

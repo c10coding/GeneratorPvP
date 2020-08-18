@@ -1,5 +1,6 @@
 package me.c10coding.generatorpvp.menus;
 
+import me.c10coding.coreapi.APIHook;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.IncompleteLocation;
 import me.c10coding.generatorpvp.utils.GPUtils;
@@ -22,7 +23,7 @@ import java.util.Random;
 public class TeleportationsMenu extends MenuCreator{
 
     public TeleportationsMenu(JavaPlugin plugin, Player p) {
-        super(plugin, "Teleportations", 27, p);
+        super((APIHook) plugin, "Teleportations", 27, p);
         createMenu("TeleportationsMenu");
         addCostToLore();
         fillMenu();

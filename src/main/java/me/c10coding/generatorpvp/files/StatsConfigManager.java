@@ -1,13 +1,14 @@
 package me.c10coding.generatorpvp.files;
 
-import me.c10coding.coreapi.files.ConfigManager;
+import me.c10coding.coreapi.files.Config;
 import me.c10coding.generatorpvp.utils.GPUtils;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
 
-public class StatsConfigManager extends ConfigManager {
+public class StatsConfigManager extends Config {
+
     public StatsConfigManager(JavaPlugin plugin) {
         super(plugin, "stats.yml");
     }

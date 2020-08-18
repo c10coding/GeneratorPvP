@@ -1,12 +1,12 @@
 package me.c10coding.generatorpvp.files;
 
-import me.c10coding.coreapi.files.ConfigManager;
+import me.c10coding.coreapi.files.Config;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AmplifiersConfigManager extends ConfigManager {
+public class AmplifiersConfigManager extends Config {
 
     public AmplifiersConfigManager(JavaPlugin plugin) {
         super(plugin, "amplifiers.yml");

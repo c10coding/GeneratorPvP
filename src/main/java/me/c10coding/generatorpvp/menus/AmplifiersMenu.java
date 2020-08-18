@@ -1,14 +1,16 @@
 package me.c10coding.generatorpvp.menus;
 
 
+import me.c10coding.coreapi.APIHook;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.files.AmplifiersConfigManager;
 import me.c10coding.generatorpvp.files.EquippedConfigManager;
-import me.c10coding.generatorpvp.files.GeneratorConfigManager;
 import me.c10coding.generatorpvp.managers.AnnouncementsManager;
-import me.c10coding.generatorpvp.managers.Generator;
 import me.c10coding.generatorpvp.utils.GPUtils;
-import org.bukkit.*;
+import org.bukkit.Color;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -30,7 +32,7 @@ public class AmplifiersMenu extends MenuCreator {
     protected EquippedConfigManager em;
 
     public AmplifiersMenu(JavaPlugin plugin, Player p, String menuTitle) {
-        super(plugin, menuTitle, 27, p);
+        super((APIHook) plugin, menuTitle, 27, p);
         this.am = new AmplifiersConfigManager(plugin);
         this.em = new EquippedConfigManager(plugin, p.getUniqueId());
         createMenu();

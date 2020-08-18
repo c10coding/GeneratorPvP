@@ -15,7 +15,7 @@ public class MenuCommand implements CommandExecutor {
 
     public MenuCommand(GeneratorPvP plugin){
         this.plugin = plugin;
-        this.chatFactory = plugin.getApi().getChatFactory();
+        this.chatFactory = plugin.getAPI().getChatFactory();
     }
 
     @Override

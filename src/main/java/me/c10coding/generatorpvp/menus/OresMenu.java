@@ -1,5 +1,6 @@
 package me.c10coding.generatorpvp.menus;
 
+import me.c10coding.coreapi.APIHook;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 public class OresMenu extends MenuCreator implements Listener {
 
     public OresMenu(JavaPlugin plugin, Player p) {
-        super(plugin, "Ores", 27, p);
+        super((APIHook) plugin, "Ores", 27, p);
         createMenu();
         setHasGivables(true);
     }

@@ -1,26 +1,23 @@
 package me.c10coding.generatorpvp.files;
 
-import me.c10coding.coreapi.files.ConfigManager;
+import me.c10coding.coreapi.files.Config;
 import me.c10coding.generatorpvp.utils.GPUtils;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 
-public class EquippedConfigManager extends ConfigManager {
+public class EquippedConfigManager extends Config {
 
     private UUID u;
-    private AmplifiersConfigManager acm;
 
     public EquippedConfigManager(JavaPlugin plugin, UUID u) {
         super(plugin, "equipped.yml");
         this.u = u;
-        this.acm = new AmplifiersConfigManager(plugin);
     }
 
     public EquippedConfigManager(JavaPlugin plugin){
         super(plugin, "equipped.yml");
-        this.acm = new AmplifiersConfigManager(plugin);
     }
 
     public void setEquipped(String key, String category){
