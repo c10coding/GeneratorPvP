@@ -59,6 +59,44 @@ public class AdminCommands implements CommandExecutor {
                 }else{
                     chatFactory.sendPlayerMessage("Only players can use this command!", false, sender, null);
                 }
+            }else if(args[0].equalsIgnoreCase("givecoins") && args.length == 5) {
+                //Guaranteed to be a player because this command is only run when a player clicks on the "Click Here" text
+                Player playerWhoClicked = (Player) sender;
+                if (args[1].trim().equalsIgnoreCase("%playerName%")) {
+
+                    String playerName = sender.getName();
+                    String playerWhoActivatedName = args[3];
+                    String amplifierName = args[4];
+
+                    if (amplifierName.equalsIgnoreCase("Coin_Multiplier")) {
+                        amplifierName = amplifierName.replace("_", " ");
+                    }
+
+                    Player activator = null;
+                    AmplifiersConfigManager acm = new AmplifiersConfigManager(plugin);
+
+                    if (playerName.equalsIgnoreCase(playerWhoActivatedName)) {
+                        chatFactory.sendPlayerMessage(" ", false, playerWhoClicked, null);
+                        chatFactory.sendPlayerMessage("You can't thank yourself silly!", false, sender, prefix);
+                        chatFactory.sendPlayerMessage(" ", false, sender, null);
+                        return false;
+                    } else {
+                        if (acm.isOnThankfulPeopleList(playerName, amplifierName)) {
+                            chatFactory.sendPlayerMessage(" ", false, playerWhoClicked, null);
+                            chatFactory.sendPlayerMessage("&7You've already received your &6Coins &7for thanking &e" + playerWhoActivatedName, false, playerWhoClicked, prefix);
+                            chatFactory.sendPlayerMessage(" ", false, sender, null);
+                            return false;
+                        } else {
+                            if (Bukkit.getPlayer(playerWhoActivatedName) != null) {
+                                activator = Bukkit.getPlayer(playerWhoActivatedName);
+                                rewardCoinsToActivator(activator, playerWhoClicked);
+                            }
+                            rewardCoinsToClicker(playerWhoClicked, activator);
+                            acm.addToThankfulPeopleList(playerName, amplifierName);
+                            acm.saveConfig();
+                        }
+                    }
+                }
             }
 
             if(sender.isOp()){
@@ -118,45 +156,6 @@ public class AdminCommands implements CommandExecutor {
                         ecm.increaseAmplifierAmount(amplifierType, levelAmplifier, amount);
                         ecm.saveConfig();
                     }
-
-                }else if(args[0].equalsIgnoreCase("givecoins") && args.length == 5){
-                    //Guaranteed to be a player because this command is only run when a player clicks on the "Click Here" text
-                    Player playerWhoClicked = (Player) sender;
-                    if(args[1].trim().equalsIgnoreCase("%playerName%")){
-                        String playerName = sender.getName();
-                        String playerWhoActivatedName = args[3];
-                        String amplifierName = args[4];
-
-                        if(amplifierName.equalsIgnoreCase("Coin_Multiplier")){
-                            amplifierName = amplifierName.replace("_", " ");
-                        }
-
-                        Player activator = null;
-                        AmplifiersConfigManager acm = new AmplifiersConfigManager(plugin);
-
-                        if(playerName.equalsIgnoreCase(playerWhoActivatedName)){
-                            chatFactory.sendPlayerMessage(" ", false, playerWhoClicked, null);
-                            chatFactory.sendPlayerMessage("You can't thank yourself silly!", false, sender, prefix);
-                            chatFactory.sendPlayerMessage(" ", false, sender, null);
-                            return false;
-                        }else{
-                            if(acm.isOnThankfulPeopleList(playerName, amplifierName)){
-                                chatFactory.sendPlayerMessage(" ", false, playerWhoClicked, null);
-                                chatFactory.sendPlayerMessage("&7You've already received your &6Coins &7for thanking &e" + playerWhoActivatedName, false, playerWhoClicked, prefix);
-                                chatFactory.sendPlayerMessage(" ", false, sender, null);
-                                return false;
-                            }else{
-                                if(Bukkit.getPlayer(playerWhoActivatedName) != null){
-                                    activator = Bukkit.getPlayer(playerWhoActivatedName);
-                                    rewardCoinsToActivator(activator, playerWhoClicked);
-                                }
-                                rewardCoinsToClicker(playerWhoClicked, activator);
-                                acm.addToThankfulPeopleList(playerName, amplifierName);
-                                acm.saveConfig();
-                            }
-                        }
-                    }
-                    //give coins C10_MC 50
                 }else if(args[0].equalsIgnoreCase("give") && args[1].equalsIgnoreCase("coins") && args.length == 4){
 
                     int amount;
