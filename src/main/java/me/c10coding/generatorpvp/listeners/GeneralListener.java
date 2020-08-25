@@ -7,6 +7,7 @@ import me.c10coding.generatorpvp.files.*;
 import me.c10coding.generatorpvp.managers.ScoreboardManager;
 import me.c10coding.generatorpvp.menus.ChatMenu;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
@@ -135,9 +136,11 @@ public class GeneralListener implements Listener {
 
             int totalCoinsReward = coinsGainedPerKill;
             if(killer != null){
+
                 if(killer.getInventory().getBoots() != null){
                     ItemStack killersBoots = killer.getInventory().getBoots();
                     if(killersBoots.getItemMeta().hasEnchant(Enchantment.getByKey(new NamespacedKey(plugin, EnchantmentKeys.COIN.toString())))) {
+
                         final int MIN_COINS = 1;
                         final int MAX_COINS = 20;
                         int randomCoinAmount = (int) (Math.random() * ((MAX_COINS - MIN_COINS) + 1)) + MIN_COINS;
@@ -147,14 +150,15 @@ public class GeneralListener implements Listener {
                         chatFactory.sendPlayerMessage("&7You received &a" + randomCoinAmount + " &6Coins " + "&7from &eCoin Boots&7", false, killer, null);
                         chatFactory.sendPlayerMessage(" ", false, killer, null);
                     }
-                    AmplifiersConfigManager acm = new AmplifiersConfigManager(plugin);
-                    if(acm.isAmplifierActivated("Coin Multiplier")){
-                        int coinsAdditive = (int) (coinsGainedPerKill * acm.getCoinsMultiplier()) - 1;
-                        totalCoinsReward = totalCoinsReward + coinsAdditive;
-                        chatFactory.sendPlayerMessage(" ", false, killer, null);
-                        chatFactory.sendPlayerMessage("&a+" + coinsAdditive + " &6Coins &7from the &eAmplifier&7", false, killer, null);
-                        chatFactory.sendPlayerMessage(" ", false, killer, null);
-                    }
+                }
+
+                AmplifiersConfigManager acm = new AmplifiersConfigManager(plugin);
+                if(acm.isAmplifierActivated("Coin Multiplier")){
+                    int coinsAdditive = (int) (coinsGainedPerKill * acm.getCoinsMultiplier()) - 1;
+                    totalCoinsReward = totalCoinsReward + coinsAdditive;
+                    chatFactory.sendPlayerMessage(" ", false, killer, null);
+                    chatFactory.sendPlayerMessage("&a+" + coinsAdditive + " &6Coins &7from the &eAmplifier&7", false, killer, null);
+                    chatFactory.sendPlayerMessage(" ", false, killer, null);
                 }
 
                 chatFactory.sendPlayerMessage(" ", false, killer, null);
