@@ -8,9 +8,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_16_R1.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_16_R1.entity.CraftSnowball;
-import org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_16_R2.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_16_R2.entity.CraftSnowball;
+import org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -70,7 +70,7 @@ public class WeaponsListener implements Listener {
                             CraftLivingEntity player = (CraftLivingEntity) p;
                             Snowball projectile = player.launchProjectile(Snowball.class);
                             projectile.setMetadata("CustomSlimeBall", new FixedMetadataValue(plugin, true));
-                            ((CraftSnowball) projectile).getHandle().setItem(CraftItemStack.asNMSCopy(new ItemStack(Material.CARROT)));
+                            ((CraftSnowball) projectile).getHandle().setItem(CraftItemStack.asNMSCopy(new ItemStack(Material.SLIME_BALL)));
                         } else if (displayName.equalsIgnoreCase("Knockback")) {
                             e.setCancelled(true);
                             Snowball sb = p.launchProjectile(Snowball.class);
