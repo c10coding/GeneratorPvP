@@ -21,7 +21,6 @@ public class EnchantmentRegister {
     }
 
     public void registerEnchantment(Enchantment ench) {
-        //Using Reflection
         try {
             Field f = Enchantment.class.getDeclaredField("acceptingNew");
             f.setAccessible(true);
@@ -30,11 +29,6 @@ public class EnchantmentRegister {
         }catch(Exception e) {
             e.printStackTrace();
         }
-
-        /*
-        if(registered) {
-
-        }*/
     }
 
     public void registerEnchantments(){

@@ -52,10 +52,11 @@ public final class GeneratorPvP extends BetterJavaPlugin {
 
         logger.info("==================================================================");
 
+        validateConfigs();
+
         this.enchantmentRegister = new EnchantmentRegister(this);
 
         disableHolograms();
-        validateConfigs();
         registerEvents();
         initializeCommands();
         startAmplifierTimer();
@@ -201,12 +202,10 @@ public final class GeneratorPvP extends BetterJavaPlugin {
         File hologramFile = new File(this.getDataFolder(), "holograms.yml");
         logger.info("Removing holograms...");
         if(hologramFile.exists()){
-            HologramHelper hh = new HologramHelper(this);
 
-            if(hh.getAllNames() != null){
-                for(String hologramName : hh.getAllNames()){
-                    hh.removeHologram(hologramName);
-                }
+            HologramHelper hh = new HologramHelper(this);
+            for(String hologramName : hh.getAllNames()){
+                hh.removeHologram(hologramName);
             }
 
         }

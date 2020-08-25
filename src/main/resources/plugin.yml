@@ -6,6 +6,8 @@ depend:
   - Vault
   - PlaceholderAPI
   - CoreAPI
+  - UltraPunishments
+  - UltraPermissions
 commands:
   menu:
     description: "Opens the generator pvp menu"

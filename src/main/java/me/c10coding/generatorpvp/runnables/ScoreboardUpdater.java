@@ -1,12 +1,11 @@
 package me.c10coding.generatorpvp.runnables;
 
 import me.TechsCode.UltraPunishments.UltraPunishments;
-import me.TechsCode.UltraPunishments.types.IndexedPlayer;
+import me.TechsCode.UltraPunishments.storage.types.IndexedPlayer;
 import me.c10coding.coreapi.chat.ChatFactory;
 import me.c10coding.generatorpvp.GeneratorPvP;
 import me.c10coding.generatorpvp.files.AmplifiersConfigManager;
 import me.c10coding.generatorpvp.files.StatsConfigManager;
-import me.c10coding.generatorpvp.managers.ScoreboardManager;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -14,17 +13,15 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+import java.util.Optional;
+
 public class ScoreboardUpdater extends BukkitRunnable {
 
-    private GeneratorPvP plugin;
-    private ScoreboardManager sm;
     private ChatFactory chatFactory = new ChatFactory();
     private StatsConfigManager scm;
     private AmplifiersConfigManager acm;
 
     public ScoreboardUpdater(GeneratorPvP plugin){
-        this.plugin = plugin;
-        this.sm = new ScoreboardManager(plugin);
         this.scm = new StatsConfigManager(plugin);
         this.acm = new AmplifiersConfigManager(plugin);
     }
@@ -74,13 +71,15 @@ public class ScoreboardUpdater extends BukkitRunnable {
                 amplifier.setSuffix(chatFactory.colorString(isActive));
 
                 UltraPunishments up = (UltraPunishments) UltraPunishments.getAPI();
-                IndexedPlayer ip = up.getPlayerIndexes().get(p.getUniqueId());
-                int numWarnings = up.getWarningStorage().getWarnings().target(ip).count();
-                warnings.setSuffix(chatFactory.colorString("&c" + numWarnings+""));
+                Optional<IndexedPlayer> opIndexedPlayer = up.getPlayerIndexes().get(p.getUniqueId());
+                if(opIndexedPlayer.isPresent()){
+                    IndexedPlayer ip = opIndexedPlayer.get();
+                    int numWarnings = up.getWarningStorage().getWarnings().target(ip).size();
+                    warnings.setSuffix(chatFactory.colorString("&c" + numWarnings+""));
+                }
 
                 p.setScoreboard(scoreboard);
             }
-
         }
     }
 }
