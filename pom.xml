@@ -109,8 +109,8 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>UltraPerms</groupId>
-            <artifactId>UltraPerms</artifactId>
+            <groupId>UltraPermissions</groupId>
+            <artifactId>UltraPermissions</artifactId>
             <version>1.0.0</version>
             <scope>provided</scope>
         </dependency>

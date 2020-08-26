@@ -100,11 +100,9 @@ public class AdminCommands implements CommandExecutor {
             }
 
             if(sender.isOp()){
-                //gp give amp <player name> <type> <level> <amount>
-
                 if(args[0].equalsIgnoreCase("give") && args[1].equals("amp") && args.length == 6){
-                    int amount;
 
+                    int amount;
                     String playerName = args[2];
                     String amplifierType = args[3];
                     List<String> possibleAmplifierTypes = getPossibleAmplifiers();

@@ -19,25 +19,26 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
+import java.util.Collection;
 
 public class GeneralListener implements Listener {
 
     private GeneratorPvP plugin;
     private DefaultConfigManager dcm;
-    private DefaultConfigBootsSectionManager bm;
     private ChatFactory chatFactory;
-    private ScoreboardManager sm;
 
     public GeneralListener(GeneratorPvP plugin){
         this.plugin = plugin;
         this.dcm = new DefaultConfigManager(plugin);
-        this.bm = new DefaultConfigBootsSectionManager(plugin);
         this.chatFactory = plugin.getAPI().getChatFactory();
-        this.sm = new ScoreboardManager(plugin);
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e){
+
         Player p = e.getPlayer();
         EquippedConfigManager ecm = new EquippedConfigManager(plugin, p.getUniqueId());
         ScoreboardManager sm = new ScoreboardManager(plugin);
@@ -86,15 +87,25 @@ public class GeneralListener implements Listener {
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent e){
-        if(e.getPlayer().isGlowing()){
+
+        Player player = e.getPlayer();
+
+        if(player.isGlowing()){
             e.getPlayer().setGlowing(false);
         }
+
+        Collection<PotionEffect> potionEffects = player.getActivePotionEffects();
+        for(PotionEffect pe : potionEffects){
+            player.removePotionEffect(pe.getType());
+        }
+
     }
 
     @EventHandler
     public void onPlayerDeath(EntityDeathEvent e){
 
         if(e.getEntity() instanceof Player){
+
             Player deadPlayer = (Player) e.getEntity();
             Economy econ = GeneratorPvP.getEconomy();
             StatsConfigManager scm = new StatsConfigManager(plugin);
